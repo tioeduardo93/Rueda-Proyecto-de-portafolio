@@ -18,7 +18,10 @@ export interface CarCardProps {
   /** El comparador está lleno y este coche no está en él. */
   compareDisabled?: boolean
   onToggleCompare: () => void
-  /** Etiqueta sobre la foto, abajo a la izquierda. Por defecto, el número de fotos. */
+  /**
+   * Etiqueta sobre la foto, abajo a la izquierda, visible en todos los anchos. Sin la prop, el número
+   * de fotos (solo desde `sm`, como en el diseño); con `null`, ninguna.
+   */
   photoBadge?: ReactNode
   /** Dato del pie, a la derecha. Por defecto, la ciudad. */
   meta?: ReactNode
@@ -69,9 +72,13 @@ export function CarCard({
           <CarPhoto label={name} silhouette={64} className="aspect-[16/9] sm:aspect-[16/10]" labelClassName="text-[10px] sm:text-[11px]" />
         </Link>
         <DgtBadge label={car.etiqueta} ring className="absolute top-3 left-3" />
-        <div className="absolute bottom-3 left-3 hidden sm:block">
-          {photoBadge ?? <Badge tone="overlay">{car.fotos} fotos</Badge>}
-        </div>
+        {photoBadge === undefined ? (
+          <div className="absolute bottom-3 left-3 hidden sm:block">
+            <Badge tone="overlay">{car.fotos} fotos</Badge>
+          </div>
+        ) : (
+          photoBadge && <div className="absolute bottom-3 left-3">{photoBadge}</div>
+        )}
         <button
           type="button"
           onClick={onToggleFavorite}

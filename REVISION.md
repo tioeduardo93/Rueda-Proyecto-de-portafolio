@@ -118,3 +118,37 @@ Pendiente para el constructor: nada de esta fase. Sigue aplazada a la fase 5 la 
 
 Para que Eduardo lo entienda:
 Las dos cuotas no coincidían porque se calculaban con entradas distintas: el 15 % exacto y el 15 % redondeado al paso del slider. La solución hace que ambas usen la misma función, así coinciden por construcción y no por casualidad. Reducir el paso a 10 € mantiene las cifras del diseño, y hay un test por cada coche para que nadie lo rompa sin darse cuenta. El hueco del pie lo decide el layout a partir de lo que declara cada ruta, en vez de que cada página meta márgenes a mano.
+
+## Fase 4 — 20/10/2026
+Estado: APROBADA
+
+Comprobado:
+- `npm run build` y `npm run lint` sin errores ni avisos; `npm test` dos veces seguidas, 154 de 154 en verde (antes y después de las correcciones).
+- Comparador, escritorio (1440 px), con León, C-HR y 3008:
+  - Los «Mejor» coinciden fila a fila con `Comparador-escritorio.dc.html`: precio, cuota, km y potencia para el León; año para León y C-HR; consumo y etiqueta para el C-HR; maletero para el 3008.
+  - «Mostrar solo diferencias» quita puertas y plazas.
+  - Al quitar el C-HR, el foco pasa al «Quitar» del 3008 y aparece el hueco «Añadir otro coche».
+- Comparador, móvil (390 px):
+  - Cabecera propia «Comparar (3/3)» con leyenda.
+  - Tabla con scroll horizontal y la columna de etiquetas fija al desplazar.
+  - Con un eléctrico, el consumo en kWh no compite con los de gasolina.
+  - La página no hace scroll horizontal.
+- Favoritos, escritorio:
+  - Orden por fecha de guardado: «Guardado hace 2 días / 5 días / 1 semana / 1 mes» y «Ha bajado 600 €» en el C-HR.
+  - Un id inexistente en el store se borra solo.
+  - Al quitar un favorito, el foco pasa a la tarjeta siguiente.
+  - «Comparar favoritos» con 4 guardados lleva los 3 más recientes al comparador.
+- Favoritos, móvil: estado vacío del diseño y «Búsquedas populares» con las 4 URL filtradas correctas.
+- Consola sin errores ni warnings de React.
+
+Corregido por el revisor:
+- `src/components/compare/CompareTable.tsx:113`: en móvil se veía «Ver ficha» además del nombre enlazado. El constructor había decidido (decisión 7) que fuera solo de escritorio, pero `hidden` perdía frente al `inline-flex` de `buttonClasses`. Ahora usa `max-lg:hidden`.
+- `src/lib/compare.ts`: quitada la opción `value` de las filas, que ninguna fila usaba. Se deja un comentario sobre por qué se compara el texto.
+- `src/pages/FavoritesPage.tsx`: sangría descuadrada en el bloque «Comparar favoritos».
+
+Pendiente para el constructor (no bloquea; para la fase 5):
+1. Los ids retirados solo se limpian al abrir `/favoritos` o `/comparar`. Antes de eso, el contador de la cabecera los cuenta: con un id inexistente guardado, la cabecera decía «Favoritos 5» con 4 coches reales. Conviene limpiar los dos stores en un sitio común en cuanto llega el catálogo, por ejemplo en el layout.
+2. Siguen los pendientes acordados: fila «Filtros / Ordenar» dentro de la cabecera fija en móvil (fase 2) y borrar los iconos sin uso (fase 1).
+
+Para que Eduardo lo entienda:
+El comparador construye sus filas con una tabla de definiciones en `lib/compare.ts`. Cada fila dice cómo mostrar el dato, qué número comparar y si gana el menor o el mayor, así añadir una fila nueva es añadir un objeto y no tocar la vista. El «Mejor» compara solo lo comparable: el consumo se agrupa por unidad para no enfrentar litros con kWh, y la etiqueta DGT se convierte en un rango numérico. La tabla es una `<table>` real con cabeceras de fila y de columna, que es lo que permite a un lector de pantalla decir «Toyota C-HR, Consumo, 4,9 l/100 km, Mejor». Favoritos reutiliza la tarjeta del listado con dos huecos configurables («Ha bajado…» y «Guardado hace…») en vez de crear otra tarjeta.

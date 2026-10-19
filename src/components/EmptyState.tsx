@@ -41,7 +41,8 @@ function FavoritesIllustration() {
 export interface EmptyStateProps {
   illustration: 'search' | 'favorites'
   title: string
-  description: string
+  /** Texto o nodos (p. ej. una frase distinta para móvil). */
+  description: ReactNode
   /** Botones o enlaces de acción. */
   children?: ReactNode
   headingLevel?: 'h1' | 'h2' | 'h3'

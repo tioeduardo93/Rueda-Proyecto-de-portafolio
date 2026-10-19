@@ -86,6 +86,11 @@ describe('formatRelativeDays', () => {
     expect(formatRelativeDays(iso, now)).toBe(expected)
   })
 
+  it('acepta un Date con hora (el momento en que se guardó un favorito)', () => {
+    expect(formatRelativeDays(new Date(2026, 9, 17, 8, 15), now)).toBe('hace 2 días')
+    expect(formatRelativeDays(new Date(2026, 9, 19, 0, 5), now)).toBe('hoy')
+  })
+
   it('trata las fechas futuras como «hoy»', () => {
     expect(formatRelativeDays('2026-10-25', now)).toBe('hoy')
   })

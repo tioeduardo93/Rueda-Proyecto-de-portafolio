@@ -3,7 +3,8 @@ import { createBrowserRouter, type RouteObject } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import { AppLayout, type RouteHandle } from './layout/AppLayout'
 import CarDetailPage from './pages/CarDetailPage'
-import ComingSoonPage from './pages/ComingSoonPage'
+import ComparePage from './pages/ComparePage'
+import FavoritesPage from './pages/FavoritesPage'
 import ListingPage from './pages/ListingPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -29,8 +30,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <ListingPage /> },
       { path: 'coche/:id', element: <CarDetailPage />, handle: { ownMobileHeader: true, mobileBottomBar: true } satisfies RouteHandle },
-      { path: 'comparar', element: <ComingSoonPage title="Comparar coches" phase={4} /> },
-      { path: 'favoritos', element: <ComingSoonPage title="Tus favoritos" phase={4} /> },
+      { path: 'comparar', element: <ComparePage />, handle: { ownMobileHeader: true } satisfies RouteHandle },
+      { path: 'favoritos', element: <FavoritesPage />, handle: { ownMobileHeader: true } satisfies RouteHandle },
       ...devRoutes(),
       { path: '*', element: <NotFoundPage /> },
     ],

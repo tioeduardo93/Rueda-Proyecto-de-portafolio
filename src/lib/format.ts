@@ -59,9 +59,12 @@ export function parseISODate(iso: string): Date {
   return new Date(y, m - 1, d)
 }
 
-/** «hoy», «hace 1 día», «hace 3 días», «hace 2 semanas», «hace 1 mes»… */
-export function formatRelativeDays(iso: string, now: Date = new Date()): string {
-  const days = Math.max(0, daysBetween(parseISODate(iso), now))
+/**
+ * «hoy», «hace 1 día», «hace 3 días», «hace 2 semanas», «hace 1 mes»…
+ * Acepta una fecha ISO sin hora (AAAA-MM-DD) o un `Date` (p. ej. el momento en que se guardó un favorito).
+ */
+export function formatRelativeDays(date: string | Date, now: Date = new Date()): string {
+  const days = Math.max(0, daysBetween(typeof date === 'string' ? parseISODate(date) : date, now))
   if (days === 0) return 'hoy'
   if (days < 7) return days === 1 ? 'hace 1 día' : `hace ${days} días`
   if (days < 30) {

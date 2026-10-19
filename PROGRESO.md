@@ -7,8 +7,8 @@ Registro de avance por fases. Se actualiza al cerrar cada fase.
 | 0. Plan y repositorio | ✅ Hecha | 19/10/2026 |
 | 1. Estructura, tokens, datos y componentes base | ✅ Aprobada por el revisor | 19/10/2026 |
 | 2. Listado con filtros, orden y URL | ✅ Aprobada por el revisor | 19/10/2026 |
-| 3. Ficha y calculadora | ✅ Hecha · pendiente de revisión | 19/10/2026 |
-| 4. Comparador y favoritos | ⏳ Pendiente | — |
+| 3. Ficha y calculadora | ✅ Aprobada por el revisor | 19/10/2026 |
+| 4. Comparador y favoritos | ✅ Hecha · pendiente de revisión | 19/10/2026 |
 | 5. Responsive, accesibilidad, tests y README | ⏳ Pendiente | — |
 
 ## Estructura
@@ -25,6 +25,7 @@ src/
 │   ├── filters.ts             Filtrado, orden, facetas, modelos por marca y chips activos (funciones puras)
 │   ├── url.ts                 Filtros y orden ↔ parámetros de la URL, con validación
 │   ├── car.ts                 Textos derivados del coche y coches similares
+│   ├── compare.ts             Filas del comparador, «Mejor» por fila y «solo diferencias» (funciones puras)
 │   ├── listingMemory.ts       Última búsqueda del listado, para «Volver a resultados»
 │   ├── api.ts                 API simulada (500 ms, cancelable, 404 tipado)
 │   └── cn.ts                  Unión de clases
@@ -32,15 +33,71 @@ src/
 ├── hooks/                     useCars, useListingQuery (URL), useMediaQuery, useSimulatedRefresh, useDocumentTitle
 ├── components/                Presentacionales, sin lógica de negocio:
 │   │                          Button/ButtonLink, FilterChip, DgtBadge, Badge, CarPhoto, CarCard, CarCardSkeleton,
-│   │                          RangeSlider, CompareBar, EmptyState, ActiveFilterChips, SortSelect, BottomSheet, Logo, icons
+│   │                          RangeSlider, CompareBar, EmptyState, ActiveFilterChips, SortSelect, BottomSheet, Logo, icons,
+│   │                          MobilePageHeader, PopularSearches
 │   ├── filters/               FilterGroup, BrandFilter, ModelSelect, OptionChips, FilterFields, FiltersSidebar
+│   ├── compare/               CompareTable, BestLegend
 │   └── detail/                Gallery, CarSummary, DetailSection, SpecGrid, EquipmentList, FinanceCalculator,
 │                              Breadcrumbs, StickyContactBar, DetailSkeleton (además CarMiniCard y Toast en components/)
 ├── containers/                Conectan componentes con stores y lógica (CarCard, CompareBar, MobileFiltersSheet)
 ├── layout/                    AppLayout (enlace «Saltar al contenido»), SiteHeader (búsqueda en vivo), SiteFooter
-├── pages/                     ListingPage, CarDetailPage, NotFoundPage, ComingSoonPage, ComponentsPage (dev)
+├── pages/                     ListingPage, CarDetailPage, ComparePage, FavoritesPage, NotFoundPage, ComponentsPage (dev)
 └── test/                      Setup de Vitest y matchMedia simulado
 ```
+
+## Fase 4 · Comparador y favoritos
+
+**Pendientes de la revisión anterior**: ninguno de la fase 3. La fila «Filtros / Ordenar» en la cabecera móvil sigue para la fase 5.
+
+**Hecho**
+- **Comparador (`/comparar`)**
+  - Tabla con los coches del store en el orden en que se añadieron y las 13 filas del diseño. Precio y cuota (con `cuotaDesde`), año, km, potencia, consumo, maletero, combustible, cambio, etiqueta DGT, color, puertas y plazas.
+  - «Mejor» por fila (`lib/compare.ts`):
+    - Precio, cuota, km y consumo: gana el menor. Año, potencia y maletero: el mayor.
+    - Etiqueta DGT por rango: 0 > ECO > C > B.
+    - Si varios empatan en el mejor valor, ganan todos. Si empatan todos, no gana nadie.
+    - Consumo: solo compiten los coches con la misma unidad. Uno solo en su unidad (un eléctrico entre gasolinas) no gana ni pierde.
+    - Combustible, cambio, color, puertas y plazas no tienen ganador.
+  - «Mostrar solo diferencias» quita las filas en las que todos coinciden. Dos consumos con el mismo número y distinta unidad cuentan como diferencia. Si no queda ninguna fila, la tabla lo dice.
+  - Quitar un coche desde su columna. Los huecos libres («Añadir otro coche») llevan al listado con la última búsqueda.
+  - Escritorio: una `<table>` con `caption`, `<th scope="col">` por coche y `<th scope="row">` por fila, con leyenda «Mejor valor de la fila» y nota de WLTP y cuotas.
+  - Móvil: la misma tabla con scroll horizontal (columnas de 172 px), columna de etiquetas fija con textos cortos («Cuota», «Etiqueta») y aviso «Desliza horizontalmente…». En las celdas ganadoras, la marca de verificación lleva el texto «Mejor» para lectores de pantalla.
+- **Favoritos (`/favoritos`)**
+  - La misma tarjeta del listado, con «Guardado hace…» (desde `savedAt`) y «Ha bajado X €» (desde `precioAnterior`, visible también en móvil).
+  - Corazón para quitar y casilla «Comparar» conectada al comparador, con su límite de 3.
+  - «N coches guardados. Te avisamos si alguno baja de precio.» y «Comparar favoritos» a partir de 2.
+  - Estado vacío del diseño, con el texto de móvil o de escritorio. En móvil, «Búsquedas populares» abren el listado ya filtrado con `listingHref`:
+    - Híbridos ECO → `?combustible=Híbrido&etiqueta=ECO`
+    - SUV hasta 25.000 € → `?precioMax=25000&carroceria=SUV`
+    - Eléctricos → `?combustible=Eléctrico`
+    - Automáticos → `?cambio=Automático`
+- **Cabecera propia en móvil** para las dos pantallas (`MobilePageHeader`: «Volver» de 44 px y título, más la leyenda en el comparador y el contador en favoritos). Las rutas usan el `handle` `ownMobileHeader`, como la ficha.
+- **Foco al quitar**: al quitar un coche del comparador o un favorito, su botón desaparece. El foco pasa al elemento que ocupa su sitio (o a «Añadir otro coche» / «Explorar coches») en vez de perderse en el `<body>`.
+- **Cambios pequeños en piezas compartidas**:
+  - `CarCard`: `photoBadge={null}` quita la etiqueta de la foto.
+  - `EmptyState`: admite nodos como descripción.
+  - `formatRelativeDays`: acepta un `Date`.
+  - Borrado `ComingSoonPage`, que ya no se usaba.
+- **154 tests** (29 nuevos): lógica del comparador, `formatRelativeDays` con `Date` e integración de comparador y favoritos (mejor valor, solo diferencias, quitar con foco, 1 coche, vacío, ids retirados, límite de 3, «Comparar favoritos» con 4, búsquedas populares).
+- `npm run build`, `npm run lint` y `npm test` (3 ejecuciones seguidas) sin errores ni avisos.
+- **Probado en el navegador:**
+  - 1440 px: tabla del diseño (León, C-HR y 3008 con los mismos «Mejor» del diseño), solo diferencias, quitar con hueco nuevo, «Ver ficha», favoritos en 3 columnas, «Comparar favoritos» con 4.
+  - 390 px: tabla de 616 px con la columna fija al desplazar, «Mejor» de consumo sin el eléctrico, cabeceras propias, estado vacío y búsqueda popular que abre el listado filtrado.
+  - Sin errores en consola al cargar ni al navegar entre las dos páginas. Los que salieron antes eran del recargado en caliente de Vite mientras editaba `App.tsx`.
+
+**Decisiones de esta fase** (casos que el diseño no cubre)
+1. **Comparador con 0 coches**: estado vacío «Aún no has elegido coches para comparar» con «Explorar coches» (a la última búsqueda).
+2. **Comparador con 1 coche**: tabla con ese coche y 2 huecos, sin ningún «Mejor», aviso «Añade al menos otro coche para ver cuál gana en cada fila» y «Mostrar solo diferencias» desactivado.
+3. **«Comparar favoritos» con más de 3**: sustituye la selección del comparador por los 3 guardados más recientes (por `savedAt`, no por la posición en el store) y lo indica bajo el botón: «Se comparan los 3 guardados más recientes».
+4. **Ids que ya no existen en el catálogo** (anuncio retirado): no se muestran, y se borran del store en cuanto llega el catálogo, en el comparador y en favoritos. Así no ocupan uno de los 3 huecos ni descuadran el contador.
+5. **Cabecera de escritorio del comparador con buscador**: el diseño no lo pone, pero la cabecera es común a todo el sitio y quitarlo solo aquí sería incoherente.
+6. **Filas del comparador iguales en móvil y escritorio**: el diseño móvil enseña 10 y el de escritorio 13. En móvil también salen color, puertas y plazas, que caben de sobra con el scroll.
+7. **En móvil el nombre del coche enlaza a la ficha**, porque el diseño no tiene «Ver ficha»; en escritorio, el botón «Ver ficha» del diseño.
+8. **«Búsquedas populares» solo en móvil**, como en el diseño: en escritorio el estado vacío queda igual que en `Favoritos-escritorio.dc.html`.
+
+**Limitaciones de la verificación**
+- El panel del navegador seguía oculto: sin capturas ni comparación a ojo con los cuatro diseños. Medidas, textos, orden y comportamiento se han comprobado por DOM.
+- No probado con lector de pantalla real (los nombres accesibles se comprueban en los tests con Testing Library) ni con scroll táctil real en la tabla.
 
 ## Fase 3 · Ficha y calculadora
 
