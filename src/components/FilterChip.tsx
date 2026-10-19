@@ -1,13 +1,14 @@
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { cn } from '../lib/cn'
 import { CloseIcon } from './icons'
 
 /** Amplía el área táctil hasta 44 px sin cambiar el tamaño visual del chip. */
-const HIT_AREA = "relative after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']"
+const HIT_AREA = "relative after:absolute after:inset-x-0 after:-inset-y-[5px] after:content-['']"
 
-type BaseProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & { children: string }
+type BaseProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>
 
 type ToggleChipProps = BaseProps & {
+  children: ReactNode
   selected: boolean
   /** `pill` para opciones en línea; `tile` para rejillas (cambio, etiqueta, plazos). */
   shape?: 'pill' | 'tile'
@@ -15,6 +16,8 @@ type ToggleChipProps = BaseProps & {
 }
 
 type RemovableChipProps = BaseProps & {
+  /** Texto del filtro; también forma el nombre accesible («Quitar filtro …»). */
+  children: string
   /** Chip de filtro activo: al pulsarlo se quita el filtro. */
   onRemove: () => void
   selected?: never

@@ -1,26 +1,55 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import { HeartIcon, SearchIcon } from '../components/icons'
 import { Logo } from '../components/Logo'
+import { MEDIA, useMediaQuery } from '../hooks/useMediaQuery'
 import { cn } from '../lib/cn'
+import { PARAMS } from '../lib/url'
 import { useFavoriteCount } from '../store/favorites'
 
 /**
  * Cabecera común. En móvil: logo y favoritos arriba, buscador debajo.
  * Desde `sm`: todo en una fila, como en el diseño de escritorio.
  */
-export function SiteHeader({ showSearch = true }: { showSearch?: boolean }) {
+export function SiteHeader() {
   const favCount = useFavoriteCount()
   const { pathname } = useLocation()
+  const onListing = pathname === '/'
   const onFavorites = pathname === '/favoritos'
-  const [params] = useSearchParams()
-  const urlQuery = pathname === '/' ? (params.get('q') ?? '') : ''
+  const [params, setParams] = useSearchParams()
   const navigate = useNavigate()
+  const wide = useMediaQuery(MEDIA.sm)
+
+  const urlQuery = onListing ? (params.get(PARAMS.q) ?? '') : ''
+  const [query, setQuery] = useState(urlQuery)
+  const [syncedQuery, setSyncedQuery] = useState(urlQuery)
+  // Si la búsqueda cambia desde fuera («Limpiar filtros», atrás/adelante), el campo la refleja.
+  if (urlQuery !== syncedQuery) {
+    setSyncedQuery(urlQuery)
+    setQuery(urlQuery)
+  }
+
+  function onChange(value: string) {
+    setQuery(value)
+    if (!onListing) return
+    // En el listado la búsqueda filtra mientras se escribe.
+    setSyncedQuery(value.trim() ? value : '')
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev)
+        if (value.trim()) next.set(PARAMS.q, value)
+        else next.delete(PARAMS.q)
+        return next
+      },
+      { replace: true, preventScrollReset: true },
+    )
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const q = String(new FormData(e.currentTarget).get('q') ?? '').trim()
-    navigate(q ? `/?q=${encodeURIComponent(q)}` : '/')
+    if (onListing) return
+    const q = query.trim()
+    navigate(q ? `/?${PARAMS.q}=${encodeURIComponent(q)}` : '/')
   }
 
   return (
@@ -30,23 +59,20 @@ export function SiteHeader({ showSearch = true }: { showSearch?: boolean }) {
           <Logo />
         </Link>
 
-        {showSearch && (
-          // `key`: si la búsqueda cambia desde fuera (atrás/adelante), el campo se reinicia con ella.
-          <form key={urlQuery} role="search" onSubmit={onSubmit} className="order-last basis-full sm:order-none sm:max-w-[640px] sm:flex-[1_1_320px]">
-            <label className="relative flex items-center">
-              <span className="sr-only">Buscar por marca o modelo</span>
-              <SearchIcon className="pointer-events-none absolute left-3.5 text-muted sm:left-4" />
-              <input
-                type="search"
-                name="q"
-                defaultValue={urlQuery}
-                placeholder="Busca por marca o modelo, p. ej. SEAT León"
-                enterKeyHint="search"
-                className="h-[46px] w-full rounded-btn border border-line-strong bg-field pr-3.5 pl-[42px] text-base text-ink placeholder:text-muted sm:h-12 sm:pr-4 sm:pl-[46px] sm:text-[15px]"
-              />
-            </label>
-          </form>
-        )}
+        <form role="search" onSubmit={onSubmit} className="order-last basis-full sm:order-none sm:max-w-[640px] sm:flex-[1_1_320px]">
+          <label className="relative flex items-center">
+            <span className="sr-only">Buscar por marca o modelo</span>
+            <SearchIcon className="pointer-events-none absolute left-3.5 text-muted sm:left-4" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder={wide ? 'Busca por marca o modelo, p. ej. SEAT León' : 'Marca o modelo'}
+              enterKeyHint="search"
+              className="h-[46px] w-full rounded-btn border border-line-strong bg-field pr-3.5 pl-[42px] text-base text-ink placeholder:text-muted sm:h-12 sm:pr-4 sm:pl-[46px] sm:text-[15px]"
+            />
+          </label>
+        </form>
 
         <Link
           to="/favoritos"
