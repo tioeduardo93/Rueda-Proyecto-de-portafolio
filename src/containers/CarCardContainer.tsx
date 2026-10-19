@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { CarCard } from '../components/CarCard'
 import { cuotaDesde } from '../lib/finance'
 import { MAX_COMPARE, useCompare } from '../store/compare'
-import { useFavorites } from '../store/favorites'
+import { useFavorites, useIsFavorite } from '../store/favorites'
 import type { Car } from '../types'
 
 interface CarCardContainerProps {
@@ -15,7 +15,7 @@ interface CarCardContainerProps {
 
 /** Conecta `CarCard` con favoritos, comparador y la cuota estándar. */
 export function CarCardContainer({ car, ...rest }: CarCardContainerProps) {
-  const isFavorite = useFavorites((s) => s.items.some((f) => f.id === car.id))
+  const isFavorite = useIsFavorite(car.id)
   const toggleFavorite = useFavorites((s) => s.toggle)
   const isComparing = useCompare((s) => s.ids.includes(car.id))
   const compareFull = useCompare((s) => s.ids.length >= MAX_COMPARE)

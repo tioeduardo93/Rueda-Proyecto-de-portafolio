@@ -16,7 +16,7 @@ export default function ListingPage() {
   const cars = useCars()
 
   return (
-    <div className="mx-auto max-w-[1280px] px-4 pt-4 pb-28 sm:px-6 sm:pt-8 sm:pb-16">
+    <div className="mx-auto max-w-[1280px] px-4 pt-4 pb-10 sm:px-6 sm:pt-8 sm:pb-16">
       {/* En móvil el diseño no muestra la cabecera de la página, pero el h1 sigue ahí para lectores de pantalla. */}
       <div className="sr-only flex-col gap-1.5 sm:not-sr-only sm:mb-7 sm:flex">
         <p className="text-[13px] font-bold tracking-[0.08em] text-accent uppercase">Coches de segunda mano</p>
@@ -26,7 +26,7 @@ export default function ListingPage() {
 
       <section aria-labelledby="resultados" className="flex flex-col gap-4">
         <h2 id="resultados" className="text-[17px] font-extrabold tabular-nums sm:text-xl" aria-live="polite">
-          {cars.status === 'success' ? `${pluralize(cars.data.length, 'coche encontrado', 'coches encontrados')}` : 'Buscando coches…'}
+          {cars.status === 'success' ? pluralize(cars.data.length, 'coche encontrado', 'coches encontrados') : 'Buscando coches…'}
         </h2>
 
         {cars.status === 'loading' && (
@@ -60,7 +60,7 @@ export default function ListingPage() {
             </ul>
             <CompareBarContainer
               cars={cars.data}
-              className="fixed inset-x-3 bottom-4 z-20 sm:sticky sm:inset-x-auto sm:bottom-5 sm:mt-2"
+              className="sticky bottom-4 z-20 mt-2 sm:bottom-5"
             />
           </>
         )}

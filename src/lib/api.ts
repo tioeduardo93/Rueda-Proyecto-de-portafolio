@@ -49,7 +49,7 @@ export class NotFoundError extends Error {
   }
 }
 
-/** API simulada. Devuelve copias para que nadie mute el catálogo por accidente. */
+/** API simulada. Cada llamada devuelve objetos nuevos, con las fechas ya desplazadas. */
 export const api = {
   getCars(signal?: AbortSignal): Promise<Car[]> {
     return delay(rebaseDates(CARS, new Date()), signal)

@@ -7,7 +7,7 @@ export function AppLayout() {
     <div className="flex min-h-dvh flex-col">
       <a
         href="#contenido"
-        className="sr-only z-50 rounded-btn bg-ink px-4 py-3 font-bold text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        className="fixed top-3 left-3 z-50 -translate-y-24 rounded-btn bg-ink px-4 py-3 font-bold text-white no-underline focus:translate-y-0"
       >
         Saltar al contenido
       </a>
