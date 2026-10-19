@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Filtros móvil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.noscroll{scrollbar-width:none}.noscroll::-webkit-scrollbar{display:none}
+.chip{transition:background-color .15s,border-color .15s,color .15s}
+.chip.on{background:color-mix(in srgb,var(--accent) 10%,#fff)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+.btn{transition:background-color .15s,transform .1s}
+.btn:active{transform:scale(.97)}
+.sheet{animation:sheet .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sheet{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:12px;flex:none}
+.dgt-0{background:#1559B8;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8.5px}
+.dgt-c{background:#24803A;color:#fff}
+.dgt-b{background:#F2C00F;color:#2B2200}
+.dual{position:relative;height:32px}
+.dual input[type=range]{position:absolute;left:0;top:0;width:100%;height:32px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none}
+.dual input[type=range]::-webkit-slider-runnable-track{background:transparent}
+.dual input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--accent);box-shadow:0 1px 4px rgba(14,26,31,.25)}
+.dual input[type=range]::-moz-range-thumb{pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--accent)}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6">
+
+<div aria-hidden="true" style="position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="height: 40px; border-radius: 10px; background: #fff"></div>
+<div style="height: 46px; border-radius: 12px; background: #fff"></div>
+<div style="height: 260px; border-radius: 16px; background: #fff"></div>
+<div style="height: 260px; border-radius: 16px; background: #fff"></div>
+</div>
+<a href="Listado-movil.dc.html" aria-label="Cerrar filtros" style="position: absolute; inset: 0; background: rgba(14,26,31,0.5)"></a>
+
+<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="ft" style="position: absolute; left: 0; right: 0; bottom: 0; top: 56px; background: #fff; border-radius: 24px 24px 0 0; display: flex; flex-direction: column; box-shadow: 0 -12px 40px rgba(14,26,31,0.2)">
+<div style="flex: none; padding: 8px 16px 0; display: flex; flex-direction: column; align-items: center">
+<span aria-hidden="true" style="width: 40px; height: 5px; border-radius: 3px; background: #D5DCDF"></span>
+<div style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 8px 0 12px; border-bottom: 1px solid #EEF1F2">
+<h2 id="ft" style="margin: 0; font-size: 20px; font-weight: 800">Filtros</h2>
+<a href="Listado-movil.dc.html" aria-label="Cerrar" style="width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0E1A1F; background: #F2F4F5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+</div>
+</div>
+
+<div class="noscroll" style="flex: 1; overflow-y: auto; padding: 4px 16px 16px">
+<div style="padding: 16px 0; border-bottom: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 800">Marca</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{brands}}" as="b" hint-placeholder-count="8">
+<button type="button" class="chip {{b.cls}}" aria-pressed="{{b.on}}" onClick="{{b.toggle}}" style="height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #33404A">{{b.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="padding: 16px 0; border-bottom: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 8px">
+<label for="m-modelo" style="font-size: 15px; font-weight: 800">Modelo</label>
+<select id="m-modelo" disabled="{{modelDisabled}}" style="height: 48px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; padding: 0 12px; font: inherit; font-size: 16px; color: #0E1A1F">
+<option>{{modelPlaceholder}}</option>
+<sc-for list="{{models}}" as="m" hint-placeholder-count="3"><option>{{m}}</option></sc-for>
+</select>
+</div>
+
+<sc-for list="{{ranges}}" as="r" hint-placeholder-count="3">
+<div style="padding: 16px 0; border-bottom: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-size: 15px; font-weight: 800">{{r.label}}</span>
+<span class="num" style="font-size: 14px; font-weight: 700; color: #33404A">{{r.loTxt}} – {{r.hiTxt}}</span>
+</div>
+<div class="dual">
+<div style="position: absolute; left: 0; right: 0; top: 14px; height: 4px; border-radius: 4px; background: #E3E7EA"></div>
+<div style="position: absolute; top: 14px; height: 4px; border-radius: 4px; background: var(--accent); left: {{r.l}}%; right: {{r.r}}%"></div>
+<input type="range" min="{{r.min}}" max="{{r.max}}" step="{{r.step}}" value="{{r.lo}}" onChange="{{r.onLo}}" aria-label="{{r.label}} mínimo">
+<input type="range" min="{{r.min}}" max="{{r.max}}" step="{{r.step}}" value="{{r.hi}}" onChange="{{r.onHi}}" aria-label="{{r.label}} máximo">
+</div>
+</div>
+</sc-for>
+
+<div style="padding: 16px 0; border-bottom: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 800">Combustible</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{fuels}}" as="f" hint-placeholder-count="4">
+<button type="button" class="chip {{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.toggle}}" style="height: 44px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #33404A">{{f.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="padding: 16px 0; border-bottom: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 800">Cambio</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{gears}}" as="g" hint-placeholder-count="2">
+<button type="button" class="chip {{g.cls}}" aria-pressed="{{g.on}}" onClick="{{g.toggle}}" style="height: 44px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #33404A">{{g.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="padding: 16px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 15px; font-weight: 800">Etiqueta ambiental DGT</span>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{dgts}}" as="d" hint-placeholder-count="4">
+<button type="button" class="chip {{d.cls}}" aria-pressed="{{d.on}}" aria-label="Etiqueta {{d.label}}" onClick="{{d.toggle}}" style="height: 52px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; display: flex; align-items: center; justify-content: center; padding: 0"><span class="dgt dgt-{{d.key}}">{{d.label}}</span></button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="flex: none; padding: 12px 16px 24px; border-top: 1px solid #E3E7EA; display: flex; gap: 10px; background: #fff">
+<button type="button" class="btn" onClick="{{clearAll}}" style="flex: 1; height: 52px; border-radius: 14px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #0E1A1F">Limpiar</button>
+<a href="Listado-movil.dc.html" class="btn num" style="flex: 2; height: 52px; border-radius: 14px; background: var(--accent); color: #fff; text-decoration: none; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{ctaTxt}}</a>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":390,"height":844}}'>
+const CARS = [
+  ['SEAT','León',18990,2021,48200,'Gasolina','Manual','C'],['Volkswagen','Golf',17450,2020,79500,'Diésel','Manual','C'],['Toyota','C-HR',21900,2021,52000,'Híbrido','Automático','ECO'],
+  ['Renault','Clio',13490,2022,31400,'Gasolina','Manual','C'],['Kia','Sportage',27950,2022,38700,'Híbrido','Automático','ECO'],['Peugeot','3008',19750,2020,66300,'Gasolina','Automático','C'],
+  ['Tesla','Model 3',26900,2021,72000,'Eléctrico','Automático','0'],['Hyundai','Tucson',22490,2021,58900,'Diésel','Manual','ECO'],['Dacia','Sandero Stepway',12990,2023,19800,'Gasolina','Manual','C'],
+  ['Mazda','CX-30',24700,2022,34500,'Gasolina','Automático','ECO'],['Ford','Puma',18450,2021,41200,'Gasolina','Manual','ECO'],['Volkswagen','ID.3',24990,2022,29800,'Eléctrico','Automático','0'],
+  ['Opel','Astra',7990,2015,142000,'Diésel','Manual','B']
+].map(([marca,modelo,precio,anio,km,comb,cambio,dgt]) => ({marca,modelo,precio,anio,km,comb,cambio,dgt}));
+const MODELS = {SEAT:['León','Ibiza','Arona'],Volkswagen:['Golf','Polo','ID.3'],Toyota:['C-HR','Corolla'],Renault:['Clio','Captur'],Kia:['Sportage','Niro'],Peugeot:['3008','208'],Tesla:['Model 3','Model Y'],Hyundai:['Tucson','Kona']};
+const RANGE = {precio:{label:'Precio',min:3000,max:60000,step:500},anio:{label:'Año',min:2010,max:2025,step:1},km:{label:'Kilómetros',min:0,max:200000,step:5000}};
+const FULL = {brands:[],precio:[3000,60000],anio:[2010,2025],km:[0,200000],fuels:[],gears:[],dgt:[]};
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const rTxt = (k, v) => k === 'precio' ? fmt(v) + ' €' : k === 'km' ? fmt(v) + ' km' : String(v);
+const tog = (a, v) => a.includes(v) ? a.filter(x => x !== v) : [...a, v];
+const inR = (v, r) => v >= r[0] && v <= r[1];
+
+class Component extends DCLogic {
+  state = {...FULL, precio: [3000, 30000], km: [0, 80000], anio: [2020, 2025]};
+
+  renderVals() {
+    const s = this.state, accent = this.props.accent ?? '#0B7A75';
+    const n = CARS.filter(c => (!s.brands.length || s.brands.includes(c.marca)) && inR(c.precio, s.precio) && inR(c.anio, s.anio) && inR(c.km, s.km)
+      && (!s.fuels.length || s.fuels.includes(c.comb)) && (!s.gears.length || s.gears.includes(c.cambio)) && (!s.dgt.length || s.dgt.includes(c.dgt))).length;
+    const mk = (arr, key) => arr.map(v => { const on = s[key].includes(v); return {label: v, key: v.toLowerCase(), on, cls: on ? 'on' : '', toggle: () => this.setState(st => ({[key]: tog(st[key], v)}))}; });
+    return {
+      accent,
+      brands: mk(Object.keys(MODELS), 'brands'),
+      modelDisabled: s.brands.length === 0, modelPlaceholder: s.brands.length ? 'Todos los modelos' : 'Elige antes una marca',
+      models: s.brands.flatMap(b => MODELS[b] || []),
+      ranges: Object.keys(RANGE).map(k => {
+        const R = RANGE[k], [lo, hi] = s[k], span = R.max - R.min;
+        return {label: R.label, min: R.min, max: R.max, step: R.step, lo, hi, loTxt: rTxt(k, lo), hiTxt: rTxt(k, hi),
+          l: ((lo - R.min) / span * 100).toFixed(1), r: ((R.max - hi) / span * 100).toFixed(1),
+          onLo: e => this.setState(st => ({[k]: [Math.min(+e.target.value, st[k][1] - R.step), st[k][1]]})),
+          onHi: e => this.setState(st => ({[k]: [st[k][0], Math.max(+e.target.value, st[k][0] + R.step)]}))};
+      }),
+      fuels: mk(['Gasolina','Diésel','Híbrido','Eléctrico'], 'fuels'),
+      gears: mk(['Manual','Automático'], 'gears'),
+      dgts: mk(['0','ECO','C','B'], 'dgt'),
+      clearAll: () => this.setState({...FULL}),
+      ctaTxt: n === 0 ? 'Sin resultados' : n === 1 ? 'Ver 1 coche' : 'Ver ' + n + ' coches'
+    };
+  }
+}
+</script>
+</body>
+</html>

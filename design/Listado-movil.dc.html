@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Listado móvil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ph{background-color:#ECF0F0;background-image:repeating-linear-gradient(135deg,rgba(14,26,31,.04) 0 10px,transparent 10px 20px)}
+.card{transition:transform .15s ease}
+.card:active{transform:scale(.99)}
+.btn{transition:background-color .15s,transform .1s}
+.btn:active{transform:scale(.97)}
+.noscroll{scrollbar-width:none}.noscroll::-webkit-scrollbar{display:none}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:12px;box-shadow:0 0 0 2px #fff;flex:none}
+.dgt-0{background:#1559B8;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8.5px}
+.dgt-c{background:#24803A;color:#fff}
+.up{animation:up .35s ease both}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; width: 390px; height: 844px; position: relative; overflow: hidden; display: flex; flex-direction: column; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6">
+
+<header style="background: #fff; border-bottom: 1px solid #E3E7EA; padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 12px; flex: none">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Listado-movil.dc.html" aria-label="Rueda, inicio" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #0E1A1F">
+<svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 22px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</a>
+<a href="Favoritos-movil.dc.html" aria-label="Favoritos: {{favCount}} coches guardados" style="position: relative; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #0E1A1F">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+<span class="num" style="position: absolute; top: 4px; right: 2px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff">{{favCount}}</span>
+</a>
+</div>
+<label style="position: relative; display: flex; align-items: center">
+<span class="sr">Buscar por marca o modelo</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg>
+<input type="search" placeholder="Marca o modelo" style="width: 100%; height: 46px; border-radius: 12px; border: 1px solid #D5DCDF; background: #F7F9F9; padding: 0 14px 0 42px; font: inherit; font-size: 16px; color: #0E1A1F">
+</label>
+<div style="display: flex; gap: 8px">
+<a href="Filtros-movil.dc.html" class="btn" style="flex: 1; height: 44px; border-radius: 12px; border: 1px solid #0E1A1F; background: #0E1A1F; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 800">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"></path><circle cx="15" cy="6" r="2"></circle><circle cx="9" cy="12" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>
+Filtros
+<span class="num" style="min-width: 20px; height: 20px; border-radius: 10px; background: var(--accent); font-size: 11px; display: inline-flex; align-items: center; justify-content: center">3</span>
+</a>
+<label style="flex: 1; position: relative; display: flex">
+<span class="sr">Ordenar por</span>
+<select style="width: 100%; height: 44px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 700; color: #0E1A1F">
+<option>Más recientes</option>
+<option>Precio: menor a mayor</option>
+<option>Precio: mayor a menor</option>
+<option>Menos kilómetros</option>
+<option>Año: más nuevos</option>
+</select>
+</label>
+</div>
+</header>
+
+<div class="noscroll" style="flex: 1; overflow-y: auto; padding: 14px 16px 110px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h1 class="num" style="margin: 0; font-size: 17px; font-weight: 800">12 coches encontrados</h1>
+</div>
+<div class="noscroll" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="3">
+<button type="button" aria-label="Quitar filtro {{c}}" style="flex: none; height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px 0 14px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 35%, #fff); background: color-mix(in srgb, var(--accent) 8%, #fff); font: inherit; font-size: 13px; font-weight: 700; color: #0E1A1F">
+<span class="num">{{c}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+</sc-for>
+</div>
+
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="4">
+<article class="card" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden">
+<div style="position: relative">
+<a href="Detalle-movil.dc.html" class="ph" aria-label="Ver {{c.marca}} {{c.modelo}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 16 / 9; text-decoration: none; color: #56616B">
+<svg width="64" height="32" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · {{c.marca}} {{c.modelo}}</span>
+</a>
+<span class="dgt dgt-{{c.dgtKey}}" title="Etiqueta ambiental {{c.dgt}}" style="position: absolute; left: 12px; top: 12px">{{c.dgt}}</span>
+<button type="button" aria-label="{{c.favLabel}}" aria-pressed="{{c.isFav}}" onClick="{{c.toggleFav}}" style="position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(14,26,31,0.15)">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="{{c.heartFill}}" stroke="{{c.heartStroke}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+</button>
+</div>
+<div style="padding: 14px 16px 10px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; gap: 12px; align-items: flex-start">
+<div style="min-width: 0">
+<h2 style="margin: 0; font-size: 17px; font-weight: 800"><a href="Detalle-movil.dc.html" style="color: #0E1A1F; text-decoration: none">{{c.marca}} {{c.modelo}}</a></h2>
+<p style="margin: 2px 0 0; font-size: 13px; color: #56616B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.version}}</p>
+</div>
+<div style="text-align: right; flex: none">
+<span class="num" style="display: block; font-size: 24px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1">{{c.precioTxt}}</span>
+<span style="font-size: 12px; color: #56616B">desde <strong class="num" style="color: var(--accent)">{{c.cuotaTxt}}/mes</strong></span>
+</div>
+</div>
+<p class="num" style="margin: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; font-weight: 700; color: #33404A">
+<span style="padding: 5px 8px; background: #F2F4F5; border-radius: 6px">{{c.anio}}</span>
+<span style="padding: 5px 8px; background: #F2F4F5; border-radius: 6px">{{c.kmTxt}}</span>
+<span style="padding: 5px 8px; background: #F2F4F5; border-radius: 6px">{{c.comb}}</span>
+<span style="padding: 5px 8px; background: #F2F4F5; border-radius: 6px">{{c.cambio}}</span>
+</p>
+<div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #EEF1F2; padding-top: 4px">
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 13px; font-weight: 700">
+<input type="checkbox" checked="{{c.isCmp}}" onChange="{{c.toggleCmp}}" disabled="{{c.cmpDisabled}}" style="width: 20px; height: 20px; margin: 0; accent-color: var(--accent)">
+Comparar
+</label>
+<span style="font-size: 12px; color: #56616B">{{c.ciudad}}</span>
+</div>
+</div>
+</article>
+</sc-for>
+<button type="button" style="height: 48px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #0E1A1F">Cargar más coches</button>
+</div>
+
+<sc-if value="{{hasCmp}}" hint-placeholder-val="{{ true }}">
+<div class="up" style="position: absolute; left: 12px; right: 12px; bottom: 16px; background: #0E1A1F; color: #fff; border-radius: 16px; padding: 10px 10px 10px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 18px 40px -12px rgba(14,26,31,0.55)">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<strong class="num" style="font-size: 15px">{{cmpTitle}}</strong>
+<span style="font-size: 12px; color: #B9C3C8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cmpNames}}</span>
+</div>
+<a href="Comparador-movil.dc.html" class="btn" style="height: 44px; padding: 0 18px; border-radius: 12px; background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 800; display: flex; align-items: center">Comparar</a>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":390,"height":844}}'>
+const CARS = [
+  {id:'leon',marca:'SEAT',modelo:'León',version:'1.5 TSI FR · 150 CV',precio:18990,anio:2021,km:48200,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Madrid'},
+  {id:'chr',marca:'Toyota',modelo:'C-HR',version:'125H Advance · 122 CV',precio:21900,anio:2021,km:52000,comb:'Híbrido',cambio:'Automático',dgt:'ECO',ciudad:'Sevilla'},
+  {id:'sandero',marca:'Dacia',modelo:'Sandero Stepway',version:'TCe 90 Comfort · 91 CV',precio:12990,anio:2023,km:19800,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Bilbao'},
+  {id:'sportage',marca:'Kia',modelo:'Sportage',version:'1.6 T-GDi HEV Drive · 230 CV',precio:27950,anio:2022,km:38700,comb:'Híbrido',cambio:'Automático',dgt:'ECO',ciudad:'Madrid'},
+  {id:'clio',marca:'Renault',modelo:'Clio',version:'TCe 90 Evolution · 91 CV',precio:13490,anio:2022,km:31400,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Barcelona'},
+  {id:'model3',marca:'Tesla',modelo:'Model 3',version:'Gran Autonomía AWD · 440 CV',precio:26900,anio:2021,km:72000,comb:'Eléctrico',cambio:'Automático',dgt:'0',ciudad:'Madrid'}
+];
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const eur = n => fmt(n) + ' €';
+const cuota = p => { const r = 0.0899 / 12; return Math.round(p * 0.85 * r / (1 - Math.pow(1 + r, -96))); };
+const tog = (a, v) => a.includes(v) ? a.filter(x => x !== v) : [...a, v];
+
+class Component extends DCLogic {
+  state = {favs: ['chr', 'model3', 'sportage'], compare: ['leon', 'chr']};
+
+  renderVals() {
+    const s = this.state, accent = this.props.accent ?? '#0B7A75';
+    return {
+      accent, favCount: s.favs.length,
+      chips: ['Hasta 30.000 €', 'Hasta 80.000 km', 'Desde 2020'],
+      cards: CARS.map(c => {
+        const fav = s.favs.includes(c.id), cmp = s.compare.includes(c.id);
+        return {...c, precioTxt: eur(c.precio), cuotaTxt: eur(cuota(c.precio)), kmTxt: fmt(c.km) + ' km', dgtKey: c.dgt.toLowerCase(),
+          isFav: fav, favLabel: fav ? 'Quitar de favoritos' : 'Añadir a favoritos', heartFill: fav ? '#E5484D' : 'none', heartStroke: fav ? '#E5484D' : '#0E1A1F',
+          isCmp: cmp, cmpDisabled: !cmp && s.compare.length >= 3,
+          toggleFav: () => this.setState(st => ({favs: tog(st.favs, c.id)})),
+          toggleCmp: () => this.setState(st => ({compare: tog(st.compare, c.id)}))};
+      }),
+      hasCmp: s.compare.length > 0, cmpTitle: 'Comparar (' + s.compare.length + '/3)',
+      cmpNames: s.compare.map(id => { const c = CARS.find(x => x.id === id); return c.marca + ' ' + c.modelo; }).join(' · ')
+    };
+  }
+}
+</script>
+</body>
+</html>

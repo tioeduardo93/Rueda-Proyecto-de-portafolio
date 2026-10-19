@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · SEAT León FR</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F6F6}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(14,26,31,.28);border-color:#CDD5D9}
+.ph{background-color:#ECF0F0;background-image:repeating-linear-gradient(135deg,rgba(14,26,31,.04) 0 10px,transparent 10px 20px)}
+.btn{transition:background-color .15s,transform .1s,border-color .15s}
+.btn:active{transform:scale(.98)}
+.btn-p:hover{background:color-mix(in srgb,var(--accent) 85%,#000)!important}
+.btn-o:hover{background:#F1F4F4!important}
+.chip{transition:background-color .15s,border-color .15s,color .15s}
+.chip:hover{border-color:var(--accent)!important}
+.chip.on{background:color-mix(in srgb,var(--accent) 10%,#fff)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+.thumb{transition:border-color .15s,opacity .15s;opacity:.75}
+.thumb:hover{opacity:1}
+.thumb.on{border-color:var(--accent)!important;opacity:1}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:12px;box-shadow:0 0 0 2px #fff;flex:none}
+.dgt-c{background:#24803A;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8.5px}
+.fade{animation:fu .3s ease both}
+@keyframes fu{from{opacity:0}to{opacity:1}}
+input[type=range]{accent-color:var(--accent)}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6; min-height: 100vh">
+
+<header style="position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid #E3E7EA">
+<div style="max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap">
+<a href="Main.dc.html" aria-label="Rueda, inicio" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0E1A1F">
+<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</a>
+<label style="flex: 1 1 320px; max-width: 640px; position: relative; display: flex; align-items: center">
+<span class="sr">Buscar por marca o modelo</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 16px"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg>
+<input type="search" placeholder="Busca por marca o modelo, p. ej. SEAT León" style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid #D5DCDF; background: #F7F9F9; padding: 0 16px 0 46px; font: inherit; font-size: 15px; color: #0E1A1F">
+</label>
+<a href="Favoritos-escritorio.dc.html" aria-label="Favoritos: {{favCount}} coches guardados" class="btn btn-o" style="margin-left: auto; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #E3E7EA; background: #fff; color: #0E1A1F; text-decoration: none; font-weight: 700; font-size: 14px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+<span>Favoritos</span>
+<span class="num" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--accent); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center">{{favCount}}</span>
+</a>
+</div>
+</header>
+
+<main style="max-width: 1280px; margin: 0 auto; padding: 20px 24px 72px; display: flex; flex-direction: column; gap: 28px">
+<nav aria-label="Ruta de navegación" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: #56616B">
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>Volver a resultados</a>
+<span aria-hidden="true">·</span><a href="Main.dc.html" style="color: #56616B">Coches</a><span aria-hidden="true">›</span><a href="Main.dc.html" style="color: #56616B">SEAT</a><span aria-hidden="true">›</span><span style="color: #0E1A1F; font-weight: 600">León 1.5 TSI FR</span>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+
+<div style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<section aria-label="Galería de fotos" style="display: flex; flex-direction: column; gap: 12px">
+<div class="ph" style="position: relative; aspect-ratio: 16 / 10; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #56616B">
+<svg width="140" height="70" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span class="fade" style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · {{photo.label}}</span>
+<button type="button" onClick="{{prev}}" aria-label="Foto anterior" class="btn" style="position: absolute; left: 16px; top: 50%; margin-top: -24px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); box-shadow: 0 4px 14px rgba(14,26,31,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #0E1A1F"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<button type="button" onClick="{{next}}" aria-label="Foto siguiente" class="btn" style="position: absolute; right: 16px; top: 50%; margin-top: -24px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); box-shadow: 0 4px 14px rgba(14,26,31,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #0E1A1F"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+<span class="num" style="position: absolute; right: 16px; bottom: 16px; font-size: 13px; font-weight: 700; color: #fff; background: rgba(14,26,31,0.75); padding: 6px 12px; border-radius: 8px">{{photo.n}} / {{photoTotal}}</span>
+<span style="position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #0E1A1F; background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v6c0 4.6-3.2 7.7-7.5 9-4.3-1.3-7.5-4.4-7.5-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-5" stroke-linecap="round"></path></svg>Revisado en 150 puntos</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="7">
+<button type="button" class="ph thumb {{t.cls}}" onClick="{{t.pick}}" aria-label="Ver foto {{t.n}}: {{t.label}}" aria-pressed="{{t.on}}" style="aspect-ratio: 4 / 3; border-radius: 10px; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 4px; font: inherit; font-size: 10px; font-weight: 700; color: #56616B; text-transform: uppercase; letter-spacing: 0.04em; text-align: center">{{t.short}}</button>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="ficha-t" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 28px">
+<h2 id="ficha-t" style="margin: 0 0 20px; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Ficha técnica</h2>
+<dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px">
+<sc-for list="{{specs}}" as="sp" hint-placeholder-count="9">
+<div style="background: #F7F9F9; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px">
+<dt style="font-size: 12px; font-weight: 700; color: #56616B; text-transform: uppercase; letter-spacing: 0.06em">{{sp.k}}</dt>
+<dd class="num" style="margin: 0; font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px">{{sp.v}}<sc-if value="{{sp.badge}}" hint-placeholder-val="{{ false }}"><span class="dgt dgt-c" style="width: 26px; height: 26px; font-size: 11px">C</span></sc-if></dd>
+</div>
+</sc-for>
+</dl>
+</section>
+
+<section aria-labelledby="eq-t" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 28px">
+<h2 id="eq-t" style="margin: 0 0 20px; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Equipamiento destacado</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px 24px">
+<sc-for list="{{equip}}" as="e" hint-placeholder-count="10">
+<li style="display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; color: #33404A">
+<span style="width: 28px; height: 28px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 10%, #fff); color: var(--accent); display: flex; align-items: center; justify-content: center; flex: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+{{e}}
+</li>
+</sc-for>
+</ul>
+</section>
+
+<section aria-labelledby="fin-t" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 28px; display: flex; flex-wrap: wrap; gap: 28px">
+<div style="flex: 3 1 340px; display: flex; flex-direction: column; gap: 22px">
+<div>
+<h2 id="fin-t" style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Calcula tu financiación</h2>
+<p style="margin: 6px 0 0; font-size: 14px; color: #56616B">Ajusta la entrada y el plazo para ver tu cuota al momento.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<label for="entrada" style="font-size: 14px; font-weight: 800">Entrada</label>
+<span class="num" style="font-size: 18px; font-weight: 800">{{entradaTxt}}</span>
+</div>
+<input id="entrada" type="range" min="0" max="9000" step="250" value="{{entrada}}" onChange="{{onEntrada}}" style="width: 100%; height: 28px; margin: 0">
+<div class="num" style="display: flex; justify-content: space-between; font-size: 12px; color: #56616B"><span>0 €</span><span>9.000 €</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 800">Plazo</span>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{plazos}}" as="p" hint-placeholder-count="7">
+<button type="button" class="chip num {{p.cls}}" aria-pressed="{{p.on}}" onClick="{{p.pick}}" aria-label="{{p.n}} meses" style="height: 44px; border-radius: 10px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 14px; font-weight: 700; color: #33404A; cursor: pointer">{{p.n}}</button>
+</sc-for>
+</div>
+<span style="font-size: 12px; color: #56616B">Meses</span>
+</div>
+</div>
+<div style="flex: 2 1 240px; background: #0E1A1F; color: #fff; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 13px; font-weight: 700; color: #B9C3C8; text-transform: uppercase; letter-spacing: 0.08em">Tu cuota mensual</span>
+<span class="num" aria-live="polite" style="font-size: 44px; font-weight: 800; letter-spacing: -0.03em; line-height: 1">{{cuotaTxt}}<span style="font-size: 18px; font-weight: 700; color: #B9C3C8">/mes</span></span>
+<dl class="num" style="margin: 0; display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.15); font-size: 14px">
+<div style="display: flex; justify-content: space-between"><dt style="color: #B9C3C8">Importe financiado</dt><dd style="margin: 0; font-weight: 700">{{financiadoTxt}}</dd></div>
+<div style="display: flex; justify-content: space-between"><dt style="color: #B9C3C8">Plazo</dt><dd style="margin: 0; font-weight: 700">{{plazo}} meses</dd></div>
+<div style="display: flex; justify-content: space-between"><dt style="color: #B9C3C8">TIN</dt><dd style="margin: 0; font-weight: 700">8,99 %</dd></div>
+<div style="display: flex; justify-content: space-between"><dt style="color: #B9C3C8">Total a plazos</dt><dd style="margin: 0; font-weight: 700">{{totalTxt}}</dd></div>
+</dl>
+<span style="font-size: 12px; color: #B9C3C8">Cálculo orientativo. Sujeto a estudio y aprobación de la entidad financiera.</span>
+</div>
+</section>
+</div>
+
+<aside aria-label="Resumen y contacto" style="flex: 1 1 340px; max-width: 420px; position: sticky; top: 96px; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="font-size: 12px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, #fff); padding: 5px 10px; border-radius: 999px">Garantía 12 meses</span>
+<span style="font-size: 12px; font-weight: 700; color: #33404A; background: #EEF1F2; padding: 5px 10px; border-radius: 999px">Único propietario</span>
+</div>
+<div>
+<h1 style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 800; letter-spacing: -0.03em">SEAT León</h1>
+<p style="margin: 4px 0 0; font-size: 15px; color: #56616B">1.5 TSI FR · 150 CV · 5 puertas</p>
+</div>
+<div class="num" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 700; color: #33404A">
+<span style="padding: 6px 10px; border: 1px solid #E3E7EA; border-radius: 8px">2021</span>
+<span style="padding: 6px 10px; border: 1px solid #E3E7EA; border-radius: 8px">48.200 km</span>
+<span style="padding: 6px 10px; border: 1px solid #E3E7EA; border-radius: 8px">Gasolina</span>
+<span style="padding: 6px 10px; border: 1px solid #E3E7EA; border-radius: 8px">Manual</span>
+</div>
+<div style="padding-top: 18px; border-top: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 4px">
+<span class="num" style="font-size: 40px; font-weight: 800; letter-spacing: -0.035em; line-height: 1">18.990 €</span>
+<span style="font-size: 15px; color: #56616B">o desde <strong class="num" style="color: var(--accent); font-weight: 800">236 €/mes</strong> con financiación</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<button type="button" class="btn btn-p" onClick="{{interest}}" style="height: 54px; border-radius: 14px; border: 0; background: var(--accent); color: #fff; font: inherit; font-size: 16px; font-weight: 800; cursor: pointer">Me interesa</button>
+<button type="button" class="btn btn-o" onClick="{{toggleFav}}" aria-pressed="{{isFav}}" style="height: 50px; border-radius: 14px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #0E1A1F; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="{{heartFill}}" stroke="{{heartStroke}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+{{favTxt}}
+</button>
+<sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+<p class="fade" role="status" style="margin: 0; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, #fff); font-size: 14px; font-weight: 600; color: #0E1A1F">Solicitud enviada. Un asesor te llamará en menos de 24 h.</p>
+</sc-if>
+</div>
+<ul style="list-style: none; margin: 0; padding: 18px 0 0; border-top: 1px solid #EEF1F2; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: #33404A">
+<li style="display: flex; gap: 10px; align-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.2"></circle></svg>Disponible en Madrid · entrega en 48 h</li>
+<li style="display: flex; gap: 10px; align-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"></path></svg>14 días de devolución</li>
+<li style="display: flex; gap: 10px; align-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5M10 13h6M10 17h6"></path></svg>Libro de mantenimiento al día</li>
+</ul>
+</div>
+<p class="num" style="margin: 0 4px; font-size: 12px; color: #56616B">Ref. RU-28417 · Publicado hace 1 día</p>
+</aside>
+</div>
+
+<section aria-labelledby="sim-t" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<h2 id="sim-t" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em">Coches similares</h2>
+<a href="Main.dc.html" style="font-size: 14px; font-weight: 700">Ver más compactos</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px">
+<sc-for list="{{similar}}" as="c" hint-placeholder-count="3">
+<article class="card" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+<div style="position: relative">
+<a href="Detalle-escritorio.dc.html" class="ph" aria-label="Ver {{c.marca}} {{c.modelo}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 16 / 10; text-decoration: none; color: #56616B">
+<svg width="72" height="36" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · {{c.marca}} {{c.modelo}}</span>
+</a>
+<span class="dgt dgt-{{c.dgtKey}}" title="Etiqueta ambiental {{c.dgt}}" style="position: absolute; left: 12px; top: 12px">{{c.dgt}}</span>
+<button type="button" aria-label="Añadir a favoritos" style="position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(14,26,31,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E1A1F" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg></button>
+</div>
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div>
+<h3 style="margin: 0; font-size: 17px; font-weight: 800"><a href="Detalle-escritorio.dc.html" style="color: #0E1A1F; text-decoration: none">{{c.marca}} {{c.modelo}}</a></h3>
+<p style="margin: 3px 0 0; font-size: 13px; color: #56616B">{{c.version}}</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="num" style="font-size: 27px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1">{{c.precio}}</span>
+<span style="font-size: 13px; color: #56616B">desde <strong class="num" style="color: var(--accent); font-weight: 800">{{c.cuota}}/mes</strong></span>
+</div>
+<p class="num" style="margin: 0; padding-top: 12px; border-top: 1px solid #EEF1F2; font-size: 13px; font-weight: 600; color: #33404A">{{c.anio}} · {{c.km}} · {{c.comb}} · {{c.cambio}}</p>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":1440,"height":2500}}'>
+const PHOTOS = ['Exterior frontal','Lateral izquierdo','Trasera','Interior','Salpicadero','Pantalla multimedia','Asientos traseros','Maletero','Llantas 18"','Faros Full LED','Motor','Detalle volante','Lateral derecho','Techo'];
+const SHORT = ['Frontal','Lateral','Trasera','Interior','Salpic.','Pantalla'];
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const eur = n => fmt(n) + ' €';
+const PRICE = 18990, TIN = 0.0899;
+const calc = (cap, n) => { const r = TIN / 12; return cap * r / (1 - Math.pow(1 + r, -n)); };
+
+class Component extends DCLogic {
+  state = {photo: 0, entrada: 3000, plazo: 72, fav: false, sent: false};
+
+  renderVals() {
+    const s = this.state, accent = this.props.accent ?? '#0B7A75';
+    const go = i => this.setState({photo: (i + PHOTOS.length) % PHOTOS.length});
+    const thumbs = SHORT.map((short, i) => ({n: i + 1, short, label: PHOTOS[i], on: s.photo === i, cls: s.photo === i ? 'on' : '', pick: () => go(i)}));
+    thumbs.push({n: 7, short: '+' + (PHOTOS.length - 6) + ' fotos', label: PHOTOS[6], on: s.photo >= 6, cls: s.photo >= 6 ? 'on' : '', pick: () => go(6)});
+    const cap = Math.max(PRICE - s.entrada, 0), cuota = calc(cap, s.plazo);
+    return {
+      accent, favCount: 3 + (s.fav ? 1 : 0),
+      photo: {n: s.photo + 1, label: PHOTOS[s.photo]}, photoTotal: PHOTOS.length,
+      prev: () => go(s.photo - 1), next: () => go(s.photo + 1), thumbs,
+      specs: [
+        {k: 'Año', v: '03/2021'}, {k: 'Kilómetros', v: '48.200 km'}, {k: 'Combustible', v: 'Gasolina'},
+        {k: 'Cambio', v: 'Manual, 6 vel.'}, {k: 'Potencia', v: '150 CV'}, {k: 'Color', v: 'Gris Magnético'},
+        {k: 'Puertas', v: '5'}, {k: 'Plazas', v: '5'}, {k: 'Etiqueta DGT', v: '', badge: true}
+      ],
+      equip: ['Navegador con pantalla de 10"', 'Apple CarPlay y Android Auto inalámbricos', 'Faros Full LED', 'Control de crucero adaptativo', 'Cámara de visión trasera', 'Climatizador bizona', 'Llantas de aleación de 18"', 'Asistente de mantenimiento de carril', 'Sensores de aparcamiento delanteros y traseros', 'Cuadro de instrumentos digital'],
+      entrada: s.entrada, entradaTxt: eur(s.entrada), onEntrada: e => this.setState({entrada: +e.target.value}),
+      plazos: [24, 36, 48, 60, 72, 84, 96].map(n => ({n, on: s.plazo === n, cls: s.plazo === n ? 'on' : '', pick: () => this.setState({plazo: n})})),
+      plazo: s.plazo, cuotaTxt: eur(cuota), financiadoTxt: eur(cap), totalTxt: eur(cuota * s.plazo + s.entrada),
+      isFav: s.fav, favTxt: s.fav ? 'Guardado en favoritos' : 'Añadir a favoritos',
+      heartFill: s.fav ? '#E5484D' : 'none', heartStroke: s.fav ? '#E5484D' : '#0E1A1F',
+      toggleFav: () => this.setState({fav: !s.fav}), sent: s.sent, interest: () => this.setState({sent: true}),
+      similar: [
+        {marca: 'Volkswagen', modelo: 'Golf', version: '2.0 TDI Life · 115 CV', precio: '17.450 €', cuota: '217 €', anio: 2020, km: '79.500 km', comb: 'Diésel', cambio: 'Manual', dgt: 'C', dgtKey: 'c'},
+        {marca: 'Ford', modelo: 'Puma', version: '1.0 EcoBoost MHEV ST-Line · 125 CV', precio: '18.450 €', cuota: '230 €', anio: 2021, km: '41.200 km', comb: 'Gasolina', cambio: 'Manual', dgt: 'ECO', dgtKey: 'eco'},
+        {marca: 'Peugeot', modelo: '3008', version: '1.2 PureTech Allure EAT8 · 130 CV', precio: '19.750 €', cuota: '246 €', anio: 2020, km: '66.300 km', comb: 'Gasolina', cambio: 'Automático', dgt: 'C', dgtKey: 'c'}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

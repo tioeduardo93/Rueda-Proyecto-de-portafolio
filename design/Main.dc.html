@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Listado</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F6F6}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(14,26,31,.28);border-color:#CDD5D9}
+.ph{background-color:#ECF0F0;background-image:repeating-linear-gradient(135deg,rgba(14,26,31,.04) 0 10px,transparent 10px 20px)}
+.btn{transition:background-color .15s,transform .1s,border-color .15s}
+.btn:active{transform:scale(.98)}
+.btn-p:hover{background:color-mix(in srgb,var(--accent) 85%,#000)!important}
+.btn-o:hover{background:#F1F4F4!important}
+.chip{transition:background-color .15s,border-color .15s,color .15s}
+.chip:hover{border-color:var(--accent)!important}
+.chip.on{background:color-mix(in srgb,var(--accent) 10%,#fff)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+.fav{transition:transform .15s}.fav:hover{transform:scale(1.08)}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:12px;box-shadow:0 0 0 2px #fff;flex:none}
+.dgt-0{background:#1559B8;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8.5px}
+.dgt-c{background:#24803A;color:#fff}
+.dgt-b{background:#F2C00F;color:#2B2200}
+.skel{background:linear-gradient(90deg,#E6EBEC 0%,#F4F6F6 50%,#E6EBEC 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:8px}
+@keyframes sh{to{background-position:-200% 0}}
+.fade{animation:fu .35s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.dual{position:relative;height:28px}
+.dual input[type=range]{position:absolute;left:0;top:0;width:100%;height:28px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none}
+.dual input[type=range]::-webkit-slider-runnable-track{background:transparent}
+.dual input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--accent);box-shadow:0 1px 4px rgba(14,26,31,.25);cursor:grab}
+.dual input[type=range]::-moz-range-thumb{pointer-events:auto;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--accent);cursor:grab}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+@media (max-width:720px){.side{max-width:none!important}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6; min-height: 100vh">
+
+<header style="position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid #E3E7EA">
+<div style="max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap">
+<a href="Main.dc.html" aria-label="Rueda, inicio" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0E1A1F">
+<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</a>
+<label style="flex: 1 1 320px; max-width: 640px; position: relative; display: flex; align-items: center">
+<span class="sr">Buscar por marca o modelo</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 16px"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg>
+<input type="search" placeholder="Busca por marca o modelo, p. ej. SEAT León" value="{{q}}" onChange="{{onQ}}" style="width: 100%; height: 48px; border-radius: 12px; border: 1px solid #D5DCDF; background: #F7F9F9; padding: 0 16px 0 46px; font: inherit; font-size: 15px; color: #0E1A1F">
+</label>
+<a href="Favoritos-escritorio.dc.html" aria-label="Favoritos: {{favCount}} coches guardados" class="btn btn-o" style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #E3E7EA; background: #fff; color: #0E1A1F; text-decoration: none; font-weight: 700; font-size: 14px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+<span>Favoritos</span>
+<span class="num" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--accent); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center">{{favCount}}</span>
+</a>
+</div>
+</header>
+
+<main style="max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px">
+<div style="margin-bottom: 28px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent)">Coches de segunda mano</p>
+<h1 style="margin: 0; font-size: 34px; line-height: 1.15; font-weight: 800; letter-spacing: -0.03em">Encuentra tu próximo coche</h1>
+<p style="margin: 0; font-size: 16px; color: #56616B">Todos revisados, con historial verificado y precio final sin sorpresas.</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+
+<aside class="side" aria-label="Filtros" style="flex: 1 1 280px; max-width: 300px; background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; padding: 6px 20px 20px">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 0">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Filtros</h2>
+<sc-if value="{{activeCount}}" hint-placeholder-val="{{ true }}">
+<span class="num" style="font-size: 12px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, #fff); padding: 4px 10px; border-radius: 999px">{{activeTxt}}</span>
+</sc-if>
+</div>
+
+<fieldset style="border: 0; border-top: 1px solid #EEF1F2; margin: 0; padding: 16px 0">
+<legend style="float: left; width: 100%; padding: 0; margin-bottom: 10px; font-size: 14px; font-weight: 800">Marca</legend>
+<div style="clear: both; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{brands}}" as="b" hint-placeholder-count="6">
+<label style="display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 14px; cursor: pointer">
+<input type="checkbox" checked="{{b.checked}}" onChange="{{b.toggle}}" style="width: 18px; height: 18px; margin: 0; accent-color: var(--accent)">
+<span style="flex: 1">{{b.name}}</span>
+<span class="num" style="font-size: 12px; color: #56616B">{{b.count}}</span>
+</label>
+</sc-for>
+</div>
+<button type="button" onClick="{{toggleBrands}}" style="margin-top: 6px; padding: 8px 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--accent); cursor: pointer">{{brandsBtn}}</button>
+</fieldset>
+
+<div style="border-top: 1px solid #EEF1F2; padding: 16px 0; display: flex; flex-direction: column; gap: 8px">
+<label for="modelo" style="font-size: 14px; font-weight: 800">Modelo</label>
+<select id="modelo" value="{{model}}" onChange="{{onModel}}" disabled="{{modelDisabled}}" style="height: 44px; border-radius: 10px; border: 1px solid #D5DCDF; background: #fff; padding: 0 12px; font: inherit; font-size: 14px; color: #0E1A1F">
+<option value="">{{modelPlaceholder}}</option>
+<sc-for list="{{models}}" as="m" hint-placeholder-count="3">
+<option value="{{m.v}}">{{m.v}}</option>
+</sc-for>
+</select>
+<sc-if value="{{modelDisabled}}" hint-placeholder-val="{{ true }}">
+<span style="font-size: 12px; color: #56616B">Elige antes una marca para ver sus modelos.</span>
+</sc-if>
+</div>
+
+<sc-for list="{{ranges}}" as="r" hint-placeholder-count="3">
+<div style="border-top: 1px solid #EEF1F2; padding: 16px 0; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<span style="font-size: 14px; font-weight: 800">{{r.label}}</span>
+<span class="num" style="font-size: 13px; font-weight: 700; color: #33404A">{{r.loTxt}} – {{r.hiTxt}}</span>
+</div>
+<div class="dual">
+<div style="position: absolute; left: 0; right: 0; top: 12px; height: 4px; border-radius: 4px; background: #E3E7EA"></div>
+<div style="position: absolute; top: 12px; height: 4px; border-radius: 4px; background: var(--accent); left: {{r.l}}%; right: {{r.r}}%"></div>
+<input type="range" min="{{r.min}}" max="{{r.max}}" step="{{r.step}}" value="{{r.lo}}" onChange="{{r.onLo}}" aria-label="{{r.label}} mínimo">
+<input type="range" min="{{r.min}}" max="{{r.max}}" step="{{r.step}}" value="{{r.hi}}" onChange="{{r.onHi}}" aria-label="{{r.label}} máximo">
+</div>
+<div class="num" style="display: flex; justify-content: space-between; font-size: 11px; color: #56616B"><span>{{r.minTxt}}</span><span>{{r.maxTxt}}</span></div>
+</div>
+</sc-for>
+
+<div style="border-top: 1px solid #EEF1F2; padding: 16px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 800">Combustible</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{fuels}}" as="f" hint-placeholder-count="4">
+<button type="button" class="chip {{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.toggle}}" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 13px; font-weight: 600; color: #33404A; cursor: pointer">{{f.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="border-top: 1px solid #EEF1F2; padding: 16px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 800">Cambio</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{gears}}" as="g" hint-placeholder-count="2">
+<button type="button" class="chip {{g.cls}}" aria-pressed="{{g.on}}" onClick="{{g.toggle}}" style="height: 40px; border-radius: 10px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 13px; font-weight: 600; color: #33404A; cursor: pointer">{{g.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="border-top: 1px solid #EEF1F2; padding: 16px 0; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 800">Etiqueta ambiental DGT</span>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{dgts}}" as="d" hint-placeholder-count="4">
+<button type="button" class="chip {{d.cls}}" aria-pressed="{{d.on}}" aria-label="Etiqueta {{d.label}}" onClick="{{d.toggle}}" style="height: 48px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+<span class="dgt dgt-{{d.key}}">{{d.label}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+
+<button type="button" class="btn btn-o" onClick="{{clearAll}}" style="width: 100%; height: 44px; margin-top: 4px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 14px; font-weight: 700; color: #0E1A1F; cursor: pointer">Limpiar filtros</button>
+</aside>
+
+<section aria-label="Resultados" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<h2 class="num" style="margin: 0; font-size: 20px; font-weight: 800" aria-live="polite">{{totalTxt}}</h2>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: #56616B">
+Ordenar por
+<select value="{{sort}}" onChange="{{onSort}}" style="height: 44px; border-radius: 10px; border: 1px solid #D5DCDF; background: #fff; padding: 0 12px; font: inherit; font-size: 14px; font-weight: 700; color: #0E1A1F">
+<option value="recientes">Más recientes</option>
+<option value="precioAsc">Precio: de menor a mayor</option>
+<option value="precioDesc">Precio: de mayor a menor</option>
+<option value="km">Menos kilómetros</option>
+<option value="anio">Año: más nuevos</option>
+</select>
+</label>
+</div>
+
+<sc-if value="{{activeCount}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="2">
+<button type="button" class="chip" onClick="{{c.remove}}" aria-label="Quitar filtro {{c.label}}" style="height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px 0 14px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 35%, #fff); background: color-mix(in srgb, var(--accent) 8%, #fff); font: inherit; font-size: 13px; font-weight: 700; color: #0E1A1F; cursor: pointer">
+<span class="num">{{c.label}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+</sc-for>
+<button type="button" onClick="{{clearAll}}" style="height: 34px; padding: 0 8px; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: underline; cursor: pointer">Limpiar todo</button>
+</div>
+</sc-if>
+
+<sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+<div aria-busy="true" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px">
+<sc-for list="{{skeletons}}" as="k" hint-placeholder-count="6">
+<div style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden">
+<div class="skel" style="aspect-ratio: 16 / 10; border-radius: 0"></div>
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div class="skel" style="height: 18px; width: 60%"></div>
+<div class="skel" style="height: 12px; width: 80%"></div>
+<div class="skel" style="height: 26px; width: 45%; margin-top: 6px"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 6px"><div class="skel" style="height: 12px"></div><div class="skel" style="height: 12px"></div><div class="skel" style="height: 12px"></div><div class="skel" style="height: 12px"></div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{showGrid}}" hint-placeholder-val="{{ true }}">
+<div class="fade" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="9">
+<article class="card" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+<div style="position: relative">
+<a href="Detalle-escritorio.dc.html" class="ph" aria-label="Ver {{c.marca}} {{c.modelo}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 16 / 10; text-decoration: none; color: #56616B">
+<svg width="72" height="36" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · {{c.marca}} {{c.modelo}}</span>
+</a>
+<span class="dgt dgt-{{c.dgtKey}}" title="Etiqueta ambiental {{c.dgt}}" style="position: absolute; left: 12px; top: 12px">{{c.dgt}}</span>
+<span class="num" style="position: absolute; left: 12px; bottom: 12px; font-size: 11px; font-weight: 700; color: #fff; background: rgba(14,26,31,0.72); padding: 4px 8px; border-radius: 6px">{{c.fotos}} fotos</span>
+<button type="button" class="fav" aria-label="{{c.favLabel}}" aria-pressed="{{c.isFav}}" onClick="{{c.toggleFav}}" style="position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(14,26,31,0.15)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="{{c.heartFill}}" stroke="{{c.heartStroke}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+</button>
+</div>
+<div style="padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+<div>
+<h3 style="margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.01em"><a href="Detalle-escritorio.dc.html" style="color: #0E1A1F; text-decoration: none">{{c.marca}} {{c.modelo}}</a></h3>
+<p style="margin: 3px 0 0; font-size: 13px; color: #56616B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.version}}</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="num" style="font-size: 27px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1">{{c.precioTxt}}</span>
+<span style="font-size: 13px; color: #56616B">desde <strong class="num" style="color: var(--accent); font-weight: 800">{{c.cuotaTxt}}/mes</strong></span>
+</div>
+<ul class="num" style="list-style: none; margin: 0; padding: 12px 0 0; border-top: 1px solid #EEF1F2; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; font-size: 13px; font-weight: 600; color: #33404A">
+<li style="display: flex; align-items: center; gap: 7px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg><span class="sr">Año </span>{{c.anio}}</li>
+<li style="display: flex; align-items: center; gap: 7px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 17a8 8 0 1 1 16 0"></path><path d="M12 17l3.5-5"></path></svg><span class="sr">Kilómetros </span>{{c.kmTxt}}</li>
+<li style="display: flex; align-items: center; gap: 7px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v16M3.5 21h12M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8.5L18.5 6M7.5 7.5h4"></path></svg><span class="sr">Combustible </span>{{c.comb}}</li>
+<li style="display: flex; align-items: center; gap: 7px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="1.8"></circle><circle cx="12" cy="5" r="1.8"></circle><circle cx="18" cy="5" r="1.8"></circle><circle cx="6" cy="19" r="1.8"></circle><circle cx="12" cy="19" r="1.8"></circle><path d="M6 7v10M12 7v10M18 7v5H6"></path></svg><span class="sr">Cambio </span>{{c.cambio}}</li>
+</ul>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<label style="display: flex; align-items: center; gap: 8px; min-height: 40px; font-size: 13px; font-weight: 700; cursor: pointer">
+<input type="checkbox" checked="{{c.isCmp}}" disabled="{{c.cmpDisabled}}" onChange="{{c.toggleCmp}}" style="width: 18px; height: 18px; margin: 0; accent-color: var(--accent)">
+Comparar
+</label>
+<span style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: #56616B"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.2"></circle></svg>{{c.ciudad}}</span>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px 0">
+<span class="num" style="font-size: 13px; color: #56616B">{{shownTxt}}</span>
+<sc-if value="{{hasMore}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="btn btn-o" onClick="{{loadMore}}" style="height: 48px; padding: 0 28px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #0E1A1F; cursor: pointer">{{moreTxt}}</button>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{showEmpty}}" hint-placeholder-val="{{ false }}">
+<div class="fade" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 56px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px">
+<svg width="168" height="120" viewBox="0 0 168 120" fill="none" aria-hidden="true"><ellipse cx="84" cy="104" rx="64" ry="7" fill="#EEF1F2"></ellipse><path d="M30 92H24v-9c0-1.6 1.2-3 2.8-3.2L42 78l11-9.5h28l14 9.8 15 2.6c1.6.3 2.6 1.6 2.6 3.2V92h-5" stroke="#B9C3C8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="41" cy="92" r="8" stroke="#B9C3C8" stroke-width="3"></circle><circle cx="96" cy="92" r="8" stroke="#B9C3C8" stroke-width="3"></circle><circle cx="122" cy="44" r="22" fill="#fff" stroke="var(--accent)" stroke-width="4"></circle><path d="M138 60l14 14" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"></path><path d="M114 36l16 16M130 36l-16 16" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"></path></svg>
+<h3 style="margin: 8px 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">No hay coches con estos filtros</h3>
+<p style="margin: 0; max-width: 380px; font-size: 15px; color: #56616B">Prueba a ampliar el rango de precio o kilómetros, o quita alguno de los filtros activos.</p>
+<button type="button" class="btn btn-p" onClick="{{clearAll}}" style="margin-top: 8px; height: 48px; padding: 0 24px; border-radius: 12px; border: 0; background: var(--accent); color: #fff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Limpiar filtros</button>
+</div>
+</sc-if>
+
+<sc-if value="{{hasCmp}}" hint-placeholder-val="{{ true }}">
+<div class="fade" style="position: sticky; bottom: 20px; z-index: 20; margin-top: 8px; background: #0E1A1F; color: #fff; border-radius: 16px; padding: 12px 12px 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; box-shadow: 0 18px 40px -16px rgba(14,26,31,0.6)">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="7.5" height="16" rx="1.5"></rect><rect x="13.5" y="4" width="7.5" height="16" rx="1.5"></rect></svg>
+<strong class="num" style="font-size: 15px">{{cmpTitle}}</strong>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1">
+<sc-for list="{{cmpItems}}" as="x" hint-placeholder-count="2">
+<span style="display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 4px 0 12px; border-radius: 999px; background: rgba(255,255,255,0.12); font-size: 13px; font-weight: 600">{{x.name}}
+<button type="button" onClick="{{x.remove}}" aria-label="Quitar {{x.name}} del comparador" style="width: 26px; height: 26px; border-radius: 50%; border: 0; background: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</span>
+</sc-for>
+</div>
+<span style="font-size: 13px; color: #B9C3C8">{{cmpHint}}</span>
+<a href="Comparador-escritorio.dc.html" class="btn btn-p" style="height: 44px; padding: 0 20px; border-radius: 12px; background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center">Comparar ahora</a>
+</div>
+</sc-if>
+</section>
+</div>
+</main>
+
+<footer style="border-top: 1px solid #E3E7EA; background: #fff">
+<div style="max-width: 1280px; margin: 0 auto; padding: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: #56616B">
+<span>© 2026 Rueda · Proyecto de portafolio</span>
+<span>Precios con IVA incluido. Cuotas orientativas a 96 meses con entrada del 15 %, TIN 8,99 %.</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"estado":{"editor":"enum","options":["resultados","cargando","vacio"],"default":"resultados"},"$preview":{"width":1440,"height":2150}}'>
+const CARS = [
+  {id:'leon',marca:'SEAT',modelo:'León',version:'1.5 TSI FR · 150 CV',precio:18990,anio:2021,km:48200,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Madrid',fotos:14,pub:1},
+  {id:'golf',marca:'Volkswagen',modelo:'Golf',version:'2.0 TDI Life · 115 CV',precio:17450,anio:2020,km:79500,comb:'Diésel',cambio:'Manual',dgt:'C',ciudad:'Valencia',fotos:11,pub:6},
+  {id:'chr',marca:'Toyota',modelo:'C-HR',version:'125H Advance · 122 CV',precio:21900,anio:2021,km:52000,comb:'Híbrido',cambio:'Automático',dgt:'ECO',ciudad:'Sevilla',fotos:16,pub:2},
+  {id:'clio',marca:'Renault',modelo:'Clio',version:'TCe 90 Evolution · 91 CV',precio:13490,anio:2022,km:31400,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Barcelona',fotos:10,pub:4},
+  {id:'sportage',marca:'Kia',modelo:'Sportage',version:'1.6 T-GDi HEV Drive · 230 CV',precio:27950,anio:2022,km:38700,comb:'Híbrido',cambio:'Automático',dgt:'ECO',ciudad:'Madrid',fotos:18,pub:3},
+  {id:'p3008',marca:'Peugeot',modelo:'3008',version:'1.2 PureTech Allure EAT8 · 130 CV',precio:19750,anio:2020,km:66300,comb:'Gasolina',cambio:'Automático',dgt:'C',ciudad:'Málaga',fotos:12,pub:9},
+  {id:'model3',marca:'Tesla',modelo:'Model 3',version:'Gran Autonomía AWD · 440 CV',precio:26900,anio:2021,km:72000,comb:'Eléctrico',cambio:'Automático',dgt:'0',ciudad:'Madrid',fotos:15,pub:5},
+  {id:'tucson',marca:'Hyundai',modelo:'Tucson',version:'1.6 CRDi 48V Tecno · 136 CV',precio:22490,anio:2021,km:58900,comb:'Diésel',cambio:'Manual',dgt:'ECO',ciudad:'Zaragoza',fotos:13,pub:7},
+  {id:'sandero',marca:'Dacia',modelo:'Sandero Stepway',version:'TCe 90 Comfort · 91 CV',precio:12990,anio:2023,km:19800,comb:'Gasolina',cambio:'Manual',dgt:'C',ciudad:'Bilbao',fotos:9,pub:2},
+  {id:'cx30',marca:'Mazda',modelo:'CX-30',version:'e-Skyactiv G 2.0 Zenith · 150 CV',precio:24700,anio:2022,km:34500,comb:'Gasolina',cambio:'Automático',dgt:'ECO',ciudad:'Madrid',fotos:12,pub:8},
+  {id:'puma',marca:'Ford',modelo:'Puma',version:'1.0 EcoBoost MHEV ST-Line · 125 CV',precio:18450,anio:2021,km:41200,comb:'Gasolina',cambio:'Manual',dgt:'ECO',ciudad:'Valencia',fotos:11,pub:10},
+  {id:'id3',marca:'Volkswagen',modelo:'ID.3',version:'Pro 58 kWh · 204 CV',precio:24990,anio:2022,km:29800,comb:'Eléctrico',cambio:'Automático',dgt:'0',ciudad:'Barcelona',fotos:14,pub:11},
+  {id:'astra',marca:'Opel',modelo:'Astra',version:'1.6 CDTi Dynamic · 110 CV',precio:7990,anio:2015,km:142000,comb:'Diésel',cambio:'Manual',dgt:'B',ciudad:'Valladolid',fotos:8,pub:4}
+];
+const MODELS = {SEAT:['León','Ibiza','Arona','Ateca'],Volkswagen:['Golf','Polo','T-Roc','ID.3'],Toyota:['C-HR','Corolla','Yaris'],Renault:['Clio','Captur','Mégane'],Kia:['Sportage','Niro','Ceed'],Peugeot:['3008','208','2008'],Tesla:['Model 3','Model Y'],Hyundai:['Tucson','Kona','i30'],Dacia:['Sandero Stepway','Duster'],Mazda:['CX-30','Mazda3'],Ford:['Puma','Focus','Kuga'],Opel:['Astra','Corsa']};
+const RANGE = {precio:{label:'Precio',min:3000,max:60000,step:500},anio:{label:'Año',min:2010,max:2025,step:1},km:{label:'Kilómetros',min:0,max:200000,step:5000}};
+const INIT = {brands:[],model:'',precio:[3000,30000],anio:[2010,2025],km:[0,80000],fuels:[],gears:[],dgt:[]};
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const eur = n => fmt(n) + ' €';
+const cuota = p => { const r = 0.0899 / 12, n = 96, cap = p * 0.85; return Math.round(cap * r / (1 - Math.pow(1 + r, -n))); };
+const tog = (a, v) => a.includes(v) ? a.filter(x => x !== v) : [...a, v];
+const inR = (v, r) => v >= r[0] && v <= r[1];
+const SORT = {recientes:(a,b)=>a.pub-b.pub,precioAsc:(a,b)=>a.precio-b.precio,precioDesc:(a,b)=>b.precio-a.precio,km:(a,b)=>a.km-b.km,anio:(a,b)=>b.anio-a.anio};
+const rTxt = (k, v) => k === 'precio' ? eur(v) : k === 'km' ? fmt(v) + ' km' : String(v);
+
+class Component extends DCLogic {
+  state = {...INIT, favs:['chr','model3','sportage'], compare:['leon','chr'], q:'', sort:'recientes', limit:9, loading:false, moreLoading:false, allBrands:false};
+
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._m); }
+
+  apply(patch, load = true) {
+    this.setState({...patch, limit: 9, ...(load ? {loading: true} : {})});
+    if (load) { clearTimeout(this._t); this._t = setTimeout(() => this.setState({loading: false}), 520); }
+  }
+
+  card(c, s) {
+    const fav = s.favs.includes(c.id), cmp = s.compare.includes(c.id);
+    return {...c, precioTxt: eur(c.precio), cuotaTxt: eur(cuota(c.precio)), kmTxt: fmt(c.km) + ' km', dgtKey: c.dgt.toLowerCase(),
+      isFav: fav, favLabel: fav ? 'Quitar de favoritos' : 'Añadir a favoritos', heartFill: fav ? '#E5484D' : 'none', heartStroke: fav ? '#E5484D' : '#0E1A1F',
+      isCmp: cmp, cmpDisabled: !cmp && s.compare.length >= 3,
+      toggleFav: () => this.setState(st => ({favs: tog(st.favs, c.id)})),
+      toggleCmp: () => this.setState(st => ({compare: tog(st.compare, c.id)}))};
+  }
+
+  renderVals() {
+    const s = this.state, accent = this.props.accent ?? '#0B7A75', estado = this.props.estado ?? 'resultados';
+    const q = (s.q || '').trim().toLowerCase();
+    let list = CARS.filter(c => (!s.brands.length || s.brands.includes(c.marca)) && (!s.model || c.modelo === s.model)
+      && inR(c.precio, s.precio) && inR(c.anio, s.anio) && inR(c.km, s.km)
+      && (!s.fuels.length || s.fuels.includes(c.comb)) && (!s.gears.length || s.gears.includes(c.cambio)) && (!s.dgt.length || s.dgt.includes(c.dgt))
+      && (!q || (c.marca + ' ' + c.modelo + ' ' + c.version).toLowerCase().includes(q)));
+    list.sort(SORT[s.sort]);
+    if (estado === 'vacio') list = [];
+    const loading = s.loading || estado === 'cargando';
+    const total = list.length;
+
+    const brandNames = Object.keys(MODELS);
+    const showAll = s.allBrands || s.brands.some(b => brandNames.indexOf(b) >= 6);
+    const brands = (showAll ? brandNames : brandNames.slice(0, 6)).map(name => ({
+      name, count: CARS.filter(c => c.marca === name).length, checked: s.brands.includes(name),
+      toggle: () => { const nb = tog(this.state.brands, name); const ok = nb.some(b => MODELS[b].includes(this.state.model)); this.apply({brands: nb, model: ok ? this.state.model : ''}); }
+    }));
+    const models = s.brands.flatMap(b => MODELS[b]).map(v => ({v}));
+
+    const ranges = Object.keys(RANGE).map(k => {
+      const R = RANGE[k], [lo, hi] = s[k], span = R.max - R.min;
+      return {key: k, label: R.label, min: R.min, max: R.max, step: R.step, lo, hi, loTxt: rTxt(k, lo), hiTxt: rTxt(k, hi), minTxt: rTxt(k, R.min), maxTxt: rTxt(k, R.max),
+        l: ((lo - R.min) / span * 100).toFixed(1), r: ((R.max - hi) / span * 100).toFixed(1),
+        onLo: e => { const v = Math.min(+e.target.value, this.state[k][1] - R.step); this.apply({[k]: [v, this.state[k][1]]}, false); },
+        onHi: e => { const v = Math.max(+e.target.value, this.state[k][0] + R.step); this.apply({[k]: [this.state[k][0], v]}, false); }};
+    });
+
+    const mk = (arr, key, label) => arr.map(v => { const on = s[key].includes(v); return {label: label ? label(v) : v, key: String(v).toLowerCase(), on, cls: on ? 'on' : '', toggle: () => this.apply({[key]: tog(this.state[key], v)})}; });
+
+    const chips = [];
+    s.brands.forEach(b => chips.push({label: b, remove: () => this.apply({brands: this.state.brands.filter(x => x !== b), model: ''})}));
+    if (s.model) chips.push({label: s.model, remove: () => this.apply({model: ''})});
+    Object.keys(RANGE).forEach(k => {
+      const R = RANGE[k], [lo, hi] = s[k];
+      if (lo === R.min && hi === R.max) return;
+      const label = lo === R.min ? 'Hasta ' + rTxt(k, hi) : hi === R.max ? 'Desde ' + rTxt(k, lo) : rTxt(k, lo) + ' – ' + rTxt(k, hi);
+      chips.push({label, remove: () => this.apply({[k]: [R.min, R.max]})});
+    });
+    s.fuels.forEach(v => chips.push({label: v, remove: () => this.apply({fuels: tog(this.state.fuels, v)})}));
+    s.gears.forEach(v => chips.push({label: v, remove: () => this.apply({gears: tog(this.state.gears, v)})}));
+    s.dgt.forEach(v => chips.push({label: 'Etiqueta ' + v, remove: () => this.apply({dgt: tog(this.state.dgt, v)})}));
+
+    const cmpCars = s.compare.map(id => CARS.find(c => c.id === id));
+    const shown = Math.min(s.limit, total);
+
+    return {
+      accent, q: s.q, onQ: e => this.apply({q: e.target.value}, false),
+      favCount: s.favs.length,
+      brands, brandsBtn: showAll ? 'Ver menos marcas' : 'Ver todas las marcas (' + brandNames.length + ')',
+      toggleBrands: () => this.setState({allBrands: !showAll}),
+      model: s.model, models, modelDisabled: s.brands.length === 0, modelPlaceholder: s.brands.length ? 'Todos los modelos' : 'Selecciona una marca',
+      onModel: e => this.apply({model: e.target.value}),
+      ranges,
+      fuels: mk(['Gasolina','Diésel','Híbrido','Eléctrico'], 'fuels'),
+      gears: mk(['Manual','Automático'], 'gears'),
+      dgts: mk(['0','ECO','C','B'], 'dgt'),
+      clearAll: () => this.apply({...INIT, precio: [3000, 60000], anio: [2010, 2025], km: [0, 200000], q: ''}),
+      chips, activeCount: chips.length > 0, activeTxt: chips.length + (chips.length === 1 ? ' activo' : ' activos'),
+      sort: s.sort, onSort: e => this.apply({sort: e.target.value}),
+      totalTxt: total === 1 ? '1 coche encontrado' : fmt(total) + ' coches encontrados',
+      loading, skeletons: [1,2,3,4,5,6],
+      showGrid: !loading && total > 0, showEmpty: !loading && total === 0,
+      cards: list.slice(0, s.limit).map(c => this.card(c, s)),
+      shownTxt: 'Mostrando ' + shown + ' de ' + total,
+      hasMore: total > s.limit, moreTxt: s.moreLoading ? 'Cargando…' : 'Cargar más coches (' + (total - s.limit) + ')',
+      loadMore: () => { this.setState({moreLoading: true}); clearTimeout(this._m); this._m = setTimeout(() => this.setState(st => ({limit: st.limit + 9, moreLoading: false})), 600); },
+      hasCmp: s.compare.length > 0, cmpTitle: 'Comparar (' + s.compare.length + '/3)',
+      cmpItems: cmpCars.map(c => ({name: c.marca + ' ' + c.modelo, remove: () => this.setState(st => ({compare: st.compare.filter(x => x !== c.id)}))})),
+      cmpHint: s.compare.length < 2 ? 'Elige al menos 2 coches' : s.compare.length < 3 ? 'Puedes añadir 1 más' : 'Máximo alcanzado'
+    };
+  }
+}
+</script>
+</body>
+</html>

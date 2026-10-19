@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Componentes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.ph{background-color:#ECF0F0;background-image:repeating-linear-gradient(135deg,rgba(14,26,31,.04) 0 10px,transparent 10px 20px)}
+.code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#56616B}
+.card{transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(14,26,31,.28)}
+.btn{transition:background-color .15s,transform .1s}
+.btn-p:hover{background:color-mix(in srgb,var(--accent) 85%,#000)!important}
+.btn-o:hover{background:#F1F4F4!important}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:12px;flex:none}
+.dgt-0{background:#1559B8;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8.5px}
+.dgt-c{background:#24803A;color:#fff}
+.dgt-b{background:#F2C00F;color:#2B2200}
+.skel{background:linear-gradient(90deg,#E6EBEC 0%,#F4F6F6 50%,#E6EBEC 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:8px}
+@keyframes sh{to{background-position:-200% 0}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; width: 1440px; height: 1240px; box-sizing: border-box; padding: 56px; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; align-items: flex-end; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 28px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</span>
+<h1 style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.03em">Componentes y tokens</h1>
+</div>
+<p style="margin: 0; max-width: 420px; font-size: 15px; color: #56616B; text-align: right">Piezas reutilizables para React + TypeScript + Tailwind. Los nombres en gris son los componentes y sus props.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; flex: 1">
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Color</h2>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{colors}}" as="c" hint-placeholder-count="8">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="height: 56px; border-radius: 12px; border: 1px solid #E3E7EA; background: {{c.v}}"></div>
+<span style="font-size: 12px; font-weight: 700">{{c.n}}</span>
+<span class="code" style="font-size: 11px">{{c.t}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Tipografía · Manrope</h2>
+<div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #EEF1F2; padding-bottom: 10px"><span class="num" style="font-size: 40px; font-weight: 800; letter-spacing: -0.035em; line-height: 1">18.990 €</span><span class="code">price-xl · 40/800</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #EEF1F2; padding-bottom: 10px"><span style="font-size: 26px; font-weight: 800; letter-spacing: -0.03em">SEAT León</span><span class="code">title · 26/800</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #EEF1F2; padding-bottom: 10px"><span class="num" style="font-size: 17px; font-weight: 800">45.000 km</span><span class="code">data · 17/800 tabular</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #EEF1F2; padding-bottom: 10px"><span style="font-size: 15px; font-weight: 500">Revisado y con garantía</span><span class="code">body · 15/500</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 13px; color: #56616B">1.5 TSI FR · 150 CV</span><span class="code">small · 13/500</span></div>
+</section>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Button</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+<button type="button" class="btn btn-p" style="height: 48px; padding: 0 22px; border-radius: 12px; border: 0; background: var(--accent); color: #fff; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer">Me interesa</button>
+<button type="button" class="btn btn-o" style="height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff; color: #0E1A1F; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Añadir a favoritos</button>
+<button type="button" class="btn" style="height: 48px; padding: 0 20px; border-radius: 12px; border: 0; background: #0E1A1F; color: #fff; font: inherit; font-size: 15px; font-weight: 700">Filtros</button>
+<button type="button" disabled style="height: 48px; padding: 0 20px; border-radius: 12px; border: 0; background: #E3E7EA; color: #56616B; font: inherit; font-size: 15px; font-weight: 700">Deshabilitado</button>
+<button type="button" style="height: 44px; padding: 0 4px; border: 0; background: none; color: var(--accent); font: inherit; font-size: 14px; font-weight: 700; text-decoration: underline">Limpiar todo</button>
+</div>
+<span class="code">variant: primary | secondary | dark | ghost · size: md | lg</span>
+</section>
+
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">FilterChip</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<button type="button" aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #D5DCDF; background: #fff; font: inherit; font-size: 13px; font-weight: 600; color: #33404A">Diésel</button>
+<button type="button" aria-pressed="true" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 10%, #fff); font: inherit; font-size: 13px; font-weight: 600; color: var(--accent)">Híbrido</button>
+<button type="button" aria-label="Quitar filtro Hasta 30.000 €" style="height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px 0 14px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 35%, #fff); background: color-mix(in srgb, var(--accent) 8%, #fff); font: inherit; font-size: 13px; font-weight: 700; color: #0E1A1F"><span class="num">Hasta 30.000 €</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<span class="code">selected?: boolean · onRemove?: () =&gt; void</span>
+</section>
+
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">DgtBadge y Badge</h2>
+<div style="display: flex; gap: 16px; align-items: center">
+<span class="dgt dgt-0" title="Etiqueta 0">0</span><span class="dgt dgt-eco" title="Etiqueta ECO">ECO</span><span class="dgt dgt-c" title="Etiqueta C">C</span><span class="dgt dgt-b" title="Etiqueta B">B</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="font-size: 12px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, #fff); padding: 5px 10px; border-radius: 999px">Garantía 12 meses</span>
+<span style="font-size: 12px; font-weight: 700; color: #33404A; background: #EEF1F2; padding: 5px 10px; border-radius: 999px">Único propietario</span>
+<span class="num" style="font-size: 12px; font-weight: 800; color: #fff; background: var(--accent); padding: 5px 10px; border-radius: 6px">Ha bajado 600 €</span>
+<span class="num" style="font-size: 11px; font-weight: 700; color: #fff; background: rgba(14,26,31,0.75); padding: 4px 8px; border-radius: 6px">14 fotos</span>
+</div>
+<span class="code">label: '0' | 'ECO' | 'C' | 'B'</span>
+</section>
+
+<section style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Campos</h2>
+<label style="position: relative; display: flex; align-items: center"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#56616B" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg><input type="search" placeholder="Marca o modelo" style="width: 100%; height: 46px; border-radius: 12px; border: 1px solid #D5DCDF; background: #F7F9F9; padding: 0 14px 0 42px; font: inherit; font-size: 15px"></label>
+<div style="display: flex; gap: 16px; align-items: center">
+<label style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700"><input type="checkbox" checked style="width: 18px; height: 18px; margin: 0; accent-color: var(--accent)">Comparar</label>
+<input type="range" min="0" max="100" value="60" aria-label="Ejemplo de slider" style="flex: 1; accent-color: var(--accent)">
+</div>
+</section>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 24px">
+<section style="display: flex; flex-direction: column; gap: 10px">
+<span class="code">&lt;CarCard car={car} isFavorite onToggleFavorite onToggleCompare /&gt;</span>
+<article class="card" style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+<div style="position: relative">
+<div class="ph" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 16 / 10; color: #56616B">
+<svg width="72" height="36" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · Toyota C-HR</span>
+</div>
+<span class="dgt dgt-eco" style="position: absolute; left: 12px; top: 12px; box-shadow: 0 0 0 2px #fff">ECO</span>
+<button type="button" aria-label="Quitar de favoritos" aria-pressed="true" style="position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(14,26,31,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="#E5484D" stroke="#E5484D" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg></button>
+</div>
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div><h3 style="margin: 0; font-size: 17px; font-weight: 800">Toyota C-HR</h3><p style="margin: 3px 0 0; font-size: 13px; color: #56616B">125H Advance · 122 CV</p></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="num" style="font-size: 27px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1">21.900 €</span><span style="font-size: 13px; color: #56616B">desde <strong class="num" style="color: var(--accent)">273 €/mes</strong></span></div>
+<p class="num" style="margin: 0; padding-top: 12px; border-top: 1px solid #EEF1F2; font-size: 13px; font-weight: 600; color: #33404A">2021 · 52.000 km · Híbrido · Automático</p>
+<label style="display: flex; align-items: center; gap: 8px; min-height: 40px; font-size: 13px; font-weight: 700"><input type="checkbox" checked style="width: 18px; height: 18px; margin: 0; accent-color: var(--accent)">Comparar</label>
+</div>
+</article>
+</section>
+<section style="display: flex; flex-direction: column; gap: 10px">
+<span class="code">&lt;CarCardSkeleton /&gt;</span>
+<div style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden; display: flex">
+<div class="skel" style="width: 140px; flex: none; border-radius: 0"></div>
+<div style="flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 10px"><div class="skel" style="height: 16px; width: 70%"></div><div class="skel" style="height: 12px; width: 90%"></div><div class="skel" style="height: 24px; width: 50%"></div></div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 10px">
+<span class="code">&lt;CompareBar cars={selected} max={3} /&gt;</span>
+<div style="background: #0E1A1F; color: #fff; border-radius: 16px; padding: 10px 10px 10px 18px; display: flex; align-items: center; gap: 12px">
+<div style="flex: 1; display: flex; flex-direction: column"><strong class="num" style="font-size: 15px">Comparar (2/3)</strong><span style="font-size: 12px; color: #B9C3C8">SEAT León · Toyota C-HR</span></div>
+<span style="height: 44px; padding: 0 18px; border-radius: 12px; background: var(--accent); font-size: 14px; font-weight: 800; display: flex; align-items: center">Comparar</span>
+</div>
+</section>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#0B7A75';
+    return {
+      accent,
+      colors: [
+        {n: 'Tinta', t: '#0E1A1F', v: '#0E1A1F'}, {n: 'Texto 2', t: '#56616B', v: '#56616B'}, {n: 'Fondo', t: '#F4F6F6', v: '#F4F6F6'}, {n: 'Superficie', t: '#FFFFFF', v: '#FFFFFF'},
+        {n: 'Borde', t: '#E3E7EA', v: '#E3E7EA'}, {n: 'Acento', t: accent.toUpperCase(), v: accent}, {n: 'Acento suave', t: 'acento 10 %', v: 'color-mix(in srgb, ' + accent + ' 10%, #fff)'}, {n: 'Favorito', t: '#E5484D', v: '#E5484D'}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

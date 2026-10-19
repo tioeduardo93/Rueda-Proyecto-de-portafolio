@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Comparador</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F6F6}
+*{box-sizing:border-box}
+a{color:var(--accent)}a:hover{color:#0E1A1F}
+.num{font-variant-numeric:tabular-nums}
+.ph{background-color:#ECF0F0;background-image:repeating-linear-gradient(135deg,rgba(14,26,31,.04) 0 10px,transparent 10px 20px)}
+.btn{transition:background-color .15s,transform .1s,border-color .15s}
+.btn:active{transform:scale(.98)}
+.btn-p:hover{background:color-mix(in srgb,var(--accent) 85%,#000)!important}
+.btn-o:hover{background:#F1F4F4!important}
+.add:hover{border-color:var(--accent)!important;background:color-mix(in srgb,var(--accent) 5%,#fff)!important}
+.best{background:color-mix(in srgb,var(--accent) 10%,#fff)!important;color:var(--accent)!important;font-weight:800!important}
+.row:hover td,.row:hover th{background-color:#F9FAFA}
+.dgt{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;font-size:11px;flex:none}
+.dgt-0{background:#1559B8;color:#fff}
+.dgt-eco{background:linear-gradient(90deg,#24803A 50%,#1559B8 50%);color:#fff;font-size:8px}
+.dgt-c{background:#24803A;color:#fff}
+.dgt-b{background:#F2C00F;color:#2B2200}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6; min-height: 100vh">
+
+<header style="background: #fff; border-bottom: 1px solid #E3E7EA">
+<div style="max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap">
+<a href="Main.dc.html" aria-label="Rueda, inicio" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0E1A1F">
+<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 24px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</a>
+<a href="Favoritos-escritorio.dc.html" aria-label="Favoritos: 3 coches guardados" class="btn btn-o" style="margin-left: auto; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid #E3E7EA; background: #fff; color: #0E1A1F; text-decoration: none; font-weight: 700; font-size: 14px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+<span>Favoritos</span>
+<span class="num" style="min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--accent); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center">3</span>
+</a>
+</div>
+</header>
+
+<main style="max-width: 1280px; margin: 0 auto; padding: 24px 24px 72px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>Volver a resultados</a>
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.03em">Comparar coches</h1>
+<p class="num" style="margin: 0; font-size: 15px; color: #56616B">{{subtitle}}</p>
+</div>
+<div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #33404A"><span class="best" style="display: inline-block; width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--accent)"></span>Mejor valor de la fila</span>
+<label style="display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; font-weight: 700; cursor: pointer">
+<input type="checkbox" checked="{{onlyDiff}}" onChange="{{toggleDiff}}" style="width: 18px; height: 18px; margin: 0; accent-color: var(--accent)">
+Mostrar solo diferencias
+</label>
+</div>
+</div>
+
+<div style="background: #fff; border: 1px solid #E3E7EA; border-radius: 20px; overflow-x: auto">
+<table style="width: 100%; min-width: 860px; border-collapse: separate; border-spacing: 0; table-layout: fixed">
+<caption style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Comparativa de especificaciones</caption>
+<colgroup><col style="width: 220px"></colgroup>
+<thead>
+<tr>
+<td style="padding: 24px; vertical-align: bottom; font-size: 13px; color: #56616B">Especificación</td>
+<sc-for list="{{cols}}" as="c" hint-placeholder-count="3">
+<th scope="col" style="padding: 20px; text-align: left; vertical-align: top; border-left: 1px solid #EEF1F2; font-weight: 400">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div class="ph" style="position: relative; aspect-ratio: 16 / 10; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #56616B">
+<svg width="60" height="30" viewBox="0 0 64 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3"></path><path d="M21 24h22"></path><circle cx="15.5" cy="24" r="4.5"></circle><circle cx="48.5" cy="24" r="4.5"></circle><path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z"></path></svg>
+<span style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase">Foto · {{c.marca}} {{c.modelo}}</span>
+<button type="button" class="btn" onClick="{{c.remove}}" aria-label="Quitar {{c.marca}} {{c.modelo}} de la comparación" style="position: absolute; right: 8px; top: 8px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.95); color: #0E1A1F; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(14,26,31,0.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div>
+<span style="display: block; font-size: 18px; font-weight: 800; color: #0E1A1F">{{c.marca}} {{c.modelo}}</span>
+<span style="display: block; margin-top: 2px; font-size: 13px; color: #56616B">{{c.version}}</span>
+</div>
+<span class="num" style="font-size: 28px; font-weight: 800; letter-spacing: -0.025em; color: #0E1A1F">{{c.precioTxt}}</span>
+<a href="Detalle-escritorio.dc.html" class="btn btn-o" style="height: 44px; border-radius: 12px; border: 1px solid #D5DCDF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #0E1A1F; text-decoration: none">Ver ficha</a>
+</div>
+</th>
+</sc-for>
+<sc-for list="{{slots}}" as="x" hint-placeholder-count="0">
+<td style="padding: 20px; border-left: 1px solid #EEF1F2; vertical-align: top">
+<a href="Main.dc.html" class="add" style="aspect-ratio: 16 / 10; border: 2px dashed #CDD5D9; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: #33404A; font-size: 14px; font-weight: 700; background: #fff">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+Añadir otro coche
+</a>
+</td>
+</sc-for>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+<tr class="row">
+<th scope="row" style="padding: 16px 24px; text-align: left; font-size: 14px; font-weight: 700; color: #33404A; border-top: 1px solid #EEF1F2">{{r.label}}</th>
+<sc-for list="{{r.cells}}" as="cell" hint-placeholder-count="3">
+<td class="num {{cell.cls}}" style="padding: 16px 20px; font-size: 16px; font-weight: 600; color: #0E1A1F; border-top: 1px solid #EEF1F2; border-left: 1px solid #EEF1F2">
+<span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<sc-if value="{{cell.dgt}}" hint-placeholder-val="{{ false }}"><span class="dgt dgt-{{cell.dgtKey}}">{{cell.text}}</span></sc-if>
+<sc-if value="{{cell.plain}}" hint-placeholder-val="{{ true }}"><span>{{cell.text}}</span></sc-if>
+<sc-if value="{{cell.best}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--accent); padding: 3px 8px; border-radius: 999px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Mejor</span></sc-if>
+</span>
+</td>
+</sc-for>
+<sc-for list="{{slots}}" as="x" hint-placeholder-count="0">
+<td style="border-top: 1px solid #EEF1F2; border-left: 1px solid #EEF1F2"></td>
+</sc-for>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<p style="margin: 0; font-size: 13px; color: #56616B">Consumo mixto homologado WLTP. Cuotas orientativas a 96 meses con entrada del 15 %, TIN 8,99 %.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":1440,"height":1500}}'>
+const CARS = [
+  {id:'leon',marca:'SEAT',modelo:'León',version:'1.5 TSI FR · 150 CV',precio:18990,anio:2021,km:48200,comb:'Gasolina',cambio:'Manual',cv:150,dgt:'C',consumo:5.7,maletero:380,color:'Gris Magnético',puertas:5,plazas:5},
+  {id:'chr',marca:'Toyota',modelo:'C-HR',version:'125H Advance · 122 CV',precio:21900,anio:2021,km:52000,comb:'Híbrido',cambio:'Automático',cv:122,dgt:'ECO',consumo:4.9,maletero:377,color:'Blanco Perla',puertas:5,plazas:5},
+  {id:'p3008',marca:'Peugeot',modelo:'3008',version:'1.2 PureTech Allure EAT8 · 130 CV',precio:19750,anio:2020,km:66300,comb:'Gasolina',cambio:'Automático',cv:130,dgt:'C',consumo:6.1,maletero:520,color:'Azul Celebes',puertas:5,plazas:5}
+];
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const eur = n => fmt(n) + ' €';
+const cuota = p => { const r = 0.0899 / 12; return Math.round(p * 0.85 * r / (1 - Math.pow(1 + r, -96))); };
+const DGT_RANK = {'0': 4, 'ECO': 3, 'C': 2, 'B': 1};
+const ROWS = [
+  {label:'Precio', get:c=>c.precio, txt:v=>eur(v), best:'min'},
+  {label:'Cuota estimada', get:c=>cuota(c.precio), txt:v=>eur(v)+'/mes', best:'min'},
+  {label:'Año', get:c=>c.anio, txt:v=>String(v), best:'max'},
+  {label:'Kilómetros', get:c=>c.km, txt:v=>fmt(v)+' km', best:'min'},
+  {label:'Potencia', get:c=>c.cv, txt:v=>v+' CV', best:'max'},
+  {label:'Consumo mixto', get:c=>c.consumo, txt:v=>String(v).replace('.', ',')+' l/100 km', best:'min'},
+  {label:'Maletero', get:c=>c.maletero, txt:v=>v+' l', best:'max'},
+  {label:'Combustible', get:c=>c.comb, txt:v=>v},
+  {label:'Cambio', get:c=>c.cambio, txt:v=>v},
+  {label:'Etiqueta DGT', get:c=>c.dgt, txt:v=>v, rank:v=>DGT_RANK[v], best:'max', dgt:true},
+  {label:'Color', get:c=>c.color, txt:v=>v},
+  {label:'Puertas', get:c=>c.puertas, txt:v=>String(v)},
+  {label:'Plazas', get:c=>c.plazas, txt:v=>String(v)}
+];
+
+class Component extends DCLogic {
+  state = {ids: ['leon', 'chr', 'p3008'], onlyDiff: false};
+
+  renderVals() {
+    const s = this.state, accent = this.props.accent ?? '#0B7A75';
+    const cars = s.ids.map(id => CARS.find(c => c.id === id));
+    let rows = ROWS.map(R => {
+      const vals = cars.map(R.get);
+      const score = vals.map(v => R.rank ? R.rank(v) : v);
+      const target = R.best && cars.length > 1 ? (R.best === 'min' ? Math.min(...score) : Math.max(...score)) : null;
+      const allSame = vals.every(v => v === vals[0]);
+      return {label: R.label, allSame, cells: vals.map((v, i) => {
+        const best = target !== null && !allSame && score[i] === target;
+        return {text: R.txt(v), best, cls: best ? 'best' : '', dgt: !!R.dgt, plain: !R.dgt, dgtKey: String(v).toLowerCase()};
+      })};
+    });
+    if (s.onlyDiff) rows = rows.filter(r => !r.allSame);
+    const n = cars.length;
+    return {
+      accent,
+      subtitle: n + ' de 3 coches seleccionados · resaltamos el mejor valor de cada fila',
+      cols: cars.map(c => ({...c, precioTxt: eur(c.precio), remove: () => this.setState(st => ({ids: st.ids.filter(x => x !== c.id)}))})),
+      slots: Array.from({length: 3 - n}, (_, i) => ({i})),
+      rows, onlyDiff: s.onlyDiff, toggleDiff: () => this.setState({onlyDiff: !s.onlyDiff})
+    };
+  }
+}
+</script>
+</body>
+</html>

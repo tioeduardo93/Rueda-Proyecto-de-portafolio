@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Rueda · Cargando</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.skel{background:linear-gradient(90deg,#E6EBEC 0%,#F4F6F6 50%,#E6EBEC 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:8px}
+@keyframes sh{to{background-position:-200% 0}}
+.bar{animation:bar 1.4s ease-in-out infinite}
+@keyframes bar{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+</style>
+</helmet>
+<div style="--accent: {{accent}}; width: 390px; height: 844px; position: relative; overflow: hidden; display: flex; flex-direction: column; font-family: 'Manrope', system-ui, sans-serif; color: #0E1A1F; background: #F4F6F6">
+<header style="flex: none; position: relative; background: #fff; border-bottom: 1px solid #E3E7EA; padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between; height: 44px">
+<span style="display: flex; align-items: center; gap: 8px">
+<svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="var(--accent)" stroke-width="4"></circle><circle cx="16" cy="16" r="4" fill="#0E1A1F"></circle><path d="M16 7.5v4.5M16 20v4.5M7.5 16H12M20 16h4.5" stroke="#0E1A1F" stroke-width="2" stroke-linecap="round"></path></svg>
+<span style="font-size: 22px; font-weight: 800; letter-spacing: -0.03em">Rueda</span>
+</span>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E1A1F" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="margin-right: 10px"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"></path></svg>
+</div>
+<div style="height: 46px; border-radius: 12px; border: 1px solid #D5DCDF; background: #F7F9F9; display: flex; align-items: center; padding: 0 14px; font-size: 16px; font-weight: 600; color: #0E1A1F">Toyota</div>
+<div style="display: flex; gap: 8px"><div style="flex: 1; height: 44px; border-radius: 12px; background: #0E1A1F"></div><div style="flex: 1; height: 44px; border-radius: 12px; border: 1px solid #D5DCDF; background: #fff"></div></div>
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; overflow: hidden"><div class="bar" style="width: 35%; height: 3px; background: var(--accent); border-radius: 2px"></div></div>
+</header>
+<main aria-busy="true" aria-label="Cargando resultados" style="flex: 1; overflow: hidden; padding: 14px 16px; display: flex; flex-direction: column; gap: 14px">
+<div class="skel" style="height: 18px; width: 52%"></div>
+<div style="display: flex; gap: 8px"><div class="skel" style="height: 34px; width: 110px; border-radius: 999px"></div><div class="skel" style="height: 34px; width: 120px; border-radius: 999px"></div><div class="skel" style="height: 34px; width: 90px; border-radius: 999px"></div></div>
+<sc-for list="{{items}}" as="i" hint-placeholder-count="3">
+<div style="background: #fff; border: 1px solid #E3E7EA; border-radius: 16px; overflow: hidden; flex: none">
+<div class="skel" style="aspect-ratio: 16 / 9; border-radius: 0"></div>
+<div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; gap: 16px"><div style="flex: 1; display: flex; flex-direction: column; gap: 8px"><div class="skel" style="height: 16px; width: 70%"></div><div class="skel" style="height: 12px; width: 90%"></div></div><div class="skel" style="height: 26px; width: 96px"></div></div>
+<div style="display: flex; gap: 6px"><div class="skel" style="height: 24px; width: 48px"></div><div class="skel" style="height: 24px; width: 80px"></div><div class="skel" style="height: 24px; width: 64px"></div><div class="skel" style="height: 24px; width: 60px"></div></div>
+</div>
+</div>
+</sc-for>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B7A75","options":["#0B7A75","#C2410C","#2B54C9"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#0B7A75', items: [1, 2, 3] };
+  }
+}
+</script>
+</body>
+</html>

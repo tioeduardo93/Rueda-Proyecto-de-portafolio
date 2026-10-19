@@ -1,0 +1,213 @@
+@import '@fontsource-variable/manrope';
+@import 'tailwindcss';
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
+
+:root {
+  --accent: #0b7a75;
+}
+
+@theme {
+  --font-sans: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+
+  --color-ink: #0e1a1f;
+  --color-ink-2: #33404a; /* texto de datos en tarjetas y chips */
+  --color-muted: #56616b; /* texto secundario */
+  --color-subtle: #b9c3c8; /* texto sobre fondo tinta */
+  --color-canvas: #f4f6f6; /* fondo */
+  --color-surface: #ffffff;
+  --color-field: #f7f9f9; /* fondo de campos y celdas de ficha */
+  --color-tint: #f2f4f5; /* fondo de etiquetas de dato */
+  --color-line: #e3e7ea; /* borde */
+  --color-line-strong: #d5dcdf; /* borde de campos y botones */
+  --color-line-soft: #eef1f2; /* separadores internos */
+  --color-line-hover: #cdd5d9;
+  --color-placeholder: #ecf0f0;
+  --color-fav: #e5484d;
+
+  --color-dgt-0: #1559b8;
+  --color-dgt-c: #24803a;
+  --color-dgt-b: #f2c00f;
+  --color-dgt-b-ink: #2b2200;
+
+  --radius-field: 10px;
+  --radius-btn: 12px;
+  --radius-card: 16px;
+  --radius-panel: 20px;
+
+  --shadow-card: 0 14px 30px -14px rgb(14 26 31 / 0.28);
+  --shadow-float: 0 2px 8px rgb(14 26 31 / 0.15);
+  --shadow-bar: 0 18px 40px -16px rgb(14 26 31 / 0.6);
+
+  --animate-fade-up: fade-up 0.35s ease both;
+  --animate-shimmer: shimmer 1.2s linear infinite;
+  --animate-sheet: sheet 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-progress: progress 1.4s ease-in-out infinite;
+  --animate-pop: pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+
+  @keyframes pop {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+  @keyframes sheet {
+    from {
+      transform: translateY(40px);
+      opacity: 0.6;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  @keyframes progress {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+}
+
+/* El acento depende de una variable CSS para poder cambiarlo en un solo sitio. */
+@theme inline {
+  --color-accent: var(--accent);
+  --color-accent-hover: color-mix(in srgb, var(--accent) 85%, #000);
+  --color-accent-soft: color-mix(in srgb, var(--accent) 10%, #fff);
+  --color-accent-faint: color-mix(in srgb, var(--accent) 8%, #fff);
+  --color-accent-line: color-mix(in srgb, var(--accent) 35%, #fff);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+  }
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline-offset: 2px;
+  }
+  input[type='checkbox'],
+  input[type='range'] {
+    accent-color: var(--accent);
+  }
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  label:has(input:not(:disabled)) {
+    cursor: pointer;
+  }
+}
+
+/* ── Utilidades del diseño ──────────────────────────────────────────── */
+
+/* Placeholder de foto rayado */
+@utility photo-placeholder {
+  background-color: var(--color-placeholder);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgb(14 26 31 / 0.04) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+/* Esqueleto con brillo */
+@utility skeleton {
+  background: linear-gradient(90deg, #e6ebec 0%, #f4f6f6 50%, #e6ebec 100%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: 8px;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Slider de doble mando: dos input[type=range] superpuestos */
+@utility dual-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::-webkit-slider-runnable-track {
+    background: transparent;
+  }
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: var(--thumb, 22px);
+    height: var(--thumb, 22px);
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgb(14 26 31 / 0.25);
+    cursor: grab;
+  }
+  &::-moz-range-thumb {
+    pointer-events: auto;
+    width: calc(var(--thumb, 22px) - 4px);
+    height: calc(var(--thumb, 22px) - 4px);
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--accent);
+    cursor: grab;
+  }
+  &:active::-webkit-slider-thumb {
+    cursor: grabbing;
+  }
+  &:focus-visible {
+    outline: none;
+  }
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline-offset: 2px;
+  }
+  &:focus-visible::-moz-range-thumb {
+    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
