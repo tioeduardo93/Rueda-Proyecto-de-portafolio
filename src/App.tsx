@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
-import { AppLayout } from './layout/AppLayout'
+import { AppLayout, type RouteHandle } from './layout/AppLayout'
+import CarDetailPage from './pages/CarDetailPage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import ListingPage from './pages/ListingPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <ListingPage /> },
-      { path: 'coche/:id', element: <ComingSoonPage title="Ficha del coche" phase={3} /> },
+      { path: 'coche/:id', element: <CarDetailPage />, handle: { ownMobileHeader: true, mobileBottomBar: true } satisfies RouteHandle },
       { path: 'comparar', element: <ComingSoonPage title="Comparar coches" phase={4} /> },
       { path: 'favoritos', element: <ComingSoonPage title="Tus favoritos" phase={4} /> },
       ...devRoutes(),

@@ -1,7 +1,13 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
 import { DEFAULT_FILTERS, type Filters, type SortKey } from '../lib/filters'
 import { parseListingParams, toListingParams } from '../lib/url'
+
+/** Mismos parámetros y valores, sin importar el orden (el buscador añade `q` al final). */
+function sameParams(a: URLSearchParams, b: URLSearchParams) {
+  const key = (p: URLSearchParams) => [...p].map(([k, v]) => `${k}=${v}`).sort().join('&')
+  return key(a) === key(b)
+}
 
 export interface UpdateOptions {
   /**
@@ -15,6 +21,13 @@ export interface UpdateOptions {
 export function useListingQuery() {
   const [params, setParams] = useSearchParams()
   const { filters, sort } = useMemo(() => parseListingParams(params), [params])
+
+  // Si la URL trae valores inválidos o sin ajustar (`?orden=raro`, `precioMax=30260`), se reescribe limpia
+  // para que lo que se comparte coincida con lo que se ve.
+  const canonical = useMemo(() => toListingParams({ filters, sort }), [filters, sort])
+  useEffect(() => {
+    if (!sameParams(params, canonical)) setParams(canonical, { replace: true, preventScrollReset: true })
+  }, [params, canonical, setParams])
 
   const write = useCallback(
     (next: (current: { filters: Filters; sort: SortKey }) => { filters: Filters; sort: SortKey }, { replace }: UpdateOptions = {}) =>

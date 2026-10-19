@@ -41,6 +41,13 @@ describe('ListingPage', () => {
     expect(router.state.location.search).toBe('')
   })
 
+  it('reescribe la URL sin los valores inválidos', async () => {
+    setViewportWidth(1440)
+    const router = renderAt('/?orden=raro&precioMax=30260&combustible=Vapor,Diésel')
+    await heading()
+    expect(decodeURIComponent(router.state.location.search)).toBe('?precioMax=30500&combustible=Diésel')
+  })
+
   it('pagina de 9 en 9', async () => {
     setViewportWidth(1440)
     renderAt('/')

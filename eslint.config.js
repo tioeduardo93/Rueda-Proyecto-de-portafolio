@@ -15,6 +15,8 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // La galería es una región enfocable para manejarla con las flechas (patrón de carrusel de WAI-ARIA).
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel', 'region'] }],
     },
   },
 )

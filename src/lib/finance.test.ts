@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { CARS } from '../data/cars'
 import {
   FINANCE,
   cuotaDesde,
@@ -43,17 +44,26 @@ describe('cuotaDesde', () => {
   ])('%i € → %i €/mes (valores del diseño)', (precio, cuota) => {
     expect(cuotaDesde(precio)).toBe(cuota)
   })
+
+  it.each(CARS.map((c) => [c.id, c.precio] as const))(
+    '%s: coincide con la calculadora recién abierta y con el 15 % exacto',
+    (_, precio) => {
+      const calculator = simulateFinancing(precio, defaultDownPayment(precio), FINANCE.meses)
+      expect(cuotaDesde(precio)).toBe(Math.round(calculator.cuota))
+      expect(cuotaDesde(precio)).toBe(Math.round(monthlyPayment(precio * (1 - FINANCE.entrada), FINANCE.meses)))
+    },
+  )
 })
 
 describe('entrada de la calculadora', () => {
-  it('por defecto es el 15 % ajustado a pasos de 250 €', () => {
-    expect(defaultDownPayment(18990)).toBe(2750) // 2.848,5 → 2.750
+  it('por defecto es el 15 % ajustado a pasos de 10 €', () => {
+    expect(defaultDownPayment(18990)).toBe(2850) // 2.848,5 → 2.850
     expect(defaultDownPayment(20000)).toBe(3000)
   })
 
   it('como máximo es la mitad del precio, ajustada hacia abajo', () => {
-    expect(maxDownPayment(18990)).toBe(9250)
-    expect(maxDownPayment(7990)).toBe(3750)
+    expect(maxDownPayment(18990)).toBe(9490)
+    expect(maxDownPayment(7990)).toBe(3990)
   })
 })
 

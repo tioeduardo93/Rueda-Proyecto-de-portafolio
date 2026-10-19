@@ -11,7 +11,7 @@ import { useFavoriteCount } from '../store/favorites'
  * Cabecera común. En móvil: logo y favoritos arriba, buscador debajo.
  * Desde `sm`: todo en una fila, como en el diseño de escritorio.
  */
-export function SiteHeader() {
+export function SiteHeader({ className }: { className?: string }) {
   const favCount = useFavoriteCount()
   const { pathname } = useLocation()
   const onListing = pathname === '/'
@@ -53,7 +53,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur-md">
+    <header className={cn('sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur-md', className)}>
       <div className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-x-7 gap-y-3 px-4 pt-3.5 pb-3 sm:px-6 sm:py-3.5">
         <Link to="/" aria-label="Rueda, inicio" className="flex min-h-11 items-center text-ink no-underline">
           <Logo />

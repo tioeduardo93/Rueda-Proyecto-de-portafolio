@@ -8,8 +8,11 @@ export const FINANCE = {
   tin: 0.0899,
   /** Plazos disponibles en la calculadora, en meses. */
   plazos: [24, 36, 48, 60, 72, 84, 96],
-  /** Paso del slider de entrada, en euros. */
-  pasoEntrada: 250,
+  /**
+   * Paso del slider de entrada, en euros. Con 10 € la entrada por defecto (15 % redondeado) da la misma
+   * cuota que el 15 % exacto en todo el catálogo, así que se conservan las cuotas «desde» del diseño.
+   */
+  pasoEntrada: 10,
   /** Entrada máxima como fracción del precio. */
   entradaMaxima: 0.5,
 } as const
@@ -29,14 +32,17 @@ export function monthlyPayment(capital: number, meses: number, tin: number = FIN
   return roundCents((capital * r) / (1 - Math.pow(1 + r, -meses)))
 }
 
-/** Cuota «desde» que se muestra en tarjetas y fichas: condiciones estándar, redondeada al euro. */
-export function cuotaDesde(precio: number): number {
-  return Math.round(monthlyPayment(precio * (1 - FINANCE.entrada), FINANCE.meses))
-}
-
 /** Entrada por defecto de la calculadora: el 15 % del precio, ajustado al paso del slider. */
 export function defaultDownPayment(precio: number): number {
   return Math.round((precio * FINANCE.entrada) / FINANCE.pasoEntrada) * FINANCE.pasoEntrada
+}
+
+/**
+ * Cuota «desde» de tarjetas y fichas, redondeada al euro. Usa la misma entrada con la que abre
+ * la calculadora para que las dos cifras coincidan siempre.
+ */
+export function cuotaDesde(precio: number): number {
+  return Math.round(monthlyPayment(precio - defaultDownPayment(precio), FINANCE.meses))
 }
 
 /** Entrada máxima de la calculadora: la mitad del precio, ajustada al paso del slider. */

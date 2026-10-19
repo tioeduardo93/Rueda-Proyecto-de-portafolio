@@ -1,8 +1,20 @@
-import { Outlet, ScrollRestoration } from 'react-router'
+import { Outlet, ScrollRestoration, useMatches } from 'react-router'
+import { cn } from '../lib/cn'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 
+export interface RouteHandle {
+  /** La página trae su propia cabecera en móvil (la ficha: foto a sangre con botones encima). */
+  ownMobileHeader?: boolean
+  /** La página tiene una barra fija abajo en móvil: se deja su hueco bajo el pie para que no lo tape. */
+  mobileBottomBar?: boolean
+}
+
 export function AppLayout() {
+  const handles = useMatches().map((m) => (m.handle ?? {}) as RouteHandle)
+  const ownMobileHeader = handles.some((h) => h.ownMobileHeader)
+  const mobileBottomBar = handles.some((h) => h.mobileBottomBar)
+
   return (
     <div className="flex min-h-dvh flex-col">
       <a
@@ -11,11 +23,12 @@ export function AppLayout() {
       >
         Saltar al contenido
       </a>
-      <SiteHeader />
+      <SiteHeader className={ownMobileHeader ? 'max-lg:hidden' : undefined} />
       <main id="contenido" tabIndex={-1} className="flex-1 outline-none">
         <Outlet />
       </main>
-      <SiteFooter />
+      {/* Hueco = alto de StickyContactBar: 12 px arriba + botón de 52 px + 1 px de borde + margen inferior. */}
+      <SiteFooter className={cn(mobileBottomBar && 'max-lg:pb-[calc(65px_+_max(1rem,env(safe-area-inset-bottom)))]')} />
       <ScrollRestoration />
     </div>
   )

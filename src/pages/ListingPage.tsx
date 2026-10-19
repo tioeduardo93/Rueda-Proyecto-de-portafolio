@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router'
 import { ActiveFilterChips } from '../components/ActiveFilterChips'
 import { Button } from '../components/Button'
 import { CarCardSkeleton } from '../components/CarCardSkeleton'
@@ -27,6 +28,7 @@ import {
   type SortKey,
 } from '../lib/filters'
 import { pluralize } from '../lib/format'
+import { rememberListingSearch } from '../lib/listingMemory'
 import { toListingParams } from '../lib/url'
 import type { Car } from '../types'
 
@@ -54,6 +56,8 @@ export default function ListingPage() {
   const cars = useCars()
   const catalog = cars.status === 'success' ? cars.data : NO_CARS
   const { filters, sort, setFilters, setSort, clearAll } = useListingQuery()
+  const { search } = useLocation()
+  useEffect(() => rememberListingSearch(search), [search])
   const isDesktop = useMediaQuery(MEDIA.lg)
   const [sheetOpen, setSheetOpen] = useState(false)
 
