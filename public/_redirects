@@ -1,0 +1,2 @@
+# Netlify: cualquier ruta (/coche/leon, /comparar…) la resuelve la app; si no, un enlace directo o recargar da 404.
+/*    /index.html   200

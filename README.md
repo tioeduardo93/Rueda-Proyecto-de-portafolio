@@ -5,6 +5,8 @@ calculadora de financiación, comparador de hasta tres coches y favoritos. Es un
 construido como si fuera a salir a producción: diseño aprobado de partida, accesibilidad AA, estado
 compartible por URL y tests de la lógica y de los flujos principales.
 
+**Pruébala en línea:** https://rueda-proyecto.netlify.app/
+
 ![Listado en escritorio](docs/capturas/listado-escritorio.jpg)
 
 ## Pantallas
