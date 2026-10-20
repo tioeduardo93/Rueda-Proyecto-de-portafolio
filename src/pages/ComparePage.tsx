@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { Button, ButtonLink } from '../components/Button'
 import { BestLegend } from '../components/compare/BestLegend'
@@ -6,6 +6,7 @@ import { CompareTable } from '../components/compare/CompareTable'
 import { EmptyState } from '../components/EmptyState'
 import { ArrowLeftIcon, ArrowRightIcon } from '../components/icons'
 import { MobilePageHeader } from '../components/MobilePageHeader'
+import { LayoutSlot } from '../layout/slots'
 import { useCars } from '../hooks/useCars'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { carName, versionLine } from '../lib/car'
@@ -46,17 +47,12 @@ export default function ComparePage() {
   const catalog = cars.status === 'success' ? cars.data : NO_CARS
   const ids = useCompare((s) => s.ids)
   const remove = useCompare((s) => s.remove)
-  const setIds = useCompare((s) => s.set)
   const [onlyDiff, setOnlyDiff] = useState(false)
 
+  // Los ids que ya no están en el catálogo no se muestran (el layout los borra del store).
   const selected = useMemo(() => resolveCars(ids, catalog), [ids, catalog])
   const count = selected.length
   const canCompare = count >= 2
-
-  // Un id guardado que ya no está en el catálogo (anuncio retirado) se quita del comparador.
-  useEffect(() => {
-    if (cars.status === 'success' && selected.length !== ids.length) setIds(selected.map((c) => c.id))
-  }, [cars.status, selected, ids.length, setIds])
 
   const rows = useMemo(() => {
     const all = buildCompareRows(selected)
@@ -75,7 +71,9 @@ export default function ComparePage() {
 
   return (
     <>
-      <MobilePageHeader title={title} backTo={backTo} aside={count > 0 && <BestLegend compact />} />
+      <LayoutSlot name="mobileHeader">
+        <MobilePageHeader title={title} backTo={backTo} aside={count > 0 && <BestLegend compact />} />
+      </LayoutSlot>
 
       <div className="mx-auto flex max-w-[1280px] flex-col gap-4 pb-10 lg:gap-6 lg:px-6 lg:pt-6 lg:pb-[72px]">
         <div className="hidden flex-wrap items-end justify-between gap-4 lg:flex">

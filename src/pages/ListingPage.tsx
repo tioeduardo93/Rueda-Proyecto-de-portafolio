@@ -15,7 +15,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useListingQuery } from '../hooks/useListingQuery'
 import { MEDIA, useMediaQuery } from '../hooks/useMediaQuery'
 import { useSimulatedRefresh } from '../hooks/useSimulatedRefresh'
-import { API_DELAY_MS } from '../lib/api'
+import { latency } from '../lib/api'
 import {
   SORTS,
   activeFilters,
@@ -28,12 +28,12 @@ import {
   type SortKey,
 } from '../lib/filters'
 import { pluralize } from '../lib/format'
+import { LayoutSlot } from '../layout/slots'
 import { rememberListingSearch } from '../lib/listingMemory'
 import { toListingParams } from '../lib/url'
 import type { Car } from '../types'
 
 const PAGE_SIZE = 9
-const LOAD_MORE_DELAY_MS = 600
 const NO_CARS: Car[] = []
 
 /** Solo los filtros discretos y el orden muestran esqueletos; búsqueda y sliders filtran al momento. */
@@ -65,7 +65,7 @@ export default function ListingPage() {
   const chips = useMemo(() => activeFilters(filters), [filters])
   const brands = useMemo(() => brandFacets(catalog), [catalog])
   const models = useMemo(() => modelGroups(catalog, filters.marcas), [catalog, filters.marcas])
-  const refreshing = useSimulatedRefresh(discreteKey(filters, sort), API_DELAY_MS)
+  const refreshing = useSimulatedRefresh(discreteKey(filters, sort), latency.apiMs)
   const loading = cars.status === 'loading' || refreshing
 
   // La paginación vuelve a la primera página cuando cambian la búsqueda, los filtros o el orden.
@@ -92,7 +92,7 @@ export default function ListingPage() {
       focusIndex.current = limit
       setPage({ key: listKey, limit: limit + PAGE_SIZE })
       setLoadingMore(false)
-    }, LOAD_MORE_DELAY_MS)
+    }, latency.loadMoreMs)
   }
 
   function removeChip(id: string) {
@@ -131,25 +131,28 @@ export default function ListingPage() {
         />
 
         <section aria-labelledby="resultados" className="flex min-w-0 flex-1 flex-col gap-3.5 sm:gap-4">
-          <div className="flex gap-2 lg:hidden">
-            <Button
-              variant="dark"
-              className="flex-1 font-extrabold"
-              aria-haspopup="dialog"
-              aria-expanded={sheetOpen}
-              onClick={() => setSheetOpen(true)}
-            >
-              <FiltersIcon size={18} />
-              Filtros
-              {chips.length > 0 && (
-                <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] tabular-nums">
-                  {chips.length}
-                  <span className="sr-only"> {chips.length === 1 ? 'activo' : 'activos'}</span>
-                </span>
-              )}
-            </Button>
-            <SortSelect options={SORTS} value={sort} onChange={setSort} compact className="flex-1" />
-          </div>
+          {/* En móvil va dentro de la cabecera fija, como en el diseño (Listado-movil.dc.html). */}
+          <LayoutSlot name="headerToolbar">
+            <div className="flex gap-2 lg:hidden">
+              <Button
+                variant="dark"
+                className="flex-1 font-extrabold"
+                aria-haspopup="dialog"
+                aria-expanded={sheetOpen}
+                onClick={() => setSheetOpen(true)}
+              >
+                <FiltersIcon size={18} />
+                Filtros
+                {chips.length > 0 && (
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] tabular-nums">
+                    {chips.length}
+                    {' '}<span className="sr-only">{chips.length === 1 ? 'activo' : 'activos'}</span>
+                  </span>
+                )}
+              </Button>
+              <SortSelect options={SORTS} value={sort} onChange={setSort} compact className="flex-1" />
+            </div>
+          </LayoutSlot>
 
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 id="resultados" aria-live="polite" className="text-[17px] font-extrabold tabular-nums sm:text-xl">

@@ -26,8 +26,8 @@ function renderFavorites(items: FavoriteEntry[], compare: string[] = []) {
   return router
 }
 
-// Espera al retardo de la API simulada (solo la primera vez: después el catálogo está en caché).
-const cards = () => screen.findAllByRole('article', {}, { timeout: 2000 })
+// Espera a que llegue el catálogo: la API simulada responde sin retardo en los tests, pero sigue siendo asíncrona.
+const cards = () => screen.findAllByRole('article', {})
 const card = (name: string) => screen.getByRole('heading', { level: 2, name }).closest('article')!
 
 beforeEach(() => localStorage.clear())
@@ -99,7 +99,7 @@ describe('FavoritesPage', () => {
 
   it('sin favoritos muestra el estado vacío con búsquedas populares', async () => {
     renderFavorites([])
-    expect(await screen.findByRole('heading', { name: 'Aún no tienes favoritos' }, { timeout: 2000 })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Aún no tienes favoritos' })).toBeInTheDocument()
     const popular = screen.getByRole('navigation', { name: 'Búsquedas populares' })
     const hrefs = within(popular)
       .getAllByRole('link')
@@ -112,12 +112,13 @@ describe('FavoritesPage', () => {
     ])
   })
 
-  it('descarta los favoritos que ya no están en el catálogo', async () => {
+  // Borrarlos del store lo hace el layout (ver test/flow.test.tsx); la página solo no los muestra.
+  it('no muestra los favoritos que ya no están en el catálogo', async () => {
     renderFavorites([
       { id: 'retirado', savedAt: daysAgo(1) },
       { id: 'leon', savedAt: daysAgo(2) },
     ])
     expect(await cards()).toHaveLength(1)
-    expect(useFavorites.getState().items.map((f) => f.id)).toEqual(['leon'])
+    expect(screen.getByText('1 coche guardado. Te avisamos si alguno baja de precio.')).toBeInTheDocument()
   })
 })

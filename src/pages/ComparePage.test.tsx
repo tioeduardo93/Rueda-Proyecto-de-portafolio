@@ -11,8 +11,8 @@ function renderCompare(ids: string[]) {
   render(<RouterProvider router={router} />)
 }
 
-// Espera al retardo de la API simulada (solo la primera vez: después el catálogo está en caché).
-const table = () => screen.findByRole('table', { name: 'Comparativa de especificaciones' }, { timeout: 2000 })
+// Espera a que llegue el catálogo: la API simulada responde sin retardo en los tests, pero sigue siendo asíncrona.
+const table = () => screen.findByRole('table', { name: 'Comparativa de especificaciones' })
 const rowOf = (t: HTMLElement, label: string) => within(t).getByRole('rowheader', { name: label }).closest('tr')!
 
 beforeEach(() => localStorage.clear())
@@ -75,14 +75,14 @@ describe('ComparePage', () => {
 
   it('sin coches muestra el estado vacío', async () => {
     renderCompare([])
-    expect(await screen.findByRole('heading', { name: 'Aún no has elegido coches para comparar' }, { timeout: 2000 })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Aún no has elegido coches para comparar' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Explorar coches' })).toHaveAttribute('href', '/')
   })
 
-  it('descarta los ids que ya no están en el catálogo', async () => {
+  // Borrarlos del store lo hace el layout (ver test/flow.test.tsx); la página solo no los muestra.
+  it('no muestra los ids que ya no están en el catálogo', async () => {
     renderCompare(['leon', 'retirado', 'chr'])
     await table()
-    expect(useCompare.getState().ids).toEqual(['leon', 'chr'])
     expect(screen.getAllByRole('heading', { level: 1 }).map((h) => h.textContent)).toContain('Comparar (2/3)')
   })
 })

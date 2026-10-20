@@ -11,8 +11,8 @@ function renderAt(url: string) {
   return router
 }
 
-// Espera al retardo de la API simulada (solo la primera vez: después el catálogo está en caché).
-const heading = () => screen.findByRole('heading', { level: 2, name: /encontrados?$/ }, { timeout: 2000 })
+// Espera a que llegue el catálogo: la API simulada responde sin retardo en los tests, pero sigue siendo asíncrona.
+const heading = () => screen.findByRole('heading', { level: 2, name: /encontrados?$/ })
 
 describe('ListingPage', () => {
   it('aplica los filtros y el orden de la URL', async () => {
@@ -36,7 +36,7 @@ describe('ListingPage', () => {
   it('muestra el estado vacío y lo limpia', async () => {
     setViewportWidth(1440)
     const router = renderAt('/?marca=Tesla&combustible=Diésel')
-    expect(await screen.findByRole('heading', { name: 'No hay coches con estos filtros' }, { timeout: 2000 })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'No hay coches con estos filtros' })).toBeInTheDocument()
     await userEvent.click(screen.getAllByRole('button', { name: 'Limpiar filtros' }).at(-1)!)
     expect(router.state.location.search).toBe('')
   })

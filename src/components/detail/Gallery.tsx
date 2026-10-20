@@ -159,7 +159,6 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
             key={t.i}
             type="button"
             onClick={() => go(t.i)}
-            aria-label={`Ver foto ${t.i + 1}: ${t.name}`}
             aria-pressed={t.on}
             className={cn(
               'photo-placeholder flex aspect-[4/3] items-center justify-center rounded-field border-2 p-1 text-center text-[10px] font-bold tracking-[0.04em] uppercase',
@@ -168,7 +167,11 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
               t.on ? 'border-accent! text-ink' : 'border-transparent text-muted',
             )}
           >
-            {t.text}
+            {/* El nombre empieza por lo que se ve («Salpic.», «+8 fotos») para el control por voz (WCAG 2.5.3). */}
+            {t.text}{' '}
+            <span className="sr-only">
+              (foto {t.i + 1}: {t.name})
+            </span>
           </button>
         ))}
       </div>

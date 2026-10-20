@@ -71,7 +71,7 @@ export function FinanceCalculator({
             value={downPayment}
             aria-valuetext={formatPrice(downPayment)}
             onChange={(e) => onDownPaymentChange(Number(e.target.value))}
-            className="m-0 h-8 w-full lg:h-7"
+            className="m-0 h-11 w-full"
           />
           <div aria-hidden="true" className="flex justify-between text-xs text-muted tabular-nums">
             <span>{formatPrice(0)}</span>

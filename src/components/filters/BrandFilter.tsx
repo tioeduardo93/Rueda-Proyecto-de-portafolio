@@ -48,9 +48,9 @@ export function BrandFilter({ brands, selected, onToggle, variant = 'list', visi
             />
             <span className="flex-1">{b.name}</span>
             <span className="text-xs text-muted tabular-nums">
-              <span className="sr-only">, </span>
+              <span className="sr-only">,</span>{' '}
               {b.count}
-              <span className="sr-only"> {b.count === 1 ? 'coche' : 'coches'}</span>
+              {' '}<span className="sr-only">{b.count === 1 ? 'coche' : 'coches'}</span>
             </span>
           </label>
         ))}
@@ -60,7 +60,7 @@ export function BrandFilter({ brands, selected, onToggle, variant = 'list', visi
           type="button"
           aria-expanded={showAll}
           onClick={() => setExpanded((v) => !v)}
-          className="-my-1 self-start py-2.5 text-[13px] font-bold text-accent hover:text-ink"
+          className="-my-1 min-h-11 self-start text-[13px] font-bold text-accent hover:text-ink"
         >
           {showAll ? 'Ver menos marcas' : `Ver todas las marcas (${brands.length})`}
         </button>

@@ -8,14 +8,15 @@ Registro de avance por fases. Se actualiza al cerrar cada fase.
 | 1. Estructura, tokens, datos y componentes base | ✅ Aprobada por el revisor | 19/10/2026 |
 | 2. Listado con filtros, orden y URL | ✅ Aprobada por el revisor | 19/10/2026 |
 | 3. Ficha y calculadora | ✅ Aprobada por el revisor | 19/10/2026 |
-| 4. Comparador y favoritos | ✅ Hecha · pendiente de revisión | 19/10/2026 |
-| 5. Responsive, accesibilidad, tests y README | ⏳ Pendiente | — |
+| 4. Comparador y favoritos | ✅ Aprobada por el revisor | 20/10/2026 |
+| 5. Responsive, accesibilidad, tests y README | ✅ Hecha · pendiente de revisión | 20/10/2026 |
 
 ## Estructura
 
 ```
 src/
-├── main.tsx · App.tsx         Entrada y rutas (/, /coche/:id, /comparar, /favoritos, 404; /componentes solo en desarrollo)
+├── main.tsx · App.tsx         Entrada y router
+├── routes.tsx                 Rutas (/, /coche/:id, /comparar, /favoritos, 404; /componentes solo en desarrollo)
 ├── index.css                  Tokens del diseño (@theme de Tailwind 4) y utilidades (placeholder, skeleton, slider doble)
 ├── types.ts                   Tipo Car y uniones (combustible, cambio, etiqueta, carrocería)
 ├── data/cars.ts               24 coches (13 del diseño + 11 nuevos) y nombres de las fotos de la galería
@@ -27,10 +28,11 @@ src/
 │   ├── car.ts                 Textos derivados del coche y coches similares
 │   ├── compare.ts             Filas del comparador, «Mejor» por fila y «solo diferencias» (funciones puras)
 │   ├── listingMemory.ts       Última búsqueda del listado, para «Volver a resultados»
-│   ├── api.ts                 API simulada (500 ms, cancelable, 404 tipado)
+│   ├── api.ts                 API simulada (retardo configurable en `latency`, cancelable, 404 tipado)
 │   └── cn.ts                  Unión de clases
 ├── store/                     Zustand persistido: favoritos (con fecha de guardado) y comparador (máx. 3)
-├── hooks/                     useCars, useListingQuery (URL), useMediaQuery, useSimulatedRefresh, useDocumentTitle
+├── hooks/                     useCars, useListingQuery (URL), useMediaQuery, useSimulatedRefresh, useDocumentTitle,
+│                              useStaleIdsCleanup
 ├── components/                Presentacionales, sin lógica de negocio:
 │   │                          Button/ButtonLink, FilterChip, DgtBadge, Badge, CarPhoto, CarCard, CarCardSkeleton,
 │   │                          RangeSlider, CompareBar, EmptyState, ActiveFilterChips, SortSelect, BottomSheet, Logo, icons,
@@ -40,10 +42,70 @@ src/
 │   └── detail/                Gallery, CarSummary, DetailSection, SpecGrid, EquipmentList, FinanceCalculator,
 │                              Breadcrumbs, StickyContactBar, DetailSkeleton (además CarMiniCard y Toast en components/)
 ├── containers/                Conectan componentes con stores y lógica (CarCard, CompareBar, MobileFiltersSheet)
-├── layout/                    AppLayout (enlace «Saltar al contenido»), SiteHeader (búsqueda en vivo), SiteFooter
+├── layout/                    AppLayout (enlace «Saltar al contenido»), SiteHeader (búsqueda en vivo), SiteFooter,
+│                              slots (huecos que rellenan las páginas por portal)
 ├── pages/                     ListingPage, CarDetailPage, ComparePage, FavoritesPage, NotFoundPage, ComponentsPage (dev)
-└── test/                      Setup de Vitest y matchMedia simulado
+└── test/                      Setup de Vitest, matchMedia simulado, renderApp, axe, flujos y accesibilidad
 ```
+
+## Fase 5 · Responsive, accesibilidad, tests y README
+
+**Pendientes acumulados del revisor**
+1. ✅ **Fila «Filtros / Ordenar» dentro de la cabecera fija en móvil** (fase 2). El layout ofrece huecos (`layout/slots.tsx`) que las páginas rellenan con un portal: el listado pinta la fila en el hueco de la cabecera y el estado sigue en el listado. A 360 px la cabecera mide 185 px de 780, como en `Listado-movil.dc.html`. Las cabeceras móviles de comparador y favoritos van por el mismo camino a un hueco antes de `<main>`, así que ahora son el landmark `banner` de la página.
+2. ✅ **Ids retirados limpiados en un sitio común** (fase 4). `useStaleIdsCleanup` va en el layout: en cuanto llega el catálogo, borra de favoritos y del comparador los coches que ya no existen, en cualquier página. El contador de la cabecera ya no los cuenta (test en `test/flow.test.tsx`). Se quitan las limpiezas de cada página.
+3. ✅ **Iconos sin uso** (fase 1): ahora se usan todos (los que faltaban los usan la ficha y el comparador), así que no hay que borrar ninguno.
+
+**Accesibilidad**
+- **axe-core como test** (`test/a11y.test.tsx`): las 11 pantallas y estados (listado, con filtros, sin resultados, ficha, ficha inexistente, comparador con 3, con 1 y vacío, favoritos con coches y vacío, 404) y el panel de filtros en móvil, sin infracciones. Incluye un control que comprueba que el ayudante sí detecta fallos.
+  - En jsdom no se evalúan el contraste ni los landmarks duplicados (no hay CSS); eso se ha comprobado con axe en el navegador real.
+  - `vitest-axe` lleva un año sin publicar nada (0.1.0), así que se usa `axe-core` directamente con un ayudante de pocas líneas (`test/axe.ts`).
+- **axe en el navegador, con contraste**, en las 7 pantallas a 360, 390, 768, 1024 y 1440 px y en el panel móvil: 0 infracciones de WCAG 2.2 AA y buenas prácticas.
+- **Corregido a raíz del repaso**:
+  - Nombre accesible igual al texto visible (WCAG 2.5.3, control por voz): el enlace de Favoritos se leía «Favoritos: 4 coches guardados» mostrando «Favoritos 4», y dos miniaturas («Salpic.», «+8 fotos») tenían un `aria-label` sin su texto visible.
+  - Espacios en los nombres accesibles: con el espacio dentro del `span` solo para lectores, el nombre salía «CompararVolkswagen Golf» o «Volkswagen,3coches». Ahora el espacio va fuera.
+  - **Indicador de foco con contraste 3:1** (WCAG 1.4.11): el diseño lo pone al 40 % del acento, ~1,7:1 sobre blanco. Ahora es el acento sólido (token `--color-focus`).
+  - Zonas táctiles de 44 px:
+    - Sliders (eran de 28 px de alto).
+    - «Ver todas las marcas» (40 px).
+    - Títulos enlazados de las tarjetas y nombres del comparador en móvil (23 y 18 px; zona ampliada con `::after`).
+    - Enlace de marca de la miga de pan (31 px de ancho).
+- **Teclado**: recorrido real con Tab en listado y ficha. El orden es lógico (cabecera → miga → galería → resumen → calculadora → similares → pie), el foco se ve siempre y solo queda atrapado en el panel de filtros (probado en la fase 2 y en el test de flujo).
+- **Títulos y landmarks**: un `h1` por pantalla y ancho, sin saltos de nivel, con `header`, `main` y `footer` en todas las pantallas. Excepción: la ficha en móvil no tiene `header`, porque el diseño la abre con la foto a todo el ancho; sus botones «Volver», «Compartir» y favorito van sobre la foto.
+- `aria-live` ya estaba en recuento de resultados, panel de filtros, cuota, galería y barra del comparador. `prefers-reduced-motion` ya desactivaba animaciones y transiciones (`index.css`).
+
+**Responsive**
+- Recorrido por DOM de las 4 pantallas, la 404 y los estados de carga, error de ficha, vacío y sin resultados, a 360, 390, 768, 1024 y 1440 px.
+  - Sin scroll horizontal de página.
+  - Nada tapado por barras fijas al final.
+  - Ningún elemento fuera de pantalla.
+- **Textos cortados**: tres textos se recortaban con puntos suspensivos, como en el diseño: la versión larga de una tarjeta («E-Tech full hybrid 145 Techno · 143 CV»), los nombres de la barra del comparador en móvil y el título de la cabecera móvil. Ahora saltan de línea.
+- **768 px**: usa las disposiciones de móvil (panel inferior, ficha a sangre) con 2 columnas; cabecera en una fila y fila de filtros debajo. Revisado también a ojo con captura.
+- **Capturas a ojo**: listado, ficha, comparador y favoritos en escritorio; listado y ficha en móvil; listado en tablet. Coinciden con sus diseños.
+
+**Tests**
+- **Sin tiempos**: la API simulada tiene el retardo en un objeto (`latency`), que el setup pone a 0. Fuera los `timeout: 2000`: los tests esperan a que aparezca algo, no a que pase un tiempo. El test de la API sí prueba el retardo, con temporizadores falsos.
+- **Flujo principal** con la app completa y las rutas reales (`routes.tsx` + `test/renderApp.tsx`):
+  - Buscar «volkswagen» → filtrar por Diésel (en la URL) → abrir la ficha del Golf → favorito (contador de la cabecera) → «Volver a resultados» con la búsqueda intacta → marcar dos coches → «Comparar ahora» → tabla → Favoritos desde la cabecera.
+  - En móvil: filtros desde el panel inferior de la cabecera.
+  - Ids retirados limpiados por el layout.
+- **Estado de error** (`test/errorState.test.tsx`), que no tenía test: la API falla una vez, se ve «No hemos podido cargar los coches» sin infracciones de axe, y «Reintentar» trae los 24 coches.
+- **Fallo intermitente encontrado y corregido**: con todos los archivos en paralelo, el test de flujo tardaba 5,1 s y superaba el límite de 5 s de Vitest (la auditoría axe del listado llegaba a 4,2 s). No esperaba ningún tiempo; era margen de ejecución de jsdom. `testTimeout` sube a 20 s en `vite.config.ts`, con la explicación.
+- **181 tests en 17 archivos**, 5 ejecuciones seguidas de la batería completa en verde. `npm run build` y `npm run lint` sin errores ni avisos.
+
+**README.md**: qué es, capturas de las pantallas (`docs/capturas/`), stack y por qué, decisiones técnicas, cómo arrancarlo, estructura y límites conocidos. Se añade `engines.node >= 22.12` a `package.json`, que es lo que piden Vite, Vitest y jsdom.
+
+**Decisiones de esta fase**
+1. **Huecos del layout con portal** en vez de mover la fila de filtros al layout: el estado de filtros sigue viviendo en el listado y el layout no sabe nada de él.
+2. **Textos sin recortar**, aunque el diseño use puntos suspensivos: el encargo de esta fase pide que no se corten, y la información es útil.
+3. **Foco con acento sólido** en vez del 40 % del diseño, por contraste.
+4. **Ficha en móvil sin landmark `header`**, por fidelidad al diseño (ver arriba).
+
+**Limitaciones de la verificación**
+- **Capturas**: el panel inferior de filtros no sale en ellas, porque la herramienta de captura no recoge la capa superior del navegador donde va el `<dialog>`. Lo he comprobado por DOM (posición, modal, contraste con axe), pero no a ojo, y no hay captura suya en el README.
+- **Animaciones**: con el panel del navegador en segundo plano no avanzaban. Para medir el panel de filtros las he terminado a mano.
+- **Recorrido con teclado**: completo en listado y ficha. En comparador y favoritos solo lo cubren los tests (foco al quitar, nombres accesibles) y axe, no un recorrido real con Tab.
+- **Estado de error de la API**: no se puede provocar en el navegador (la API simulada no falla). Lo cubre el test `errorState.test.tsx`, con axe, pero no se ha visto a ojo.
+- **Sin probar** con lector de pantalla real ni en dispositivos táctiles reales.
 
 ## Fase 4 · Comparador y favoritos
 

@@ -97,11 +97,11 @@ export function CarCard({
         <div className="flex items-start justify-between gap-3 sm:flex-col sm:justify-start">
           <div className="min-w-0">
             <Heading className="text-[17px] font-extrabold tracking-[-0.01em]">
-              <Link to={href} className="text-ink no-underline hover:text-accent">
+              <Link to={href} className="relative text-ink no-underline after:absolute after:inset-x-0 after:-inset-y-[11px] after:content-[''] hover:text-accent">
                 {name}
               </Link>
             </Heading>
-            <p className="mt-0.5 truncate text-[13px] text-muted sm:mt-[3px]">
+            <p className="mt-0.5 text-[13px] text-pretty text-muted sm:mt-[3px]">
               {car.version} · {car.cv} CV
             </p>
           </div>
@@ -119,7 +119,7 @@ export function CarCard({
           {specs.map(({ icon: SpecIcon, label, value }) => (
             <li key={label} className="flex items-center gap-[7px] rounded-md bg-tint px-2 py-[5px] sm:rounded-none sm:bg-transparent sm:p-0">
               <SpecIcon size={16} className="hidden flex-none text-muted sm:block" />
-              <span className="sr-only">{label}: </span>
+              <span className="sr-only">{label}:</span>{' '}
               {value}
             </li>
           ))}
@@ -140,13 +140,13 @@ export function CarCard({
               onChange={onToggleCompare}
               className="m-0 size-5 sm:size-[18px]"
             />
-            Comparar<span className="sr-only"> {name}</span>
+            Comparar{' '}<span className="sr-only">{name}</span>
           </label>
           <span className="flex min-w-0 items-center gap-1 text-xs text-muted">
             {meta ?? (
               <>
                 <PinIcon size={14} className="hidden flex-none sm:block" />
-                <span className="sr-only">Ubicación: </span>
+                <span className="sr-only">Ubicación:</span>{' '}
                 {car.ciudad}
               </>
             )}

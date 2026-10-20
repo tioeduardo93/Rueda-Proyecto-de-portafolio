@@ -97,6 +97,8 @@
   --color-accent-soft: color-mix(in srgb, var(--accent) 10%, #fff);
   --color-accent-faint: color-mix(in srgb, var(--accent) 8%, #fff);
   --color-accent-line: color-mix(in srgb, var(--accent) 35%, #fff);
+  /* El diseño usa el acento al 40 %: sobre blanco da ~1,7:1 y WCAG 1.4.11 pide 3:1 para el foco. */
+  --color-focus: var(--accent);
 }
 
 /* ── Base ───────────────────────────────────────────────────────────── */
@@ -109,7 +111,7 @@
     @apply bg-canvas font-sans text-ink antialiased;
   }
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
   input[type='checkbox'],
@@ -192,11 +194,11 @@
     outline: none;
   }
   &:focus-visible::-webkit-slider-thumb {
-    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
   &:focus-visible::-moz-range-thumb {
-    outline: 3px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
 }

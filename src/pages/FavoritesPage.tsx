@@ -6,6 +6,7 @@ import { CarCardSkeleton } from '../components/CarCardSkeleton'
 import { EmptyState } from '../components/EmptyState'
 import { CompareIcon } from '../components/icons'
 import { MobilePageHeader } from '../components/MobilePageHeader'
+import { LayoutSlot } from '../layout/slots'
 import { PopularSearches } from '../components/PopularSearches'
 import { CarCardContainer } from '../containers/CarCardContainer'
 import { useCars } from '../hooks/useCars'
@@ -34,11 +35,11 @@ export default function FavoritesPage() {
   const cars = useCars()
   const catalog = cars.status === 'success' ? cars.data : NO_CARS
   const items = useFavorites((s) => s.items)
-  const removeFavorite = useFavorites((s) => s.remove)
   const setCompare = useCompare((s) => s.set)
   const navigate = useNavigate()
 
-  // Más recientes primero, por fecha de guardado. Los que ya no están en el catálogo se descartan.
+  // Más recientes primero, por fecha de guardado. Los que ya no están en el catálogo no se muestran
+  // (el layout los borra del store en cuanto llega el catálogo).
   const favorites = useMemo(
     () =>
       items
@@ -47,11 +48,6 @@ export default function FavoritesPage() {
     [items, catalog],
   )
   const count = favorites.length
-
-  useEffect(() => {
-    if (cars.status !== 'success') return
-    items.filter((f) => !catalog.some((c) => c.id === f.id)).forEach((f) => removeFavorite(f.id))
-  }, [cars.status, items, catalog, removeFavorite])
 
   // Al quitar un favorito su tarjeta desaparece y el foco caería en el <body>: pasa a la tarjeta que ocupa
   // su sitio o, si no queda ninguna, a «Explorar coches».
@@ -78,18 +74,20 @@ export default function FavoritesPage() {
 
   return (
     <>
-      <MobilePageHeader
-        title="Favoritos"
-        backTo={backTo}
-        aside={
-          count > 0 && (
-            <span className="flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-bold text-white tabular-nums">
-              {count}
-              <span className="sr-only"> {count === 1 ? 'coche guardado' : 'coches guardados'}</span>
-            </span>
-          )
-        }
-      />
+      <LayoutSlot name="mobileHeader">
+        <MobilePageHeader
+          title="Favoritos"
+          backTo={backTo}
+          aside={
+            count > 0 && (
+              <span className="flex h-[22px] min-w-[22px] items-center justify-center rounded-full bg-accent px-1.5 text-xs font-bold text-white tabular-nums">
+                {count}
+                {' '}<span className="sr-only">{count === 1 ? 'coche guardado' : 'coches guardados'}</span>
+              </span>
+            )
+          }
+        />
+      </LayoutSlot>
 
       <div ref={contentRef} className="mx-auto flex max-w-[1280px] flex-col gap-5 px-4 pt-5 pb-10 sm:px-6 lg:gap-6 lg:pt-8 lg:pb-[72px]">
         <div className="flex flex-wrap items-end justify-between gap-4 empty:hidden">

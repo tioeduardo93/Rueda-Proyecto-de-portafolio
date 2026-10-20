@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CARS } from '../data/cars'
-import { API_DELAY_MS, NotFoundError, api, rebaseDates } from './api'
+import { NotFoundError, api, latency, rebaseDates } from './api'
 
 describe('rebaseDates', () => {
   it('desplaza las fechas para que el catálogo parezca reciente', () => {
@@ -17,24 +17,32 @@ describe('rebaseDates', () => {
 })
 
 describe('api', () => {
-  beforeEach(() => vi.useFakeTimers())
-  afterEach(() => vi.useRealTimers())
+  // Aquí sí se prueba el retardo: el setup lo pone a 0 para el resto de tests.
+  const DELAY = 500
+  beforeEach(() => {
+    vi.useFakeTimers()
+    latency.apiMs = DELAY
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    latency.apiMs = 0
+  })
 
   it('devuelve el catálogo tras el retardo simulado', async () => {
     const promise = api.getCars()
-    await vi.advanceTimersByTimeAsync(API_DELAY_MS)
+    await vi.advanceTimersByTimeAsync(DELAY)
     await expect(promise).resolves.toHaveLength(CARS.length)
   })
 
   it('devuelve un coche por id', async () => {
     const promise = api.getCar('leon')
-    await vi.advanceTimersByTimeAsync(API_DELAY_MS)
+    await vi.advanceTimersByTimeAsync(DELAY)
     await expect(promise).resolves.toMatchObject({ marca: 'SEAT', modelo: 'León' })
   })
 
   it('lanza NotFoundError si el id no existe', async () => {
     const assertion = expect(api.getCar('no-existe')).rejects.toBeInstanceOf(NotFoundError)
-    await vi.advanceTimersByTimeAsync(API_DELAY_MS)
+    await vi.advanceTimersByTimeAsync(DELAY)
     await assertion
   })
 

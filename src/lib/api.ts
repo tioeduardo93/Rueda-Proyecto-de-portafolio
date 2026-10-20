@@ -2,8 +2,16 @@ import { CARS } from '../data/cars'
 import type { Car } from '../types'
 import { daysBetween, parseISODate } from './format'
 
-/** Retardo simulado de red, para que se vean los esqueletos de carga. */
-export const API_DELAY_MS = 500
+/**
+ * Retardos simulados de red, para que se vean los esqueletos y el «Cargando…». Es un objeto y no una
+ * constante para que los tests lo pongan a 0 y no dependan de tiempos (ver `test/setup.ts`).
+ */
+export const latency = {
+  /** Respuesta de la API (y esqueletos al cambiar un filtro discreto). */
+  apiMs: 500,
+  /** «Cargar más coches». */
+  loadMoreMs: 600,
+}
 
 /** Fecha a la que se refieren las fechas de publicación del catálogo. */
 const CATALOG_DATE = '2026-10-19'
@@ -30,7 +38,7 @@ export function rebaseDates(cars: Car[], today: Date): Car[] {
 function delay<T>(value: T, signal?: AbortSignal): Promise<T> {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) return reject(signal.reason)
-    const timer = setTimeout(() => resolve(value), API_DELAY_MS)
+    const timer = setTimeout(() => resolve(value), latency.apiMs)
     signal?.addEventListener(
       'abort',
       () => {

@@ -101,7 +101,10 @@ export function CompareTable({ columns, rows, emptySlots, addHref, onRemove, cla
                     </button>
                   </div>
                   <div>
-                    <Link to={c.href} className="block text-sm leading-tight font-extrabold text-ink no-underline lg:hidden">
+                    <Link
+                      to={c.href}
+                      className="relative block text-sm leading-tight font-extrabold text-ink no-underline after:absolute after:inset-x-0 after:-inset-y-[13px] after:content-[''] lg:hidden"
+                    >
                       {c.name}
                     </Link>
                     <span className="hidden text-lg font-extrabold text-ink lg:block">{c.name}</span>
@@ -111,7 +114,7 @@ export function CompareTable({ columns, rows, emptySlots, addHref, onRemove, cla
                     {c.price}
                   </span>
                   <ButtonLink to={c.href} variant="secondary" block className="max-lg:hidden">
-                    Ver ficha<span className="sr-only"> de {c.name}</span>
+                    Ver ficha{' '}<span className="sr-only">de {c.name}</span>
                   </ButtonLink>
                 </div>
               </th>

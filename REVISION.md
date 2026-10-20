@@ -152,3 +152,34 @@ Pendiente para el constructor (no bloquea; para la fase 5):
 
 Para que Eduardo lo entienda:
 El comparador construye sus filas con una tabla de definiciones en `lib/compare.ts`. Cada fila dice cómo mostrar el dato, qué número comparar y si gana el menor o el mayor, así añadir una fila nueva es añadir un objeto y no tocar la vista. El «Mejor» compara solo lo comparable: el consumo se agrupa por unidad para no enfrentar litros con kWh, y la etiqueta DGT se convierte en un rango numérico. La tabla es una `<table>` real con cabeceras de fila y de columna, que es lo que permite a un lector de pantalla decir «Toyota C-HR, Consumo, 4,9 l/100 km, Mejor». Favoritos reutiliza la tarjeta del listado con dos huecos configurables («Ha bajado…» y «Guardado hace…») en vez de crear otra tarjeta.
+
+## Fase 5 — 20/10/2026
+Estado: APROBADA
+
+Comprobado:
+- `npm run build` y `npm run lint` sin errores ni avisos. `axe-core` ya estaba instalado (`npm ls`).
+- Tests: 181. Antes de corregir, fallaban de forma intermitente (abajo). Después, 4 de 4 baterías en verde con dos ejecuciones a la vez para forzar carga, y otra más sola.
+- Pendientes acumulados: los tres resueltos.
+  - Fila «Filtros / Ordenar» dentro de la cabecera fija en móvil: comprobada a 360 px con scroll, la cabecera se queda arriba con la fila.
+  - Ids retirados: limpiados desde el layout. Con un id inexistente guardado, el contador marca 2 ya en el listado, sin abrir favoritos.
+  - Iconos: todos se usan.
+- Auditoría en el navegador real, con axe-core (WCAG 2.0, 2.1 y 2.2 AA y buenas prácticas, contraste incluido):
+  - 7 pantallas: listado, sin resultados, ficha, coche inexistente, comparador, favoritos y 404.
+  - 5 anchos: 360, 390, 768, 1024 y 1440 px.
+  - Resultado: 0 infracciones, sin scroll horizontal, un solo `h1` por pantalla y ningún control por debajo de 44 px.
+  - A 768 px salieron 85 avisos de contraste, pero eran de la animación de entrada congelada a media opacidad, porque el panel del navegador estaba oculto. Con las animaciones terminadas, 0.
+- Teclado: recorrido real con Tab en comparador y favoritos, lo que el constructor no pudo probar. Orden lógico (cabecera → volver → solo diferencias → tabla → quitar / ver ficha de cada coche) y foco visible con el acento sólido en todos los elementos.
+- README: claro, sin emojis y con las decisiones bien explicadas. Revisadas las 6 capturas de `docs/capturas/`: nítidas y sin restos de animación.
+- Consola sin errores ni warnings de React.
+
+Corregido por el revisor:
+- `src/test/setup.ts`: tests intermitentes. Con la máquina cargada, «aplica los filtros y el orden de la URL» y el flujo principal fallaban en el primer `findByRole`. El montaje inicial de la app en jsdom pasaba de 1 s, que es lo que espera Testing Library por defecto. El constructor había subido el `testTimeout` de Vitest a 20 s, pero no ese tope. Ahora `configure({ asyncUtilTimeout: 5000 })`. Antes: 3 de 4 baterías con fallos; después: todas en verde, también bajo carga doble.
+
+Pendiente para el constructor: nada.
+
+Sugerencias, por si el proyecto sigue:
+1. `src/hooks/useStaleIdsCleanup.ts:47`: el efecto depende de `cars`, que es un objeto nuevo en cada render, así que se ejecuta en cada render del layout. No rompe nada (solo escribe si hay ids retirados), pero bastaría con depender de `cars.status` y de los datos.
+2. En `docs/capturas/ficha-escritorio.jpg`, la flecha «Foto siguiente» sale con el anillo de foco puesto. Se puede repetir la captura sin foco.
+
+Para que Eduardo lo entienda:
+Esta fase no añade funciones: pule lo que hay hasta dejarlo como un producto. La fila de filtros de la cabecera móvil usa un portal, un hueco del layout que la página rellena; así el estado de los filtros sigue en el listado y el layout no sabe nada de él. La accesibilidad se comprueba de dos formas: axe dentro de los tests, que vigila la estructura cada vez que se ejecutan, y axe en el navegador real, que es donde se puede medir el contraste. Los tests ya no dependen del tiempo: la API simulada responde al instante en los tests y estos esperan a que aparezca algo en pantalla. La corrección del revisor es la otra mitad de esa idea: dar margen suficiente a esa espera para que un ordenador lento no haga fallar un test que en realidad funciona.

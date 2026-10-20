@@ -11,7 +11,7 @@ function renderCar(id: string) {
   render(<RouterProvider router={router} />)
 }
 
-const title = () => screen.findByRole('heading', { level: 1 }, { timeout: 2000 })
+const title = () => screen.findByRole('heading', { level: 1 })
 const liveText = (text: string) => screen.getByText((_, el) => el?.getAttribute('aria-live') === 'polite' && el.textContent === text)
 
 beforeEach(() => useFavorites.setState({ items: [] }))
@@ -34,7 +34,7 @@ describe('CarDetailPage', () => {
     expect(liveText('Foto 1 de 14: Exterior frontal')).toBeInTheDocument()
     await userEvent.click(screen.getAllByRole('button', { name: 'Foto siguiente' })[0]!)
     expect(liveText('Foto 2 de 14: Lateral izquierdo')).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Ver foto 4: Interior' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Interior (foto 4: Interior)' }))
     expect(liveText('Foto 4 de 14: Interior')).toBeInTheDocument()
 
     const gallery = screen.getByRole('region', { name: 'Fotos de SEAT León' })

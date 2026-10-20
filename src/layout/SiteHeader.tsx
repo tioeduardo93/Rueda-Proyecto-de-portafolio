@@ -11,7 +11,13 @@ import { useFavoriteCount } from '../store/favorites'
  * Cabecera común. En móvil: logo y favoritos arriba, buscador debajo.
  * Desde `sm`: todo en una fila, como en el diseño de escritorio.
  */
-export function SiteHeader({ className }: { className?: string }) {
+interface SiteHeaderProps {
+  className?: string
+  /** Hueco bajo el buscador, solo en móvil, que rellenan las páginas (ver `layout/slots.tsx`). */
+  toolbarRef?: (el: HTMLDivElement | null) => void
+}
+
+export function SiteHeader({ className, toolbarRef }: SiteHeaderProps) {
   const favCount = useFavoriteCount()
   const { pathname } = useLocation()
   const onListing = pathname === '/'
@@ -73,10 +79,10 @@ export function SiteHeader({ className }: { className?: string }) {
             />
           </label>
         </form>
+        <div ref={toolbarRef} className="order-last basis-full empty:hidden lg:hidden" />
 
         <Link
           to="/favoritos"
-          aria-label={`Favoritos: ${favCount} ${favCount === 1 ? 'coche guardado' : 'coches guardados'}`}
           aria-current={onFavorites ? 'page' : undefined}
           className={cn(
             'relative ml-auto flex size-11 items-center justify-center gap-2 rounded-btn text-sm font-bold text-ink no-underline transition-colors',
@@ -85,7 +91,9 @@ export function SiteHeader({ className }: { className?: string }) {
           )}
         >
           <HeartIcon size={24} className={cn('sm:size-5', onFavorites && 'fill-fav text-fav')} />
-          <span className="hidden sm:inline">Favoritos</span>
+          {/* Nombre accesible desde el texto visible («Favoritos 4») más «coches guardados», sin aria-label:
+              así quien usa control por voz puede decir lo que ve (WCAG 2.5.3). */}
+          <span className="sr-only sm:not-sr-only">Favoritos</span>{' '}
           <span
             className={cn(
               'flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-[5px] text-[11px] font-extrabold text-white tabular-nums',
@@ -94,7 +102,8 @@ export function SiteHeader({ className }: { className?: string }) {
             )}
           >
             {favCount}
-          </span>
+          </span>{' '}
+          <span className="sr-only">{favCount === 1 ? 'coche guardado' : 'coches guardados'}</span>
         </Link>
       </div>
     </header>

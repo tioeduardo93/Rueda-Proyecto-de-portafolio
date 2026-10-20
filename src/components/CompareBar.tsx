@@ -42,7 +42,7 @@ export function CompareBar({ items, max, onRemove, to, className }: CompareBarPr
         <strong className="text-[15px] tabular-nums" aria-live="polite">
           {title}
         </strong>
-        <span className="truncate text-xs text-subtle md:hidden">{items.map((i) => i.name).join(' · ')}</span>
+        <span className="text-xs text-pretty text-subtle md:hidden">{items.map((i) => i.name).join(' · ')}</span>
       </div>
 
       <ul className="hidden flex-1 flex-wrap gap-2 md:flex">

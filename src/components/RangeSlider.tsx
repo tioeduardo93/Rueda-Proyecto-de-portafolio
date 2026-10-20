@@ -44,7 +44,6 @@ export function RangeSlider({
   const loOnTop = lo > min + span / 2
 
   const big = size === 'lg'
-  const track = big ? 'top-[14px]' : 'top-3'
 
   return (
     <div role="group" aria-labelledby={labelId} className={cn('flex flex-col gap-2.5', className)}>
@@ -57,9 +56,10 @@ export function RangeSlider({
         </span>
       </div>
 
-      <div className={cn('relative', big ? 'h-8' : 'h-7')} style={{ '--thumb': big ? '26px' : '22px' } as CSSProperties}>
-        <div className={cn('absolute inset-x-0 h-1 rounded bg-line', track)} />
-        <div className={cn('absolute h-1 rounded bg-accent', track)} style={{ left: `${left}%`, right: `${right}%` }} />
+      {/* 44 px de alto: área táctil; la pista va centrada (top-5). */}
+      <div className="relative h-11" style={{ '--thumb': big ? '26px' : '22px' } as CSSProperties}>
+        <div className="absolute inset-x-0 top-5 h-1 rounded bg-line" />
+        <div className="absolute top-5 h-1 rounded bg-accent" style={{ left: `${left}%`, right: `${right}%` }} />
         <input
           type="range"
           min={min}

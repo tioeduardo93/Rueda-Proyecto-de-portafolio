@@ -27,7 +27,7 @@ export function Breadcrumbs({ backTo, crumbs, className }: BreadcrumbsProps) {
           <li key={c.label} className="flex items-center gap-2">
             {i > 0 && <span aria-hidden="true">›</span>}
             {c.to ? (
-              <Link to={c.to} className="inline-flex min-h-11 items-center text-muted hover:text-ink">
+              <Link to={c.to} className="inline-flex min-h-11 min-w-11 items-center justify-center text-muted hover:text-ink">
                 {c.label}
               </Link>
             ) : (
