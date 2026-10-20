@@ -29,7 +29,8 @@ léelos como código fuente para copiar colores, tamaños, espaciados, textos, d
 - Todo el texto en español de España.
 - Formato: `18.990 €`, `45.000 km`. Ojo: `Intl.NumberFormat('es-ES')` NO agrupa números de 4 cifras (da `8990`); usa `useGrouping: 'always'` o un formateador propio, y espacio de no separación antes de `€` y `km`.
 - Cuota: 96 meses, entrada 15 %, TIN 8,99 % (sistema francés). Centralízalo en `src/lib/finance.ts`.
-- Sin logos de marcas: solo nombres en texto. Fotos = placeholders con el nombre del coche.
+- Sin logos de marcas en la interfaz (iconos, textos): solo nombres en texto.
+- Fotos reales con licencia libre para uso comercial (Unsplash, Pexels), guardadas en `public/cars/` en WebP (≤150 KB, 1200×800) y acreditadas en `CREDITS.md`. Nada de enlazar imágenes externas.
 - Mobile-first. Áreas táctiles ≥ 44 px. Accesible: botones y enlaces reales, `aria-label` en botones de icono, foco visible, contraste AA.
 - Componentes pequeños y reutilizables en `src/components/`, sin lógica de negocio dentro.
 - Antes de dar algo por terminado: `npm run build`, `npm run lint` y `npm test` sin errores.

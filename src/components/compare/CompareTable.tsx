@@ -2,6 +2,7 @@ import { useEffect, useRef, type CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { cn } from '../../lib/cn'
 import type { CompareRow } from '../../lib/compare'
+import type { Photo } from '../../types'
 import { ButtonLink } from '../Button'
 import { CarPhoto } from '../CarPhoto'
 import { DgtBadge } from '../DgtBadge'
@@ -13,6 +14,7 @@ export interface CompareColumn {
   version: string
   price: string
   href: string
+  photo?: Photo
 }
 
 export interface CompareTableProps {
@@ -83,13 +85,7 @@ export function CompareTable({ columns, rows, emptySlots, addHref, onRemove, cla
               <th key={c.id} scope="col" className="border-l border-line-soft px-2.5 py-3 text-left align-top font-normal lg:p-5">
                 <div className="flex flex-col gap-2 lg:gap-3">
                   <div className="relative">
-                    <CarPhoto
-                      label={c.name}
-                      silhouette={0}
-                      className="aspect-[4/3] rounded-field lg:hidden"
-                      labelClassName="text-[9px]"
-                    />
-                    <CarPhoto label={c.name} silhouette={60} className="hidden aspect-[16/10] rounded-btn lg:flex" labelClassName="text-[10px]" />
+                    {c.photo && <CarPhoto photo={c.photo} alt="" priority={index === 0} className="aspect-[4/3] rounded-field lg:aspect-[16/10] lg:rounded-btn" />}
                     <button
                       type="button"
                       data-remove

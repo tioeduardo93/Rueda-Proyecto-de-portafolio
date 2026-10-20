@@ -17,11 +17,11 @@ export const DGT_LABELS: EtiquetaDgt[] = ['0', 'ECO', 'C', 'B']
 export const BODY_TYPES: Carroceria[] = ['Utilitario', 'Compacto', 'Berlina', 'Familiar', 'SUV']
 
 export const SORTS = [
-  { value: 'recientes', label: 'Más recientes', shortLabel: 'Más recientes' },
-  { value: 'precio-asc', label: 'Precio: de menor a mayor', shortLabel: 'Precio: menor a mayor' },
-  { value: 'precio-desc', label: 'Precio: de mayor a menor', shortLabel: 'Precio: mayor a menor' },
-  { value: 'km', label: 'Menos kilómetros', shortLabel: 'Menos kilómetros' },
-  { value: 'anio', label: 'Año: más nuevos', shortLabel: 'Año: más nuevos' },
+  { value: 'recientes', label: 'Más recientes' },
+  { value: 'precio-asc', label: 'Precio: de menor a mayor' },
+  { value: 'precio-desc', label: 'Precio: de mayor a menor' },
+  { value: 'km', label: 'Menos kilómetros' },
+  { value: 'anio', label: 'Año: más nuevos' },
 ] as const
 
 export type SortKey = (typeof SORTS)[number]['value']

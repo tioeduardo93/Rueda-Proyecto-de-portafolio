@@ -9,7 +9,7 @@ import { MobilePageHeader } from '../components/MobilePageHeader'
 import { LayoutSlot } from '../layout/slots'
 import { useCars } from '../hooks/useCars'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { carName, versionLine } from '../lib/car'
+import { carName, carPhotos, versionLine } from '../lib/car'
 import { buildCompareRows, onlyDifferences, resolveCars } from '../lib/compare'
 import { FINANCE } from '../lib/finance'
 import { formatNumber, formatPrice } from '../lib/format'
@@ -67,6 +67,7 @@ export default function ComparePage() {
     version: versionLine(c),
     price: formatPrice(c.precio),
     href: `/coche/${c.id}`,
+    photo: carPhotos(c)[0],
   }))
 
   return (

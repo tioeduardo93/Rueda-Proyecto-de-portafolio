@@ -196,3 +196,33 @@ Comprobado:
 Corregido por el revisor: nada.
 
 Pendiente para el constructor: nada. Proyecto terminado.
+
+## Fase 6 (pulido para la candidatura) — 20/10/2026
+Estado: APROBADA (el código). Quedan 2 cambios en el panel de Netlify, que hace Eduardo.
+
+Comprobado, punto por punto del encargo:
+1. **Fotos reales**: resuelto.
+   - 74 fotos locales en `public/cars/`, WebP 1200×800, todas de menos de 150 KB, con autor y enlace al original en `CREDITS.md`. Ninguna se enlaza desde fuera.
+   - Revisadas a ojo las fotos 1 y 2 de los 24 coches: cada una corresponde a su modelo; los parecidos (Corolla berlina, Golf anterior, Mazda3 por CX-30…) están declarados.
+   - Texto alternativo en español, carga diferida salvo la primera foto, galería con miniaturas de imagen.
+2. **Insignia de Netlify**: sigue en la web publicada (`iframe#nl-badge-frame`, 197×64 px abajo a la derecha). No es código: se quita en el panel de Netlify.
+3. **Autoría en el pie**: resuelto. «Proyecto de portafolio de Eduardo Cebrián López» con enlaces a GitHub y al repositorio, en pestaña nueva y con `noopener noreferrer`. El del portafolio aparecerá al rellenar `SITE.portfolioUrl`.
+4. **Open Graph**: resuelto. `og:title`, `og:description`, `og:image` (1200×630, revisada) y Twitter Card con URL absolutas desde `VITE_SITE_URL`. Cada ficha cambia título y descripción.
+5. **Detalles**: resueltos.
+   - Barra «Comparar» en móvil: acaba 40 px por encima del pie.
+   - Orden: «Precio: de menor a mayor» en todos los anchos.
+   - Panel de filtros: un solo contenedor (`ListingFilters`), con un solo `<dialog>` en móvil y la barra lateral en escritorio.
+6. **Nombre del enlace**: sigue siendo `rueda-proyecto.netlify.app`. Se cambia en el panel de Netlify.
+
+Además:
+- `npm run build` y `npm run lint` sin errores; `npm test` dos veces, 186 de 186.
+- axe en el navegador a 390 px en listado, ficha, favoritos y comparador: 0 infracciones. Consola sin errores ni warnings.
+
+Corregido por el revisor:
+- `PROGRESO.md`: se había perdido el título «## Fase 5» y sus notas quedaban dentro de la fase 6.
+
+Avisos para publicar:
+- `.env` (solo la URL pública, sin secretos) **tiene que subirse** con el resto: Netlify compila desde GitHub y sin él las etiquetas Open Graph saldrían vacías.
+- Si se cambia el nombre del sitio, hay que actualizar `VITE_SITE_URL` en `.env` y el enlace de la demo en el README **antes** de subir, o la vista previa al compartir apuntará a una dirección que ya no existe.
+
+Sugerencia: en algunos coches el color cambia entre fotos (el Opel Astra sale blanco en la primera y gris en la segunda). Si se quiere afinar, buscar fotos del mismo color o ajustar el color del anuncio a la principal.

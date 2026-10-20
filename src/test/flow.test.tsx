@@ -94,3 +94,43 @@ describe('flujo principal', () => {
     expect(useCompare.getState().ids).toEqual(['chr'])
   })
 })
+
+describe('un solo panel de filtros y un solo selector de orden', () => {
+  const SORT_LABELS = ['Más recientes', 'Precio: de menor a mayor', 'Precio: de mayor a menor', 'Menos kilómetros', 'Año: más nuevos']
+
+  it.each([
+    { width: 1440, sidebar: 1 },
+    { width: 390, sidebar: 0 },
+  ])('a $width px', async ({ width, sidebar }) => {
+    setViewportWidth(width)
+    const user = userEvent.setup()
+    const router = renderApp('/')
+    await results('24 coches encontrados')
+
+    expect(screen.queryAllByRole('complementary', { name: 'Filtros' })).toHaveLength(sidebar)
+    const sorts = screen.getAllByRole('combobox', { name: 'Ordenar por' })
+    expect(sorts).toHaveLength(1)
+    expect(within(sorts[0]!).getAllByRole('option').map((o) => o.textContent)).toEqual(SORT_LABELS)
+
+    await user.selectOptions(sorts[0]!, 'Precio: de menor a mayor')
+    expect(router.state.location.search).toBe('?orden=precio-asc')
+  })
+})
+
+describe('fotos del listado', () => {
+  it('solo la primera tarjeta pide su foto enseguida, y todas reservan su tamaño', async () => {
+    setViewportWidth(1440)
+    renderApp('/')
+    await results('24 coches encontrados')
+    // Las fotos de las tarjetas cuelgan de un enlace oculto (el título ya enlaza): se buscan en el DOM.
+    const photos = [...document.querySelectorAll<HTMLImageElement>('article img')]
+    expect(photos.length).toBeGreaterThan(1)
+    expect(photos.map((img) => img.getAttribute('loading'))).toEqual(['eager', ...photos.slice(1).map(() => 'lazy')])
+    for (const img of photos) {
+      expect(img).toHaveAttribute('width', '1200')
+      expect(img).toHaveAttribute('height', '800')
+      expect(img.getAttribute('src')).toMatch(/^\/cars\/[\w-]+-1\.webp$/)
+      expect(img.alt).toMatch(/, vista /)
+    }
+  })
+})

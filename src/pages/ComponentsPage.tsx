@@ -10,6 +10,7 @@ import { FilterChip } from '../components/FilterChip'
 import { RangeSlider } from '../components/RangeSlider'
 import { CARS } from '../data/cars'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { carPhotos } from '../lib/car'
 import { cuotaDesde } from '../lib/finance'
 import { formatKm, formatPrice } from '../lib/format'
 
@@ -124,6 +125,7 @@ export default function ComponentsPage() {
         <div className="flex flex-col gap-6">
           <CarCard
             car={car}
+            photos={carPhotos(car)}
             monthlyFee={cuotaDesde(car.precio)}
             isFavorite={fav}
             onToggleFavorite={() => setFav((v) => !v)}

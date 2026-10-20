@@ -157,28 +157,3 @@ export const PlusIcon = (p: IconProps) => (
     <path d="M12 5v14M5 12h14" />
   </Icon>
 )
-
-/** Silueta de coche de los placeholders de foto (viewBox 64×32). */
-export function CarSilhouette({ width = 72, strokeWidth = 1.6, ...props }: SVGProps<SVGSVGElement> & { width?: number }) {
-  return (
-    <svg
-      width={width}
-      height={width / 2}
-      viewBox="0 0 64 32"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-      {...props}
-    >
-      <path d="M7 24H4v-5.5c0-1 .8-1.8 1.8-2L15 15l7-6h17l9 6.2 9.6 1.6c1 .2 1.4 1 1.4 2V24h-3" />
-      <path d="M21 24h22" />
-      <circle cx="15.5" cy="24" r="4.5" />
-      <circle cx="48.5" cy="24" r="4.5" />
-      <path d="M23.5 15l4.5-4h8.5v4zM39.5 11h1.5l5.5 4h-7z" />
-    </svg>
-  )
-}

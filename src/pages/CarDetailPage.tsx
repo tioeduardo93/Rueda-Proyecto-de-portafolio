@@ -18,7 +18,7 @@ import { Toast } from '../components/Toast'
 import { CarCardContainer } from '../containers/CarCardContainer'
 import { useCars } from '../hooks/useCars'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { carName, gearboxLabel, moreOfBodyLabel, photoLabels, priceDrop, similarCars } from '../lib/car'
+import { carDescription, carName, carPhotos, gearboxLabel, moreOfBodyLabel, priceDrop, similarCars } from '../lib/car'
 import {
   FINANCE,
   cuotaDesde,
@@ -71,7 +71,7 @@ export default function CarDetailPage() {
   const cars = useCars()
   const car = cars.status === 'success' ? cars.data.find((c) => c.id === id) : undefined
   const notFound = cars.status === 'success' && !car
-  useDocumentTitle(car ? `${carName(car)} ${car.version}` : notFound ? 'Coche no encontrado' : null)
+  useDocumentTitle(car ? `${carName(car)} ${car.version}` : notFound ? 'Coche no encontrado' : null, car ? carDescription(car) : null)
 
   if (cars.status === 'loading') {
     return (
@@ -175,7 +175,7 @@ function CarDetail({ car, cars }: { car: Car; cars: Car[] }) {
         <Gallery
           className="lg:col-start-1 lg:row-start-1"
           title={name}
-          photos={photoLabels(car)}
+          photos={carPhotos(car)}
           badge={
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-1.5 text-[13px] font-bold text-ink">
               <ShieldCheckIcon size={16} className="text-accent" />

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { cn } from '../lib/cn'
 import { formatKm, formatMonthly, formatPrice } from '../lib/format'
-import type { Car } from '../types'
+import type { Car, Photo } from '../types'
 import { Badge } from './Badge'
 import { CarPhoto } from './CarPhoto'
 import { DgtBadge } from './DgtBadge'
@@ -10,6 +10,9 @@ import { CalendarIcon, FuelIcon, GaugeIcon, GearboxIcon, HeartIcon, PinIcon } fr
 
 export interface CarCardProps {
   car: Car
+  photos: Photo[]
+  /** La tarjeta es de las primeras de la página: su foto no espera al scroll. */
+  priority?: boolean
   /** Cuota «desde» ya calculada (la calcula quien usa la tarjeta). */
   monthlyFee: number
   isFavorite: boolean
@@ -35,6 +38,8 @@ export interface CarCardProps {
  */
 export function CarCard({
   car,
+  photos,
+  priority = false,
   monthlyFee,
   isFavorite,
   onToggleFavorite,
@@ -69,12 +74,12 @@ export function CarCard({
       <div className="relative">
         {/* El título ya enlaza a la ficha: la foto es un atajo para ratón y táctil, fuera del orden de tabulación. */}
         <Link to={href} tabIndex={-1} aria-hidden="true" className="block">
-          <CarPhoto label={name} silhouette={64} className="aspect-[16/9] sm:aspect-[16/10]" labelClassName="text-[10px] sm:text-[11px]" />
+          {photos[0] && <CarPhoto photo={photos[0]} priority={priority} className="aspect-[16/9] sm:aspect-[16/10]" />}
         </Link>
         <DgtBadge label={car.etiqueta} ring className="absolute top-3 left-3" />
         {photoBadge === undefined ? (
           <div className="absolute bottom-3 left-3 hidden sm:block">
-            <Badge tone="overlay">{car.fotos} fotos</Badge>
+            <Badge tone="overlay">{photos.length} fotos</Badge>
           </div>
         ) : (
           photoBadge && <div className="absolute bottom-3 left-3">{photoBadge}</div>

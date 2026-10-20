@@ -109,6 +109,8 @@
   }
   body {
     @apply bg-canvas font-sans text-ink antialiased;
+    /* Con viewport-fit=cover (index.html), en horizontal el contenido no debe meterse bajo la muesca. */
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
   }
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
     outline: 3px solid var(--color-focus);
@@ -127,7 +129,7 @@
 
 /* ── Utilidades del diseño ──────────────────────────────────────────── */
 
-/* Placeholder de foto rayado */
+/* Fondo rayado mientras carga una foto */
 @utility photo-placeholder {
   background-color: var(--color-placeholder);
   background-image: repeating-linear-gradient(

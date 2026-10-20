@@ -1,23 +1,28 @@
 import { cn } from '../lib/cn'
-import { CarSilhouette } from './icons'
+import type { Photo } from '../types'
 
 export interface CarPhotoProps {
-  /** Texto del placeholder, p. ej. «SEAT León» o «Exterior frontal». */
-  label: string
-  /** Ancho de la silueta en px. */
-  silhouette?: number
+  photo: Photo
+  /** Solo la primera foto visible al cargar la página: se pide enseguida y con prioridad. */
+  priority?: boolean
+  /** Vacío cuando la foto es decorativa (la acompaña un texto que ya dice lo mismo). */
+  alt?: string
   className?: string
-  labelClassName?: string
 }
 
-/** Placeholder de foto: no hay fotos reales en el proyecto, solo el nombre del coche. */
-export function CarPhoto({ label, silhouette = 72, className, labelClassName }: CarPhotoProps) {
+/** Foto de coche a 3:2 recortada al hueco; mientras llega, el fondo rayado ocupa su sitio. */
+export function CarPhoto({ photo, priority = false, alt = photo.alt, className }: CarPhotoProps) {
   return (
-    <div className={cn('photo-placeholder flex flex-col items-center justify-center gap-1.5 text-muted', className)}>
-      {silhouette > 0 && <CarSilhouette width={silhouette} strokeWidth={silhouette > 100 ? 1.4 : 1.6} />}
-      <span className={cn('px-2 text-center text-[11px] font-bold tracking-[0.08em] uppercase', labelClassName)}>
-        Foto · {label}
-      </span>
-    </div>
+    <img
+      src={photo.src}
+      alt={alt}
+      width={1200}
+      height={800}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+      // En minúsculas: React 18 no conoce `fetchPriority` y lo pasaría al DOM con aviso.
+      {...{ fetchpriority: priority ? 'high' : 'auto' }}
+      className={cn('photo-placeholder block h-auto w-full object-cover', className)}
+    />
   )
 }

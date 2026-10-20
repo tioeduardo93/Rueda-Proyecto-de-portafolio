@@ -148,12 +148,13 @@ export default function FavoritesPage() {
           </EmptyState>
         ) : (
           <ul className={GRID}>
-            {favorites.map(({ car, savedAt }) => {
+            {favorites.map(({ car, savedAt }, i) => {
               const drop = priceDrop(car)
               return (
                 <li key={car.id} className="flex animate-fade-up">
                   <CarCardContainer
                     car={car}
+                    priority={i === 0}
                     headingLevel="h2"
                     className="w-full"
                     photoBadge={drop > 0 ? <Badge tone="solid">Ha bajado {formatPrice(drop)}</Badge> : null}

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { CarCard } from '../components/CarCard'
+import { carPhotos } from '../lib/car'
 import { cuotaDesde } from '../lib/finance'
 import { MAX_COMPARE, useCompare } from '../store/compare'
 import { useFavorites, useIsFavorite } from '../store/favorites'
@@ -10,10 +11,11 @@ interface CarCardContainerProps {
   photoBadge?: ReactNode
   meta?: ReactNode
   headingLevel?: 'h2' | 'h3'
+  priority?: boolean
   className?: string
 }
 
-/** Conecta `CarCard` con favoritos, comparador y la cuota estándar. */
+/** Conecta `CarCard` con sus fotos, favoritos, comparador y la cuota estándar. */
 export function CarCardContainer({ car, ...rest }: CarCardContainerProps) {
   const isFavorite = useIsFavorite(car.id)
   const toggleFavorite = useFavorites((s) => s.toggle)
@@ -24,6 +26,7 @@ export function CarCardContainer({ car, ...rest }: CarCardContainerProps) {
   return (
     <CarCard
       car={car}
+      photos={carPhotos(car)}
       monthlyFee={cuotaDesde(car.precio)}
       isFavorite={isFavorite}
       onToggleFavorite={() => toggleFavorite(car.id)}

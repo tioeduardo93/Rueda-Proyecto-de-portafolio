@@ -3,6 +3,25 @@ export type Cambio = 'Manual' | 'Automático'
 export type EtiquetaDgt = '0' | 'ECO' | 'C' | 'B'
 export type Carroceria = 'Utilitario' | 'Compacto' | 'Berlina' | 'Familiar' | 'SUV'
 
+/** Qué enseña cada foto; los archivos están en `public/cars/<id>-<n>.webp`. */
+export type PhotoView = 'frontal' | 'lateral' | 'trasera' | 'interior' | 'detalle'
+
+export interface PhotoSpec {
+  vista: PhotoView
+  /** Color de esa foto cuando no coincide con el del anuncio (otra unidad del mismo modelo). */
+  color?: string
+  /** Texto alternativo cuando la vista no basta para describirla. */
+  alt?: string
+}
+
+/** Foto lista para pintar. */
+export interface Photo {
+  src: string
+  alt: string
+  /** Nombre corto de la vista: «Frontal», «Interior»… */
+  label: string
+}
+
 export interface Consumo {
   valor: number
   unidad: 'l/100 km' | 'kWh/100 km'
@@ -35,7 +54,6 @@ export interface Car {
   consumo: Consumo
   /** Capacidad del maletero en litros. */
   maletero: number
-  fotos: number
   equipamiento: string[]
   /** Fecha de publicación en formato ISO (AAAA-MM-DD). */
   publicadoEl: string

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { CARS } from '../data/cars'
-import { carName, gearboxLabel, moreOfBodyLabel, photoLabels, priceDrop, similarCars, versionLine } from './car'
+import { carDescription, carName, carPhotos, gearboxLabel, moreOfBodyLabel, priceDrop, similarCars, versionLine } from './car'
+import { NBSP } from './format'
 
 const byId = (id: string) => CARS.find((c) => c.id === id)!
 
@@ -13,14 +14,25 @@ describe('textos del coche', () => {
     expect(gearboxLabel(byId('model3'))).toBe('Automático')
   })
 
-  it('usa tantas fotos como tenga el coche', () => {
-    expect(photoLabels(byId('leon'))).toHaveLength(14)
-    expect(photoLabels(byId('leon'))[0]).toBe('Exterior frontal')
+  it('da a cada foto su archivo y un texto alternativo en español', () => {
+    expect(carPhotos(byId('leon'))).toEqual([
+      { src: '/cars/leon-1.webp', label: 'Frontal', alt: 'SEAT León negro, vista frontal' },
+      { src: '/cars/leon-2.webp', label: 'Lateral', alt: 'SEAT León negro, vista lateral' },
+      { src: '/cars/leon-3.webp', label: 'Interior', alt: 'Interior del SEAT León' },
+    ])
+    // Otra unidad del mismo modelo con otro color: el texto describe la foto, no el anuncio.
+    expect(carPhotos(byId('sandero'))[2]?.alt).toBe('Dacia Sandero Stepway gris, vista trasera')
   })
 
   it('enlace a más coches de la misma carrocería', () => {
     expect(moreOfBodyLabel('Compacto')).toBe('Ver más compactos')
     expect(moreOfBodyLabel('SUV')).toBe('Ver más SUV')
+  })
+
+  it('describe el coche para la meta description', () => {
+    expect(carDescription(byId('leon')).replaceAll(NBSP, ' ')).toBe(
+      'SEAT León 1.5 TSI FR de 2021 con 48.200 km, gasolina y cambio manual, en Madrid. 18.990 € o desde 236 €/mes.',
+    )
   })
 
   it('calcula la bajada de precio', () => {

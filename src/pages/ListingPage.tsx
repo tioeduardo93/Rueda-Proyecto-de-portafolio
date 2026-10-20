@@ -4,12 +4,11 @@ import { ActiveFilterChips } from '../components/ActiveFilterChips'
 import { Button } from '../components/Button'
 import { CarCardSkeleton } from '../components/CarCardSkeleton'
 import { EmptyState } from '../components/EmptyState'
-import { FiltersSidebar } from '../components/filters/FiltersSidebar'
 import { FiltersIcon } from '../components/icons'
 import { SortSelect } from '../components/SortSelect'
 import { CarCardContainer } from '../containers/CarCardContainer'
 import { CompareBarContainer } from '../containers/CompareBarContainer'
-import { MobileFiltersSheet } from '../containers/MobileFiltersSheet'
+import { ListingFilters } from '../containers/ListingFilters'
 import { useCars } from '../hooks/useCars'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useListingQuery } from '../hooks/useListingQuery'
@@ -19,11 +18,8 @@ import { latency } from '../lib/api'
 import {
   SORTS,
   activeFilters,
-  brandFacets,
   filterCars,
-  modelGroups,
   sortCars,
-  toggleBrand,
   type Filters,
   type SortKey,
 } from '../lib/filters'
@@ -63,8 +59,6 @@ export default function ListingPage() {
 
   const results = useMemo(() => sortCars(filterCars(catalog, filters), sort), [catalog, filters, sort])
   const chips = useMemo(() => activeFilters(filters), [filters])
-  const brands = useMemo(() => brandFacets(catalog), [catalog])
-  const models = useMemo(() => modelGroups(catalog, filters.marcas), [catalog, filters.marcas])
   const refreshing = useSimulatedRefresh(discreteKey(filters, sort), latency.apiMs)
   const loading = cars.status === 'loading' || refreshing
 
@@ -100,11 +94,6 @@ export default function ListingPage() {
     if (chip) setFilters(chip.remove)
   }
 
-  function applySheet(next: Filters) {
-    setFilters(next)
-    setSheetOpen(false)
-  }
-
   const total = results.length
   const shown = Math.min(limit, total)
   const remaining = total - shown
@@ -119,46 +108,50 @@ export default function ListingPage() {
       </div>
 
       <div className="lg:flex lg:items-start lg:gap-7">
-        <FiltersSidebar
-          className="hidden w-[300px] flex-none lg:block"
+        <ListingFilters
+          isDesktop={isDesktop}
+          className="w-[300px] flex-none"
+          cars={catalog}
           filters={filters}
-          brands={brands}
-          models={models}
           activeCount={chips.length}
-          onChange={(patch, { continuous }) => setFilters((f) => ({ ...f, ...patch }), { replace: continuous })}
-          onToggleBrand={(brand) => setFilters((f) => toggleBrand(catalog, f, brand))}
+          setFilters={setFilters}
           onClearAll={clearAll}
+          sheetOpen={sheetOpen}
+          onCloseSheet={() => setSheetOpen(false)}
         />
 
         <section aria-labelledby="resultados" className="flex min-w-0 flex-1 flex-col gap-3.5 sm:gap-4">
           {/* En móvil va dentro de la cabecera fija, como en el diseño (Listado-movil.dc.html). */}
-          <LayoutSlot name="headerToolbar">
-            <div className="flex gap-2 lg:hidden">
-              <Button
-                variant="dark"
-                className="flex-1 font-extrabold"
-                aria-haspopup="dialog"
-                aria-expanded={sheetOpen}
-                onClick={() => setSheetOpen(true)}
-              >
-                <FiltersIcon size={18} />
-                Filtros
-                {chips.length > 0 && (
-                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] tabular-nums">
-                    {chips.length}
-                    {' '}<span className="sr-only">{chips.length === 1 ? 'activo' : 'activos'}</span>
-                  </span>
-                )}
-              </Button>
-              <SortSelect options={SORTS} value={sort} onChange={setSort} compact className="flex-1" />
-            </div>
-          </LayoutSlot>
+          {!isDesktop && (
+            <LayoutSlot name="headerToolbar">
+              <div className="flex gap-2">
+                <Button
+                  variant="dark"
+                  className="flex-none px-4 font-extrabold"
+                  aria-haspopup="dialog"
+                  aria-expanded={sheetOpen}
+                  onClick={() => setSheetOpen(true)}
+                >
+                  <FiltersIcon size={18} />
+                  Filtros
+                  {chips.length > 0 && (
+                    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] tabular-nums">
+                      {chips.length}
+                      {' '}<span className="sr-only">{chips.length === 1 ? 'activo' : 'activos'}</span>
+                    </span>
+                  )}
+                </Button>
+                <SortSelect options={SORTS} value={sort} onChange={setSort} compact className="min-w-0 flex-1" />
+              </div>
+            </LayoutSlot>
+          )}
 
           <div className="flex flex-wrap items-center justify-between gap-4">
             <h2 id="resultados" aria-live="polite" className="text-[17px] font-extrabold tabular-nums sm:text-xl">
               {cars.status === 'loading' ? 'Buscando coches…' : pluralize(total, 'coche encontrado', 'coches encontrados')}
             </h2>
-            <SortSelect options={SORTS} value={sort} onChange={setSort} className="hidden lg:flex" />
+            {/* Un solo selector de orden en el DOM: aquí en escritorio, en la cabecera en móvil. */}
+            {isDesktop && <SortSelect options={SORTS} value={sort} onChange={setSort} />}
           </div>
 
           <ActiveFilterChips chips={chips} onRemove={removeChip} onClearAll={clearAll} />
@@ -190,9 +183,9 @@ export default function ListingPage() {
           ) : (
             <>
               <ul ref={listRef} className="grid animate-fade-up grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
-                {results.slice(0, limit).map((car) => (
+                {results.slice(0, limit).map((car, i) => (
                   <li key={car.id} className="flex">
-                    <CarCardContainer car={car} className="w-full" />
+                    <CarCardContainer car={car} priority={i === 0} className="w-full" />
                   </li>
                 ))}
               </ul>
@@ -209,13 +202,14 @@ export default function ListingPage() {
             </>
           )}
 
-          <CompareBarContainer cars={catalog} className="sticky bottom-4 z-20 mt-2 sm:bottom-5" />
+          {/* Sticky dentro de los resultados: al final de la página ocupa su sitio y no tapa el pie. La zona
+              segura de iOS la separa del indicador de inicio. */}
+          <CompareBarContainer
+            cars={catalog}
+            className="sticky bottom-[calc(1rem_+_env(safe-area-inset-bottom))] z-20 mt-2 sm:bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))]"
+          />
         </section>
       </div>
-
-      {sheetOpen && !isDesktop && cars.status === 'success' && (
-        <MobileFiltersSheet cars={catalog} filters={filters} onApply={applySheet} onClose={() => setSheetOpen(false)} />
-      )}
     </div>
   )
 }

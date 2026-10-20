@@ -10,6 +10,7 @@ Registro de avance por fases. Se actualiza al cerrar cada fase.
 | 3. Ficha y calculadora | ✅ Aprobada por el revisor | 19/10/2026 |
 | 4. Comparador y favoritos | ✅ Aprobada por el revisor | 20/10/2026 |
 | 5. Responsive, accesibilidad, tests y README | ✅ Aprobada por el revisor | 20/10/2026 |
+| 6. Pulido para la candidatura | 🔍 Pendiente de revisión | 20/10/2026 |
 
 ## Estructura
 
@@ -17,9 +18,11 @@ Registro de avance por fases. Se actualiza al cerrar cada fase.
 src/
 ├── main.tsx · App.tsx         Entrada y router
 ├── routes.tsx                 Rutas (/, /coche/:id, /comparar, /favoritos, 404; /componentes solo en desarrollo)
-├── index.css                  Tokens del diseño (@theme de Tailwind 4) y utilidades (placeholder, skeleton, slider doble)
-├── types.ts                   Tipo Car y uniones (combustible, cambio, etiqueta, carrocería)
-├── data/cars.ts               24 coches (13 del diseño + 11 nuevos) y nombres de las fotos de la galería
+├── index.css                  Tokens del diseño (@theme de Tailwind 4) y utilidades (fondo de foto, skeleton, slider doble)
+├── types.ts                   Tipos Car y Photo y uniones (combustible, cambio, etiqueta, carrocería)
+├── config/site.ts             Dominio (de VITE_SITE_URL), autor y enlaces del pie
+├── data/cars.ts               24 coches (13 del diseño + 11 nuevos)
+├── data/photos.ts             Vistas de las fotos de cada coche (generado desde scripts/photos.json)
 ├── lib/
 │   ├── format.ts              Precios, km, decimales, matrícula, fechas relativas (sin Intl: agrupa 4 cifras)
 │   ├── finance.ts             Única fuente de la financiación: 96 meses, 15 %, TIN 8,99 %, sistema francés
@@ -47,6 +50,22 @@ src/
 ├── pages/                     ListingPage, CarDetailPage, ComparePage, FavoritesPage, NotFoundPage, ComponentsPage (dev)
 └── test/                      Setup de Vitest, matchMedia simulado, renderApp, axe, flujos y accesibilidad
 ```
+
+## Fase 6 · Pulido para la candidatura
+
+**Hecho**
+- **Fotos reales**: 74 fotos (3 o 4 por coche: exterior frontal, lateral o trasera e interior) de Unsplash y Pexels con licencia libre, ninguna de Unsplash+ ni de iStock. En `public/cars/` como WebP de 1200×800 (máx. 148 KB, media 74 KB). `scripts/photos.json` + `npm run photos` las regeneran junto a `src/data/photos.ts` y `CREDITS.md`. `<img>` con `width`/`height`, `loading="lazy"` salvo la primera visible (`fetchpriority="high"`), fondo rayado mientras cargan y alt en español («SEAT León negro, vista frontal»). Galería con miniaturas de imagen. Colores de 18 anuncios ajustados a sus fotos.
+- **Pie**: «Proyecto de portafolio de Eduardo Cebrián López», enlaces a GitHub y al repositorio (pestaña nueva, `noopener noreferrer`). El del portafolio sale cuando se rellene `SITE.portfolioUrl`.
+- **Open Graph y Twitter Card** con URLs absolutas desde `VITE_SITE_URL` y `public/og-image.jpg` (1200×630). Cada ficha actualiza título y meta description.
+- **Zona segura de iOS**: `viewport-fit=cover`, márgenes laterales y la barra del comparador separada del indicador de inicio.
+- **Un solo panel de filtros** (`containers/ListingFilters.tsx`) y un solo selector de orden; «Precio: de menor a mayor» en todos los anchos.
+- Fuera el marcador `CarPhoto` de texto, `PHOTO_LABELS` y `CarSilhouette`. README y capturas renovados.
+- 186 tests (eran 184): fotos y archivos de cada coche, texto alternativo, carga diferida del listado, galería con fotos, meta description de la ficha y panel de filtros único.
+
+**Decisiones**
+1. **Lo que tapaba el pie en móvil era la insignia de Netlify** (un `iframe` fijo que inyecta Netlify), no la barra del comparador, que es `sticky` y se queda al final de los resultados. Se quita desde el panel de Netlify; en el código solo se ha añadido la zona segura.
+2. **Modelos parecidos** cuando no había fotos libres del exacto (CX-30, Corolla Touring Sports, generaciones anteriores de Golf, Ibiza y Captur, interiores de otro modelo de la marca). `CREDITS.md` lo dice en cada coche.
+3. **Imagen para redes** compuesta en un `<canvas>` con Manrope (sharp no lee `.woff2`).
 
 ## Fase 5 · Responsive, accesibilidad, tests y README
 

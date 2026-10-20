@@ -3,7 +3,9 @@
 Buscador de coches de segunda mano para el mercado español: listado con filtros, ficha con galería y
 calculadora de financiación, comparador de hasta tres coches y favoritos. Es un proyecto de portafolio
 construido como si fuera a salir a producción: diseño aprobado de partida, accesibilidad AA, estado
-compartible por URL y tests de la lógica y de los flujos principales.
+compartible por URL, fotos reales con licencia libre y tests de la lógica y de los flujos principales.
+
+Proyecto de portafolio de **Eduardo Cebrián López** ([GitHub](https://github.com/tioeduardo93)).
 
 **Pruébala en línea:** https://rueda-proyecto.netlify.app/
 
@@ -24,6 +26,8 @@ compartible por URL y tests de la lógica y de los flujos principales.
 - **Comparador (`/comparar`)**: tabla con cabeceras de fila y columna, «Mejor» por fila y «solo diferencias».
 - **Favoritos (`/favoritos`)**: guardados en el navegador, con casilla para mandarlos al comparador.
 - Estados de carga (esqueletos), error con reintento, vacío y página 404 en todas las pantallas.
+- Fotos reales de cada modelo (frontal, lateral o trasera e interior) y vista previa al compartir el enlace
+  (Open Graph y Twitter Card); cada ficha actualiza el título y la meta description.
 
 ## Stack
 
@@ -35,6 +39,7 @@ compartible por URL y tests de la lógica y de los flujos principales.
 | **Zustand** | Favoritos y comparador en dos stores pequeños, persistidos en `localStorage` sin código propio. |
 | **Vitest + Testing Library + axe-core** | Tests que usan la app como un usuario (roles y nombres accesibles) y comprobación automática de accesibilidad. |
 | **Manrope autoalojada** | La tipografía del diseño sin peticiones a terceros. |
+| **sharp** (solo desarrollo) | Convierte las fotos originales a WebP de 1200×800 y menos de 150 KB con un script reproducible. |
 
 ## Decisiones técnicas
 
@@ -69,6 +74,21 @@ recorre el catálogo para asegurarlo y comprueba las cuotas del diseño (SEAT Le
 - Se respeta `prefers-reduced-motion`.
 - axe-core se ejecuta como test sobre todas las pantallas y estados.
 
+**Persistencia mínima y tolerante.** Favoritos y comparador se guardan en `localStorage` (`rueda:favoritos`,
+`rueda:comparador`) con el middleware `persist` de Zustand: solo los ids y la fecha de guardado, nunca copias de los
+coches, así que los precios siempre salen del catálogo vigente. Si un coche desaparece del catálogo, su id se limpia
+solo y los contadores no lo cuentan.
+
+**Fotos servidas por la propia app.** Las 74 fotos están en `public/cars/<id>-<n>.webp` (1200×800, ≤150 KB, 74 KB de
+media): no dependen de que Unsplash o Pexels sigan sirviendo la imagen. `scripts/photos.json` es la única fuente:
+de ahí `npm run photos` descarga los originales, los convierte y genera `src/data/photos.ts` y `CREDITS.md`. Todas
+llevan `width`/`height` (sin saltos de maquetación), `loading="lazy"` salvo la primera visible, un fondo mientras
+cargan y un texto alternativo descriptivo («SEAT León negro, vista frontal»).
+
+**Un solo panel de filtros.** `containers/ListingFilters.tsx` decide con una media query si pinta la barra lateral
+(escritorio) o el panel inferior (móvil): nunca están los dos en el DOM, y hay un solo selector de orden. Los textos de
+las opciones viven en `lib/filters.ts`.
+
 **Un mismo marcado para móvil y escritorio.** Cada pantalla cambia de disposición con Tailwind (la ficha y el
 listado en 1024 px) en lugar de mantener dos versiones. Las rutas declaran en su `handle` si traen cabecera propia
 en móvil o una barra fija abajo, y el layout se adapta; la fila «Filtros / Ordenar» del listado se pinta dentro de
@@ -79,7 +99,8 @@ tests el retardo es 0: los tests esperan a que aparezca algo en pantalla, nunca 
 
 ## Cómo arrancarlo
 
-Requiere Node 22.12 o superior (o Node 24), que es lo que piden Vite, Vitest y jsdom.
+Requiere Node 22.12 o superior (o Node 24), que es lo que piden Vite, Vitest y jsdom. El dominio de producción
+(para las URLs absolutas de Open Graph) se cambia en `.env` (`VITE_SITE_URL`); autor y enlaces, en `src/config/site.ts`.
 
 ```bash
 npm install
@@ -88,6 +109,7 @@ npm run build     # comprobación de tipos y build de producción en dist/
 npm run preview   # sirve el build de producción
 npm test          # todos los tests (Vitest)
 npm run lint      # ESLint, con reglas de accesibilidad (jsx-a11y)
+npm run photos    # regenera las fotos, src/data/photos.ts y CREDITS.md desde scripts/photos.json
 ```
 
 En desarrollo, `/componentes` muestra el catálogo de componentes base y tokens.
@@ -97,9 +119,11 @@ En desarrollo, `/componentes` muestra el catálogo de componentes base y tokens.
 ```
 src/
 ├── routes.tsx · App.tsx    Rutas de la app (las mismas que usan los tests de flujo)
-├── index.css               Tokens del diseño y utilidades (placeholder, esqueleto, slider doble)
-├── types.ts                Tipo Car y sus uniones
+├── config/site.ts          Dominio, autor y enlaces del pie (un solo sitio para cambiarlos)
+├── index.css               Tokens del diseño y utilidades (fondo de foto, esqueleto, slider doble)
+├── types.ts                Tipos Car y Photo y sus uniones
 ├── data/cars.ts            Catálogo de 24 coches del mercado español
+├── data/photos.ts          Vistas de las fotos de cada coche (generado por scripts/build-photos.mjs)
 ├── lib/                    Lógica pura: format, finance, filters, url, compare, car, api simulada
 ├── store/                  Zustand persistido: favoritos y comparador
 ├── hooks/                  Catálogo, estado del listado en la URL, media queries, limpieza de ids retirados
@@ -112,6 +136,8 @@ src/
 ├── layout/                 Layout, cabecera, pie y huecos que rellenan las páginas
 ├── pages/                  Listado, ficha, comparador, favoritos y 404
 └── test/                   Setup, flujos completos, accesibilidad con axe y utilidades
+public/cars/                Fotos de los coches en WebP (créditos en CREDITS.md)
+scripts/                    photos.json (fotos, autores y notas) y build-photos.mjs
 design/                     Diseño aprobado de partida (pantallas de escritorio y móvil)
 ```
 
@@ -119,8 +145,14 @@ design/                     Diseño aprobado de partida (pantallas de escritorio
 
 - **API simulada.** Los datos salen de `src/data/cars.ts` con un retardo artificial; no hay backend. Las fechas de
   publicación se desplazan para que el catálogo parezca reciente cuando se abra.
-- **Fotos de ejemplo.** No hay fotos reales ni logos de marcas: cada foto es un marcador con el nombre del coche.
+- **Fotos del modelo, no del coche.** Son fotos libres de cada modelo, no de la unidad anunciada. Cuando no había
+  fotos libres del modelo exacto se ha usado uno parecido o una generación anterior; `CREDITS.md` lo indica en cada caso.
 - **«Me interesa» no envía nada.** Muestra la confirmación del diseño, sin formulario ni servidor.
 - **Favoritos y comparador por navegador.** Se guardan en `localStorage`; no hay cuentas de usuario.
 - **Filtrado en local.** Con 24 coches basta; con un catálogo real, el filtrado y la paginación irían al servidor
   con los mismos parámetros de URL.
+
+## Créditos
+
+Fotos de [Unsplash](https://unsplash.com) y [Pexels](https://www.pexels.com) bajo sus licencias libres; el autor y el
+enlace de cada una están en [CREDITS.md](CREDITS.md).

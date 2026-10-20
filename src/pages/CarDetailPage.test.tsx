@@ -21,6 +21,7 @@ describe('CarDetailPage', () => {
     renderCar('leon')
     expect(await title()).toHaveTextContent('SEAT León')
     await waitFor(() => expect(document.title).toBe('SEAT León 1.5 TSI FR · Rueda'))
+    expect(document.querySelector('meta[name="description"]')?.getAttribute('content')).toMatch(/^SEAT León 1.5 TSI FR de 2021 con 48.200/)
     const specs = screen.getByRole('region', { name: 'Ficha técnica' })
     expect(within(specs).getByText('03/2021')).toBeInTheDocument()
     expect(within(specs).getByText('Manual, 6 vel.')).toBeInTheDocument()
@@ -31,19 +32,27 @@ describe('CarDetailPage', () => {
   it('la galería avanza con botones, miniaturas y teclado, y da la vuelta', async () => {
     renderCar('leon')
     await title()
-    expect(liveText('Foto 1 de 14: Exterior frontal')).toBeInTheDocument()
-    await userEvent.click(screen.getAllByRole('button', { name: 'Foto siguiente' })[0]!)
-    expect(liveText('Foto 2 de 14: Lateral izquierdo')).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Interior (foto 4: Interior)' }))
-    expect(liveText('Foto 4 de 14: Interior')).toBeInTheDocument()
-
     const gallery = screen.getByRole('region', { name: 'Fotos de SEAT León' })
+    const shown = () => within(gallery).getAllByRole('img').find((img) => img.getAttribute('alt'))
+    expect(liveText('Foto 1 de 3: SEAT León negro, vista frontal')).toBeInTheDocument()
+    // La primera foto se pide enseguida; el resto, al acercarse.
+    expect(shown()).toHaveAttribute('loading', 'eager')
+    expect(shown()).toHaveAttribute('src', '/cars/leon-1.webp')
+
+    await userEvent.click(screen.getAllByRole('button', { name: 'Foto siguiente' })[0]!)
+    expect(liveText('Foto 2 de 3: SEAT León negro, vista lateral')).toBeInTheDocument()
+    expect(shown()).toHaveAttribute('alt', 'SEAT León negro, vista lateral')
+    await userEvent.click(screen.getByRole('button', { name: 'Interior (foto 3: Interior del SEAT León)' }))
+    expect(liveText('Foto 3 de 3: Interior del SEAT León')).toBeInTheDocument()
+
+    fireEvent.keyDown(gallery, { key: 'Home' })
+    expect(liveText('Foto 1 de 3: SEAT León negro, vista frontal')).toBeInTheDocument()
     fireEvent.keyDown(gallery, { key: 'End' })
-    expect(liveText('Foto 14 de 14: Techo')).toBeInTheDocument()
+    expect(liveText('Foto 3 de 3: Interior del SEAT León')).toBeInTheDocument()
     fireEvent.keyDown(gallery, { key: 'ArrowRight' })
-    expect(liveText('Foto 1 de 14: Exterior frontal')).toBeInTheDocument()
+    expect(liveText('Foto 1 de 3: SEAT León negro, vista frontal')).toBeInTheDocument()
     fireEvent.keyDown(gallery, { key: 'ArrowLeft' })
-    expect(liveText('Foto 14 de 14: Techo')).toBeInTheDocument()
+    expect(liveText('Foto 3 de 3: Interior del SEAT León')).toBeInTheDocument()
   })
 
   it('la calculadora recalcula la cuota al cambiar plazo y entrada', async () => {

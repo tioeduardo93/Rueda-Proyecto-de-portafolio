@@ -1,0 +1,182 @@
+{
+  "leon": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "N-ZBzHj2s54", "img": "photo-1606579215704-1a9036d7e3c0", "autor": "Marcel Strauß", "usuario": "martzzl" },
+      { "vista": "lateral", "unsplash": "Hrxe7S1DzgQ", "img": "photo-1614213704713-9c3afa035941", "autor": "Jorge Segura", "usuario": "jorgesegura1" },
+      { "vista": "interior", "unsplash": "GbkPy6ur4_4", "img": "photo-1547626560-18eaa7908114", "autor": "Marcel Strauß", "usuario": "martzzl" }
+    ]
+  },
+  "golf": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "54tC25jNoWA", "img": "photo-1605475300127-0a31e8273bc2", "autor": "Chris Osmond", "usuario": "chrisosmond" },
+      { "vista": "lateral", "unsplash": "SuD4h8Gpgok", "img": "photo-1572811298797-9eecadf6cb24", "autor": "Martin Katler", "usuario": "martinkatler" },
+      { "vista": "trasera", "unsplash": "tmhW9YUAFPw", "img": "photo-1630019499081-50ed7838a1cd", "autor": "Flavien", "usuario": "faliven" },
+      { "vista": "interior", "unsplash": "4Ndz09Lbp8c", "img": "photo-1714225410424-c020a3682fe0", "autor": "Zakaria Issaad", "usuario": "alpha_photographer" }
+    ],
+    "nota": "Golf de la generación anterior."
+  },
+  "chr": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "DGy3Mf8uQj8", "img": "photo-1652509328308-7f0d7804e678", "autor": "Ivan Kazlouskij", "usuario": "ivankazlouskij" },
+      { "vista": "trasera", "unsplash": "k9pRfnaPuKI", "img": "photo-1652509328300-9578821756c9", "autor": "Ivan Kazlouskij", "usuario": "ivankazlouskij" },
+      { "vista": "interior", "unsplash": "7VcaVnaK3U4", "img": "photo-1785912775363-2f6baddfc5de", "autor": "Zion C", "usuario": "jcs_chen" }
+    ]
+  },
+  "clio": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "eTuO9BNtcPA", "img": "photo-1666335009171-3ddc17937d6d", "autor": "Samy MOUNICHY", "usuario": "smithers131" },
+      { "vista": "trasera", "unsplash": "AZcfIq5X-W8", "img": "photo-1666335009169-a9505c436d80", "autor": "Samy MOUNICHY", "usuario": "smithers131" },
+      { "vista": "interior", "unsplash": "CxZAVYnIkS8", "img": "photo-1623828850775-2636cdd96e04", "autor": "Alexis AMZ DA CRUZ", "usuario": "alexisamz" }
+    ]
+  },
+  "sportage": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "Z1ERtrRJj70", "img": "photo-1688893287874-ac7fbd686c24", "autor": "Michail Dementiev", "usuario": "bot_va" },
+      { "vista": "trasera", "unsplash": "vp3ZX76VaPU", "img": "photo-1647501581530-053b42684b8d", "autor": "Hyundai Motor Group", "usuario": "hyundaimotorgroup" },
+      { "vista": "interior", "unsplash": "SF9Q0ue21mU", "img": "photo-1657638005531-a5c98fa49677", "autor": "Mark Chan", "usuario": "markcjn" }
+    ]
+  },
+  "p3008": {
+    "photos": [
+      { "vista": "lateral", "unsplash": "V3O85qIIILc", "img": "photo-1771783203301-e475b0be1abf", "autor": "Sotirios T. Kokkinos", "usuario": "toapalad" },
+      { "vista": "trasera", "unsplash": "fB13Whqbels", "img": "photo-1785665672034-a814154f622f", "autor": "Aravind Balabhaskar", "usuario": "aravind_balabhaskar", "alt": "Pilotos traseros del Peugeot 3008" },
+      { "vista": "interior", "unsplash": "0p3B_UQOblM", "img": "photo-1775637483808-dee4ec3bfc1d", "autor": "lucas clarysse", "usuario": "lucky_photography" }
+    ]
+  },
+  "model3": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "J1fCVREbkV4", "img": "photo-1771289083523-35928b27b03e", "autor": "Darien Attridge", "usuario": "dariendesigns" },
+      { "vista": "lateral", "unsplash": "zSeZzS1bCq8", "img": "photo-1610470832703-95d40c3fad55", "autor": "Robin van Geenen", "usuario": "robinvangeenen" },
+      { "vista": "interior", "unsplash": "4xM5cytsdMo", "img": "photo-1553260188-75a8d6205b6c", "autor": "Bram Van Oost", "usuario": "ort" }
+    ]
+  },
+  "tucson": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "37-uFwiQLwY", "img": "photo-1705624843697-4461f9dce482", "autor": "Hyundai Motor Group", "usuario": "hyundaimotorgroup" },
+      { "vista": "lateral", "unsplash": "BEYDMfTsOFU", "img": "photo-1706082072635-d19df8f0f3fb", "autor": "Hyundai Motor Group", "usuario": "hyundaimotorgroup" },
+      { "vista": "interior", "unsplash": "n1idCIGIKc4", "img": "photo-1629093174728-32a37e1c9141", "autor": "Nischal Kanishk", "usuario": "escobar_kanishk" }
+    ]
+  },
+  "sandero": {
+    "photos": [
+      { "vista": "frontal", "pexels": "14607289", "autor": "Emanuel Turbuc", "usuario": "emanuel-turbuc-379156881" },
+      { "vista": "detalle", "pexels": "14607284", "autor": "Emanuel Turbuc", "usuario": "emanuel-turbuc-379156881", "alt": "Faro delantero del Dacia Sandero Stepway naranja" },
+      { "vista": "trasera", "pexels": "32562058", "autor": "Emre Simsek", "usuario": "emre-simsek-27565013", "color": "gris" },
+      { "vista": "interior", "pexels": "3809002", "autor": "Robert Nagy", "usuario": "robert-nagy-512974" }
+    ],
+    "nota": "La vista trasera es otra unidad del mismo modelo (gris) y el interior es de un Sandero de la generación anterior."
+  },
+  "cx30": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "NPymjZsBEsE", "img": "photo-1722786102929-91e647c74768", "autor": "Gaku Suyama", "usuario": "gakusuyama" },
+      { "vista": "frontal", "unsplash": "SpSVyLVB_5g", "img": "photo-1599491143816-8c1ea12a4e06", "autor": "Austin Lowman", "usuario": "shutter_hunter" },
+      { "vista": "interior", "unsplash": "wT6xplsYE1E", "img": "photo-1665608704807-eb378fc61ab1", "autor": "Denis Nuțiu", "usuario": "ndcphoto" }
+    ],
+    "nota": "Modelo parecido: Mazda3 y SUV Mazda de la misma gama (no hay fotos libres del CX-30)."
+  },
+  "puma": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "q-4jYrCSyvE", "img": "photo-1631040306457-c82283601633", "autor": "Mark Dickson", "usuario": "sparkyno4" },
+      { "vista": "lateral", "unsplash": "1xnjF1fYm9A", "img": "photo-1655959625367-7b983ddf9e7e", "autor": "Austin Schmid", "usuario": "schmidy" },
+      { "vista": "interior", "unsplash": "2UJeqGcan0Q", "img": "photo-1713944183657-6f189d0ce39d", "autor": "Václav Pechar", "usuario": "venajeborec" }
+    ]
+  },
+  "id3": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "ZXqXV5xijVM", "img": "photo-1655286375243-7f34cfb5ac16", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" },
+      { "vista": "trasera", "unsplash": "-kpp0ubarOc", "img": "photo-1655286369296-9ccc3e57fbe1", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" },
+      { "vista": "interior", "unsplash": "hl6D_YdNb6I", "img": "photo-1655286352480-e38fe0845e20", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" }
+    ]
+  },
+  "astra": {
+    "photos": [
+      { "vista": "lateral", "unsplash": "DkGUn0Y1VzA", "img": "photo-1582639510494-c80b5de9f148", "autor": "Youssef D", "usuario": "ussefd" },
+      { "vista": "frontal", "pexels": "8672734", "autor": "Jay jay Redelinghuys", "usuario": "jay-jay-redelinghuys-61078147", "color": "gris" },
+      { "vista": "interior", "unsplash": "yNC8oHHchC0", "img": "photo-1616448199578-f53c904782dd", "autor": "Harry Shelton", "usuario": "itsharryshelton" }
+    ],
+    "nota": "La vista frontal es otra unidad del mismo modelo (gris)."
+  },
+  "ibiza": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "MdOlwfykjnE", "img": "photo-1598543869103-0b61e0923d13", "autor": "Wassim Chouak", "usuario": "ynwasso" },
+      { "vista": "frontal", "unsplash": "hld7B72rs0Y", "img": "photo-1582736190845-cce6ebd8928c", "autor": "Wassim Chouak", "usuario": "ynwasso" },
+      { "vista": "interior", "unsplash": "W4Y3amEP718", "img": "photo-1684872961971-8084ea207ff8", "autor": "serjan midili", "usuario": "s_midili", "alt": "Asientos del SEAT Ibiza" }
+    ],
+    "nota": "Ibiza de la generación anterior."
+  },
+  "corolla": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "DwNmXuRb1Tk", "img": "photo-1638618164682-12b986ec2a75", "autor": "Bestami Sarıkaya", "usuario": "bbestamis" },
+      { "vista": "lateral", "unsplash": "6pmT6MRvUPM", "img": "photo-1763268265028-1631360c07dd", "autor": "Trevor", "usuario": "trevoriscamera" },
+      { "vista": "interior", "unsplash": "jifKBXXQBwU", "img": "photo-1654168441839-410635603c3d", "autor": "Neerob Raihan", "usuario": "neerob_raihan" }
+    ],
+    "nota": "Modelo parecido: Corolla berlina y compacto (no hay fotos libres del Touring Sports)."
+  },
+  "captur": {
+    "photos": [
+      { "vista": "frontal", "pexels": "16039979", "autor": "Emanuel Turbuc", "usuario": "emanuel-turbuc-379156881" },
+      { "vista": "trasera", "pexels": "16039976", "autor": "Emanuel Turbuc", "usuario": "emanuel-turbuc-379156881" },
+      { "vista": "interior", "pexels": "15372518", "autor": "Abdulvahap Demir", "usuario": "vahapdmr" }
+    ],
+    "nota": "Captur de la generación anterior; el interior es de otro Renault."
+  },
+  "niro": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "rhBjedk1Ir4", "img": "photo-1647418551307-a9bb946afe2e", "autor": "Hyundai Motor Group", "usuario": "hyundaimotorgroup" },
+      { "vista": "lateral", "unsplash": "u4gDjp0-9Ao", "img": "photo-1650003678540-e0576a7702ba", "autor": "Hyundai Motor Group", "usuario": "hyundaimotorgroup" },
+      { "vista": "interior", "unsplash": "Xb8s2wbNBOc", "img": "photo-1657638005598-68627ec3469f", "autor": "Mark Chan", "usuario": "markcjn" }
+    ]
+  },
+  "p208": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "HdkBNDbvFKA", "img": "photo-1650370794692-cc384a8a7d42", "autor": "Harold Jonker", "usuario": "haroldjonker" },
+      { "vista": "detalle", "unsplash": "9msyGvNQZjY", "img": "photo-1656579770042-2d9cdbf3c8ee", "autor": "Benoît Deschasaux", "usuario": "benowa", "alt": "Frontal del Peugeot 208 azul con los faros encendidos, de noche" },
+      { "vista": "interior", "unsplash": "sQvXW9o35K0", "img": "photo-1647866711039-678ab690a98f", "autor": "Mathieu Improvisato", "usuario": "matoovisato" }
+    ]
+  },
+  "troc": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "92K_dWgZDbE", "img": "photo-1705229810194-dd78431dcb78", "autor": "Luca", "usuario": "madebyluca" },
+      { "vista": "lateral", "unsplash": "qLaYm1UZ8sE", "img": "photo-1672496082500-2d29d97534a4", "autor": "Andrea Ferrario", "usuario": "andreaferrario" },
+      { "vista": "interior", "unsplash": "PRWfqQvNZZg", "img": "photo-1655286188829-c217895ca9d3", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" }
+    ],
+    "nota": "El interior es de un Volkswagen Tiguan."
+  },
+  "formentor": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "oycXuE4-d1M", "img": "photo-1655288929105-a4ef9c225592", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" },
+      { "vista": "trasera", "unsplash": "seNOpSiaGAI", "img": "photo-1655288883887-bb94d93d281a", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" },
+      { "vista": "interior", "unsplash": "dhblCDSJP90", "img": "photo-1655288889779-bc0ddc688361", "autor": "David Moffatt", "usuario": "stablevehiclecontracts" }
+    ]
+  },
+  "x1": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "Cm5rvewLM7s", "img": "photo-1680429039668-3ff5c1932f6c", "autor": "serjan midili", "usuario": "s_midili" },
+      { "vista": "lateral", "unsplash": "SaY7EkQMuBo", "img": "photo-1680298255666-6071fc905870", "autor": "serjan midili", "usuario": "s_midili" },
+      { "vista": "interior", "unsplash": "KTIKM41HsQY", "img": "photo-1624505960581-1303fbcca00d", "autor": "Sebastiaan Chia", "usuario": "sebastiaanchia" }
+    ],
+    "nota": "El interior es de otro BMW."
+  },
+  "xc40": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "n4yTJd7lhPw", "img": "photo-1671051548278-fce15b49e304", "autor": "Vitali Adutskevich", "usuario": "vadutskevich" },
+      { "vista": "trasera", "unsplash": "Lvnu1TEnHH0", "img": "photo-1547559418-8d7437f53b5b", "autor": "Karl Köhler", "usuario": "karlkoehler" },
+      { "vista": "interior", "unsplash": "xiLTKxaY71E", "img": "photo-1608926418601-0c6b00f46739", "autor": "Kai Winckler", "usuario": "visionofkai" }
+    ]
+  },
+  "c3": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "1xv2KzEeadY", "img": "photo-1609030429269-ca5b7a409310", "autor": "Quentin Bounias", "usuario": "qbounias" },
+      { "vista": "interior", "pexels": "5680757", "autor": "Yigithan Bal", "usuario": "yigithan02" },
+      { "vista": "detalle", "unsplash": "f7uGfUB-gSQ", "img": "photo-1579124834382-5d6c7a64fbde", "autor": "Chiara Polo", "usuario": "chiara_art", "alt": "Volante y retrovisor del Citroën C3 desde el asiento del conductor" }
+    ],
+    "nota": "El interior es de otro Citroën."
+  },
+  "modely": {
+    "photos": [
+      { "vista": "frontal", "unsplash": "WdtTIajKxrc", "img": "photo-1669625397388-32934837bd3a", "autor": "Eyosias G", "usuario": "yozz_t" },
+      { "vista": "lateral", "unsplash": "N0h6ow055KY", "img": "photo-1676754568744-7852efc67c40", "autor": "Michal Lauko", "usuario": "jingspiral" },
+      { "vista": "interior", "unsplash": "WIhlNrqSysc", "img": "photo-1553260202-d1f2ce03298b", "autor": "Bram Van Oost", "usuario": "ort" }
+    ]
+  }
+}

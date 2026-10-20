@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { PHOTO_SHORT_LABELS } from '../../data/cars'
 import { cn } from '../../lib/cn'
-import { CarSilhouette, ChevronLeftIcon, ChevronRightIcon } from '../icons'
+import type { Photo } from '../../types'
+import { CarPhoto } from '../CarPhoto'
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons'
 
 export interface GalleryProps {
   /** Nombre del coche, para los textos accesibles. */
   title: string
-  /** Nombre de cada foto («Exterior frontal», «Interior»…). */
-  photos: readonly string[]
+  photos: readonly Photo[]
   /** Botones sobre la foto en móvil (volver, compartir, favorito). */
   overlay?: ReactNode
   /** Etiqueta abajo a la izquierda en escritorio. */
@@ -15,8 +15,6 @@ export interface GalleryProps {
   className?: string
 }
 
-const MAX_THUMBS = 7
-const MAX_DOTS = 6
 const SWIPE_PX = 40
 
 /** Índice circular: después de la última vuelve a la primera y al revés. */
@@ -31,7 +29,7 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
   const regionRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const total = photos.length
-  const label = photos[index] ?? ''
+  const photo = photos[index]
 
   const go = (i: number) => setIndex(wrap(i, total))
 
@@ -72,21 +70,6 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
     }
   }, [total])
 
-  // Con más fotos que huecos, la última miniatura resume el resto («+8 fotos») y abre la siguiente.
-  const overflow = total > MAX_THUMBS
-  const thumbs = (overflow ? photos.slice(0, MAX_THUMBS - 1) : photos).map((name, i) => ({
-    i,
-    name,
-    text: PHOTO_SHORT_LABELS[i] ?? name,
-    on: index === i,
-  }))
-  if (overflow) {
-    const i = MAX_THUMBS - 1
-    thumbs.push({ i, name: photos[i] ?? '', text: `+${total - i} fotos`, on: index >= i })
-  }
-
-  const dot = Math.min(index, MAX_DOTS - 1)
-
   return (
     <div
       ref={regionRef}
@@ -96,21 +79,13 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
       aria-label={`Fotos de ${title}`}
       className={cn('flex flex-col gap-3 outline-offset-4', className)}
     >
-      <div
-        ref={stageRef}
-        className="photo-placeholder relative flex aspect-[4/3] touch-pan-y flex-col items-center justify-center gap-2.5 overflow-hidden text-muted select-none sm:aspect-[16/10] lg:rounded-panel"
-      >
-        <span className="sm:hidden">
-          <CarSilhouette width={110} strokeWidth={1.4} />
-        </span>
-        <span className="hidden sm:block">
-          <CarSilhouette width={140} strokeWidth={1.4} />
-        </span>
-        <span key={index} className="animate-fade-up px-4 text-center text-[11px] font-bold tracking-[0.08em] uppercase sm:text-[13px]">
-          Foto · {label}
-        </span>
+      <div ref={stageRef} className="relative touch-pan-y overflow-hidden select-none lg:rounded-panel">
+        {photo && (
+          // `key`: cada foto es una imagen nueva, así no se ve la anterior mientras carga la siguiente.
+          <CarPhoto key={photo.src} photo={photo} priority={index === 0} className="aspect-[4/3] sm:aspect-[16/10]" />
+        )}
         <p className="sr-only" aria-live="polite">
-          Foto {index + 1} de {total}: {label}
+          Foto {index + 1} de {total}: {photo?.alt}
         </p>
 
         {/* En móvil, tocar la foto pasa a la siguiente, como en el diseño. */}
@@ -142,10 +117,10 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
         {badge && <div className="absolute bottom-4 left-4 hidden lg:block">{badge}</div>}
 
         <div aria-hidden="true" className="absolute inset-x-0 bottom-[18px] flex justify-center gap-[5px] lg:hidden">
-          {Array.from({ length: Math.min(total, MAX_DOTS) }, (_, i) => (
+          {photos.map((p, i) => (
             <span
-              key={i}
-              className={cn('h-1.5 rounded-full transition-[width,background-color] duration-200', i === dot ? 'w-[18px] bg-white' : 'w-1.5 bg-white/60')}
+              key={p.src}
+              className={cn('h-1.5 rounded-full shadow-[0_0_3px_rgb(14_26_31/0.5)] transition-[width,background-color] duration-200', i === index ? 'w-[18px] bg-white' : 'w-1.5 bg-white/60')}
             />
           ))}
         </div>
@@ -153,24 +128,23 @@ export function Gallery({ title, photos, overlay, badge, className }: GalleryPro
         {overlay}
       </div>
 
-      <div className="hidden grid-cols-7 gap-2.5 lg:grid">
-        {thumbs.map((t) => (
+      <div className="hidden grid-cols-5 gap-2.5 lg:grid">
+        {photos.map((p, i) => (
           <button
-            key={t.i}
+            key={p.src}
             type="button"
-            onClick={() => go(t.i)}
-            aria-pressed={t.on}
+            onClick={() => go(i)}
+            aria-pressed={index === i}
             className={cn(
-              'photo-placeholder flex aspect-[4/3] items-center justify-center rounded-field border-2 p-1 text-center text-[10px] font-bold tracking-[0.04em] uppercase',
-              // El diseño atenúa las inactivas con opacidad; con texto de 10 px bajaría de AA, así que cambia el color.
-              'transition-[border-color,color] duration-150 hover:border-line-hover hover:text-ink',
-              t.on ? 'border-accent! text-ink' : 'border-transparent text-muted',
+              'relative overflow-hidden rounded-field border-2 transition-[border-color] duration-150 hover:border-line-hover',
+              index === i ? 'border-accent!' : 'border-transparent',
             )}
           >
-            {/* El nombre empieza por lo que se ve («Salpic.», «+8 fotos») para el control por voz (WCAG 2.5.3). */}
-            {t.text}{' '}
+            <CarPhoto photo={p} alt="" className="aspect-[4/3]" />
+            {/* El nombre empieza por lo que se ve («Interior») para el control por voz (WCAG 2.5.3). */}
+            <span className="absolute bottom-1.5 left-1.5 rounded-md bg-ink/75 px-1.5 py-0.5 text-[11px] font-bold text-white">{p.label}</span>{' '}
             <span className="sr-only">
-              (foto {t.i + 1}: {t.name})
+              (foto {i + 1}: {p.alt})
             </span>
           </button>
         ))}
