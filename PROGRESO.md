@@ -9,7 +9,7 @@ Registro de avance por fases. Se actualiza al cerrar cada fase.
 | 2. Listado con filtros, orden y URL | ✅ Aprobada por el revisor | 19/10/2026 |
 | 3. Ficha y calculadora | ✅ Aprobada por el revisor | 19/10/2026 |
 | 4. Comparador y favoritos | ✅ Aprobada por el revisor | 20/10/2026 |
-| 5. Responsive, accesibilidad, tests y README | ✅ Hecha · pendiente de revisión | 20/10/2026 |
+| 5. Responsive, accesibilidad, tests y README | ✅ Aprobada por el revisor | 20/10/2026 |
 
 ## Estructura
 
@@ -49,6 +49,13 @@ src/
 ```
 
 ## Fase 5 · Responsive, accesibilidad, tests y README
+
+**Corrección del revisor (aprobada en `d2a12da`)**
+- `src/test/setup.ts`: `configure({ asyncUtilTimeout: 5000 })`. Con la máquina cargada, el primer montaje de la app en jsdom pasaba de 1 s, que es lo que esperan por defecto `findBy*` y `waitFor`, y algunos tests fallaban de forma intermitente sin nada roto. El `testTimeout` de 20 s que puse yo ampliaba el tiempo total de cada test, pero no ese tope de espera. Con los dos, todas las baterías en verde, también con dos ejecuciones a la vez.
+
+**Sugerencias del revisor, aplicadas tras la aprobación**
+1. `useStaleIdsCleanup`: el efecto dependía de `cars`, un objeto nuevo en cada render, así que se ejecutaba en cada render del layout. Ahora depende del array del catálogo, que es siempre el mismo porque está en caché, y de los ids de los stores.
+2. `docs/capturas/ficha-escritorio.jpg`: repetida sin el anillo de foco en la flecha «Foto siguiente».
 
 **Pendientes acumulados del revisor**
 1. ✅ **Fila «Filtros / Ordenar» dentro de la cabecera fija en móvil** (fase 2). El layout ofrece huecos (`layout/slots.tsx`) que las páginas rellenan con un portal: el listado pinta la fila en el hueco de la cabecera y el estado sigue en el listado. A 360 px la cabecera mide 185 px de 780, como en `Listado-movil.dc.html`. Las cabeceras móviles de comparador y favoritos van por el mismo camino a un hueco antes de `<main>`, así que ahora son el landmark `banner` de la página.

@@ -183,3 +183,16 @@ Sugerencias, por si el proyecto sigue:
 
 Para que Eduardo lo entienda:
 Esta fase no añade funciones: pule lo que hay hasta dejarlo como un producto. La fila de filtros de la cabecera móvil usa un portal, un hueco del layout que la página rellena; así el estado de los filtros sigue en el listado y el layout no sabe nada de él. La accesibilidad se comprueba de dos formas: axe dentro de los tests, que vigila la estructura cada vez que se ejecutan, y axe en el navegador real, que es donde se puede medir el contraste. Los tests ya no dependen del tiempo: la API simulada responde al instante en los tests y estos esperan a que aparezca algo en pantalla. La corrección del revisor es la otra mitad de esa idea: dar margen suficiente a esa espera para que un ordenador lento no haga fallar un test que en realidad funciona.
+
+## Cierre — 20/10/2026
+Estado: APROBADO
+
+Comprobado:
+- `PROGRESO.md`: fase 5 marcada como aprobada, con la corrección del revisor bien explicada (`asyncUtilTimeout` frente a `testTimeout`).
+- `src/hooks/useStaleIdsCleanup.ts`: el efecto depende del array del catálogo, que está en caché y no cambia, en vez del objeto de estado nuevo en cada render.
+- `docs/capturas/ficha-escritorio.jpg`: sin el anillo de foco; el borde de la miniatura «FRONTAL» es el de seleccionada.
+- `npm run build`, `npm run lint` y `npm test` (181) en verde, también con dos baterías a la vez.
+
+Corregido por el revisor: nada.
+
+Pendiente para el constructor: nada. Proyecto terminado.

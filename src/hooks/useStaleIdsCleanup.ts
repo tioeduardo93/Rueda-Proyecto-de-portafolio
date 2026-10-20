@@ -9,15 +9,17 @@ import { useCars } from './useCars'
  */
 export function useStaleIdsCleanup() {
   const cars = useCars()
+  // El array del catálogo es siempre el mismo (está en caché); el objeto de estado de `useCars` es nuevo en cada render.
+  const catalog = cars.status === 'success' ? cars.data : null
   const favoriteIds = useFavorites((s) => s.items.map((f) => f.id).join(','))
   const compareIds = useCompare((s) => s.ids.join(','))
 
   useEffect(() => {
-    if (cars.status !== 'success') return
-    const exists = new Set(cars.data.map((c) => c.id))
+    if (!catalog) return
+    const exists = new Set(catalog.map((c) => c.id))
     const favorites = useFavorites.getState()
     favorites.items.filter((f) => !exists.has(f.id)).forEach((f) => favorites.remove(f.id))
     const compare = useCompare.getState()
     if (compare.ids.some((id) => !exists.has(id))) compare.set(compare.ids.filter((id) => exists.has(id)))
-  }, [cars, favoriteIds, compareIds])
+  }, [catalog, favoriteIds, compareIds])
 }
