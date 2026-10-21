@@ -6,6 +6,6 @@ export const SITE = {
   author: 'Eduardo Cebrián López',
   githubUrl: 'https://github.com/tioeduardo93',
   repoUrl: 'https://github.com/tioeduardo93/Rueda-Proyecto-de-portafolio',
-  /** Vacío mientras no exista: el pie no muestra el enlace. */
-  portfolioUrl: '',
+  /** Si se deja vacío, el pie no muestra el enlace. */
+  portfolioUrl: 'https://eduardocebrian.dev/',
 } as const

@@ -7,7 +7,7 @@ compartible por URL, fotos reales con licencia libre y tests de la lógica y de 
 
 Proyecto de portafolio de **Eduardo Cebrián López** ([GitHub](https://github.com/tioeduardo93)).
 
-**Pruébala en línea:** https://rueda-eduardo-cebrian.netlify.app/
+**Pruébala en línea:** https://rueda.eduardocebrian.dev/
 
 ![Listado en escritorio](docs/capturas/listado-escritorio.jpg)
 
